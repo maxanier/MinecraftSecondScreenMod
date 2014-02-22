@@ -18,8 +18,10 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
+
 import de.maxgb.minecraft.second_screen.info_listener.PlayerInfoListener;
 import de.maxgb.minecraft.second_screen.info_listener.PlayerInventoryListener;
+import de.maxgb.minecraft.second_screen.info_listener.ServerInfoListener;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.util.PROTOKOLL;
 
@@ -160,6 +162,18 @@ public class SocketHandler extends Thread {
 								}
 							}
 						}
+						else if(msg.startsWith(PROTOKOLL.REGISTER_SERVER_INFO_LISTENER)){
+							listeners.add(new ServerInfoListener(null));
+							
+						}
+						else if(msg.startsWith(PROTOKOLL.UNREGISTER_SERVER_INFO_LISTENER)){
+							for(int i=0;i<listeners.size();i++){
+								if(listeners.get(i) instanceof ServerInfoListener){
+									listeners.remove(i);
+									break;
+								}
+							}
+						}
 						else if(msg.startsWith(PROTOKOLL.UNREGISTER_ALL_LISTENER)){
 							listeners=new ArrayList<StandardListener>();
 							System.gc();
@@ -172,6 +186,7 @@ public class SocketHandler extends Thread {
 		}
 		
 	}
+	
 	
 	@SubscribeEvent
 	public void tick(ServerTickEvent e){
