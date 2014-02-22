@@ -17,6 +17,7 @@ import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 
 import de.maxgb.minecraft.second_screen.util.Constants;
 import de.maxgb.minecraft.second_screen.util.Logger;
@@ -58,6 +59,11 @@ public class SecondScreenMod
     	hostname="localhost";
     	port=25565;
     	start();
+    }
+    
+    @EventHandler
+    public void serverStopping(FMLServerStoppingEvent e){
+    	stop();
     }
     
     private void start(){
