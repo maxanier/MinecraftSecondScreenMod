@@ -16,7 +16,7 @@ public class PlayerInfoListener extends StandardListener{
 	public PlayerInfoListener(String params){
 		super(params);
 		setParams(params);
-		everyTick=20;
+		everyTick=40;//TODO make config related
 		Logger.i(TAG, "Created Playerlistener");//TODO remove
 	}
 	
