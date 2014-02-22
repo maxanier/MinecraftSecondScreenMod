@@ -7,7 +7,7 @@ public abstract class StandardListener {
 
 	private String params;
 	protected MinecraftServer server;
-	protected int everyTick=1;
+	protected int everyTick=0;
 	private int tick;
 	private String lastMessage;
 	
@@ -23,14 +23,15 @@ public abstract class StandardListener {
 	 * @return Message which should be sent, null if none
 	 */
 	public String tick(){
-		if(++tick>everyTick){
-			tick=0;
+		if(tick<1){
+			tick=everyTick;
 			String newMessage=update();
 			if(!newMessage.equals(lastMessage)){
 				lastMessage=newMessage;
 				return newMessage;
 			}
 		}
+		tick--;
 		return null;
 	}
 	
