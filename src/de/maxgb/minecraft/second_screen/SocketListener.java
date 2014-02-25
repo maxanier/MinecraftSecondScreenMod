@@ -25,7 +25,7 @@ public class SocketListener implements Runnable{
 	private boolean running;
 	private Thread thread;
 	private ServerSocket socket;
-	public Collection<SocketHandler>	socketList;	
+	public List<SocketHandler>	socketList;	
 	private final String TAG="SocketListener";
 	
 	
@@ -50,7 +50,7 @@ public class SocketListener implements Runnable{
 		}
 		
 		
-		socketList= Collections.synchronizedCollection(new ArrayList<SocketHandler>());
+		socketList= Collections.synchronizedList(new ArrayList<SocketHandler>());
 		Logger.i(TAG,"Starting Listener Thread on "+inetAddress.toString()+":"+port);
 		thread = new Thread(this, "SecondScreen - SocketListener");
 		thread.start();
