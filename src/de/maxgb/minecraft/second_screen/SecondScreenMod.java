@@ -67,11 +67,14 @@ public class SecondScreenMod
     }
     
     private void start(){
+    	Logger.i(TAG, "Starting SecondScreenMod");
     	socketListener=new SocketListener();
     }
     
     private void stop(){
+    	Logger.i(TAG, "Stopping SecondScreenMod");
     	socketListener.stop();
+    	socketListener=null;
     }
 
 	public static int id() {
