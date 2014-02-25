@@ -54,7 +54,9 @@ public class SocketHandler extends Thread {
 		
 		try{
 			socket.close();
-			this.socketListener.socketList.remove(this);
+			synchronized(socketListener.socketList){
+				this.socketListener.socketList.remove(this);
+			}
 		}
 		catch (IOException e){
 			e.printStackTrace();
@@ -80,7 +82,8 @@ public class SocketHandler extends Thread {
 								socket.getInputStream()));
 					}
 				} catch (IOException e) {
-					e.printStackTrace();
+					this.close();
+					return;
 				}
 				// Read if is available
 				if (reader != null) {
@@ -208,6 +211,7 @@ public class SocketHandler extends Thread {
 					socket.getOutputStream()));
 		} catch (IOException e) {
 			Logger.e(TAG, "Failed to get BufferedWriter",e);
+			this.close();
 		}
 		// if it is available, write
 		if (writer != null) {
