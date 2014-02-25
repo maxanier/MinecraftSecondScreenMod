@@ -59,7 +59,7 @@ public class SocketHandler extends Thread {
 		catch (IOException e){
 			e.printStackTrace();
 		}
-		System.gc();
+		socket=null;
 		
 	}
 	
@@ -212,9 +212,10 @@ public class SocketHandler extends Thread {
 		// if it is available, write
 		if (writer != null) {
 			try {
-				writer.append(s);
-				writer.newLine();
+				
+				writer.append(s+"\n");
 				writer.flush();
+				Logger.i(TAG, "Send message: "+s);
 			} catch (IOException e) {
 				Logger.e(TAG, "Failed to send message",e);
 				close();
