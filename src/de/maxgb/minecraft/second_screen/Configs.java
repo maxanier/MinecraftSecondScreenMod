@@ -6,7 +6,7 @@ public class Configs {
 
 	public static void load(Configuration config) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
