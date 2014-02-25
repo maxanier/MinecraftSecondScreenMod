@@ -3,8 +3,11 @@ package de.maxgb.minecraft.second_screen;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.logging.log4j.Level;
@@ -22,7 +25,7 @@ public class SocketListener implements Runnable{
 	private boolean running;
 	private Thread thread;
 	private ServerSocket socket;
-	public List<SocketHandler>	socketList	= new ArrayList<SocketHandler>();
+	public Collection<SocketHandler>	socketList;	
 	private final String TAG="SocketListener";
 	
 	
@@ -46,6 +49,8 @@ public class SocketListener implements Runnable{
 		port = MinecraftServer.getServer().getPort();
 		}
 		
+		
+		socketList= Collections.synchronizedCollection(new ArrayList<SocketHandler>());
 		Logger.i(TAG,"Starting Listener Thread on "+inetAddress.toString()+":"+port);
 		thread = new Thread(this, "SecondScreen - SocketListener");
 		thread.start();
@@ -54,21 +59,32 @@ public class SocketListener implements Runnable{
 	public void stop() {
 		FMLLog.log(Level.DEBUG,"Stopping SocketListener");
 		running=false;
+		try {
+			socket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		closeAll();
+		socket=null;
+		System.gc();
 		
 	}
 	private void closeAll(){
 		FMLLog.log(Level.DEBUG,"Closing all SocketHandler");
-		for (SocketHandler handler : socketList)
-		{
-			try
+		synchronized(socketList){
+			for (SocketHandler handler : socketList)
 			{
-				handler.close();
+				try
+				{
+					handler.close();
+				}
+				catch (Exception e)
+				{
+				}
 			}
-			catch (Exception e)
-			{
-			}
+			socketList.clear();
 		}
-		socketList.clear();
 	}
 
 
@@ -84,7 +100,13 @@ public class SocketListener implements Runnable{
 			while (running){
 				try
 				{
-				socketList.add(new SocketHandler(socket.accept(), this));
+					synchronized(socketList){
+						socketList.add(new SocketHandler(socket.accept(), this));
+					}
+				
+				}
+				catch(SocketException e){
+					stop();
 				}
 				catch (IOException e)
 				{
