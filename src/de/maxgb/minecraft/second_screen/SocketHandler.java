@@ -24,8 +24,10 @@ public class SocketHandler extends Thread {
 	private boolean running;
 	private ArrayList<StandardListener> listeners;
 	private String TAG = "SocketHandler";
+	public boolean remove;
 
 	public SocketHandler(Socket accepted, SocketListener socketListener) {
+		remove=false;
 		this.socketListener = socketListener;
 		this.socket = accepted;
 		int id = SecondScreenMod.id();
@@ -37,27 +39,32 @@ public class SocketHandler extends Thread {
 						+ socket.getInetAddress().getHostAddress() + ":"
 						+ socket.getLocalPort());
 		listeners = new ArrayList<StandardListener>();
-		FMLCommonHandler.instance().bus().register(this);
+		
 
 		start();
 
 	}
 
+	/**
+	 * Stops the run method, closes the socket and if remove is true, removes this from SocketListener.socketList
+	 * @param remove Remove from socketList
+	 */
 	public void close() {
 
 		running = false;
 
 		try {
 			socket.close();
-			synchronized (socketListener.socketList) {
-				this.socketListener.socketList.remove(this);
-			}
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		socket = null;
+		remove=true;
 
 	}
+	
+
 
 	@Override
 	public void run() {
@@ -66,17 +73,14 @@ public class SocketHandler extends Thread {
 		while (running) {
 
 			BufferedReader reader = null;
-			try {
-				if (socket.getInputStream().available() != 0) { // Prevents
-					// thread
-					// blocking
-					reader = new BufferedReader(new InputStreamReader(
+			try {			
+				reader = new BufferedReader(new InputStreamReader(
 							socket.getInputStream()));
-				}
 			} catch (IOException e) {
 				this.close();
 				return;
 			}
+			
 			// Read if is available
 			if (reader != null) {
 				// Get the message
@@ -187,6 +191,12 @@ public class SocketHandler extends Thread {
 						listeners = new ArrayList<StandardListener>();
 						System.gc();
 					}
+					else if(msg.startsWith(PROTOKOLL.DISCONNECT)){
+						close();
+					}
+					else{
+						send(PROTOKOLL.UNKNOWN);
+					}
 
 				}
 
@@ -225,8 +235,8 @@ public class SocketHandler extends Thread {
 		}
 	}
 
-	@SubscribeEvent
-	public void tick(ServerTickEvent e) {
+	
+	public void tick() {
 		for (StandardListener l : listeners) {
 			send(l.tick());
 		}
