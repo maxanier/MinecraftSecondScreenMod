@@ -14,11 +14,11 @@ public class ObservingRegistry {
 	 * @param z
 	 * @return false if there already was a observed block with that label
 	 */
-	public static boolean observeBlock(String label,int x,int y,int z){
+	public static boolean observeBlock(String label,int dimensionId,int x,int y,int z){
 		if(map==null){
 			map=new HashMap<String,ObservedBlock>();
 		}
-		return (map.put(label, new ObservedBlock(label,x,y,z))==null);
+		return (map.put(label, new ObservedBlock(label,x,y,z,dimensionId))==null);
 	}
 	
 	/**
@@ -43,13 +43,14 @@ public class ObservingRegistry {
 	
 	public static class ObservedBlock{
 		public String label;
-		public int x,y,z;
+		public int x,y,z,dimensionId;
 		
-		public ObservedBlock(String label,int x,int y,int z){
+		public ObservedBlock(String label,int x,int y,int z,int dimensionId){
 			this.x=x;
 			this.y=y;
 			this.z=z;
 			this.label=label;
+			this.dimensionId=dimensionId;
 		}
 		
 	}
