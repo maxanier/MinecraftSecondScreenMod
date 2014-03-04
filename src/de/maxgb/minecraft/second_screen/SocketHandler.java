@@ -14,6 +14,7 @@ import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
 import de.maxgb.minecraft.second_screen.info_listener.PlayerInfoListener;
 import de.maxgb.minecraft.second_screen.info_listener.PlayerInventoryListener;
 import de.maxgb.minecraft.second_screen.info_listener.ServerInfoListener;
+import de.maxgb.minecraft.second_screen.info_listener.WorldInfoListener;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.util.PROTOKOLL;
 
@@ -186,7 +187,18 @@ public class SocketHandler extends Thread {
 								break;
 							}
 						}
-					} else if (msg
+					}else if(msg.startsWith(PROTOKOLL.REGISTER_WORLD_INFO_LISTENER)){
+						listeners.add(new WorldInfoListener(null));
+					}
+					else if(msg.startsWith(PROTOKOLL.UNREGISTER_WORLD_INFO_LISTENER)){
+						for (int i = 0; i < listeners.size(); i++) {
+							if (listeners.get(i) instanceof WorldInfoListener) {
+								listeners.remove(i);
+								break;
+							}
+						}
+					}
+					else if (msg
 							.startsWith(PROTOKOLL.UNREGISTER_ALL_LISTENER)) {
 						listeners = new ArrayList<StandardListener>();
 						System.gc();
