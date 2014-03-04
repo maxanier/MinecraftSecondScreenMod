@@ -48,7 +48,7 @@ public class RegisterRedstoneInfoCommand implements ICommand{
 		
 		if(var2.length < 2)
 	    {
-	      var1.addChatMessage(new ChatComponentText("Invalid arguments. Usage: "+getCommandUsage(var1)));
+	      sendMessage(var1,"Invalid arguments. Usage: "+getCommandUsage(var1));
 	      return;
 	    }
 		
@@ -60,28 +60,38 @@ public class RegisterRedstoneInfoCommand implements ICommand{
 	                player = (EntityPlayer)var1;
 	        }
 	        else {
-	                var1.addChatMessage(new ChatComponentText("Player only command"));
+	                sendMessage(var1,"Player only command");
 	                return;
 	        }
 	        
 
 			MovingObjectPosition p=getPlayerLookingSpot(player,true);
 			if(p==null){
-				var1.addChatMessage(new ChatComponentText("You have to look at a block"));
+				sendMessage(var1,"You have to look at a block");
 				return;
 			}
 			
-			var1.addChatMessage(new ChatComponentText("You are looking at: "+p.blockX+","+p.blockY+","+p.blockZ));
+			sendMessage(var1,"You are looking at: "+p.blockX+","+p.blockY+","+p.blockZ);
 			
-			ObservingRegistry.observeBlock(var2[1], p.blockX, p.blockY, p.blockZ);
+			if(ObservingRegistry.observeBlock(var2[1], p.blockX, p.blockY, p.blockZ)){
+				sendMessage(var1,"Successfully added block to observer list.");
+			}
+			else{
+				sendMessage(var1,"Successfully added block to observer list, but overrode another block with the same label");
+			}
 			//var1.addChatMessage(new ChatComponentText(""+player.worldObj.isBlockIndirectlyGettingPowered(p.blockX, p.blockY, p.blockZ)));
 		}
 		else if(var2[0].equals("remove")){
-			
+			if(ObservingRegistry.removeObservedBlock(var2[1])){
+				sendMessage(var1,"Successfully removed block from observer list");
+			}
+			else{
+				sendMessage(var1,"Failed to remove block from observer list. There is no block with this label");
+			}
 		}
 		else{
-			var1.addChatMessage(new ChatComponentText("Invalid arguments. Usage: "+getCommandUsage(var1)));
-		      return;
+			sendMessage(var1,"Invalid arguments. Usage: "+getCommandUsage(var1));
+		    return;
 		      
 		}
 
@@ -139,6 +149,10 @@ public class RegisterRedstoneInfoCommand implements ICommand{
 		Vec3 var23 = var13.addVector(var18 * var21, var17 * var21, var20 * var21);
 		return player.worldObj.rayTraceBlocks(var13, var23);
 		//return player.worldObj.rayTraceBlocks_do_do(var13, var23, false, !true);
+	}
+	
+	private void sendMessage(ICommandSender target,String message){
+		target.addChatMessage(new ChatComponentText(message));
 	}
 
 }
