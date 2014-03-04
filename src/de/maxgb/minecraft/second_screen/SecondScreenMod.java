@@ -9,6 +9,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import de.maxgb.minecraft.second_screen.util.Constants;
 import de.maxgb.minecraft.second_screen.util.Logger;
+import de.maxgb.minecraft.second_screen.world.RegisterRedstoneInfoCommand;
 
 @Mod(modid = Constants.MOD_ID, name = Constants.NAME, version = Constants.VERSION, dependencies = "required-after:FML")
 public class SecondScreenMod {
@@ -37,14 +38,17 @@ public class SecondScreenMod {
 		Logger.d(TAG, "Test");
 		Configuration config = new Configuration(
 				event.getSuggestedConfigurationFile());
+		
 		Configs.load(config);
+		
 
 	}
 
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent e) {
-		hostname = "localhost";
-		port = 25565;
+		e.registerServerCommand( new RegisterRedstoneInfoCommand());
+		hostname = Configs.hostname;
+		port = Configs.port;
 		start();
 	}
 
