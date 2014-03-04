@@ -20,12 +20,13 @@ public class WorldInfoListener extends StandardListener {
 	
 	public WorldInfoListener(String params) {
 		super(params);
-		everyTick = 2000;// TODO make config related
+		everyTick = 200;// TODO make config related
 		worlds=new HashMap<Integer,WorldServer>();
 		
 		for( WorldServer s: server.worldServers){
 			worlds.put(s.provider.dimensionId, s);
 		}
+		Logger.i(TAG, "Worlds: "+worlds.toString());
 	}
 
 	@Override
@@ -37,17 +38,17 @@ public class WorldInfoListener extends StandardListener {
 		ArrayList<ObservedBlock> blocks =ObservingRegistry.getObservedBlocks();
 		for(int i=0;i<blocks.size();i++){
 			ObservedBlock block = blocks.get(i);
+			
 			WorldServer world=worlds.get(block.dimensionId);
 			if(world==null){
-				Logger.w(TAG, "Dimension corrosponding to the block not found");
-				blocks.remove(i);
-				i--;
+				Logger.w(TAG, "Dimension corrosponding to the block not found: "+block.dimensionId);
+				ObservingRegistry.removeObservedBlock(block.label);
+				
 			}
 			else{
 				if(world.getBlock(block.x, block.y, block.z).getMaterial()==net.minecraft.block.material.Material.air){
 					Logger.w(TAG, "Block´s material is air -> remove");
-					blocks.remove(i);
-					i--;
+					ObservingRegistry.removeObservedBlock(block.label);
 				}
 				else{
 					redstone.put(block.label,world.isBlockIndirectlyGettingPowered(block.x, block.y, block.z));

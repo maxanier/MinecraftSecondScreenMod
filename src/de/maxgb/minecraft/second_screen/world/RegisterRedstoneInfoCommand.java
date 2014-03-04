@@ -75,7 +75,7 @@ public class RegisterRedstoneInfoCommand implements ICommand{
 			
 			sendMessage(var1,"You are looking at: "+p.blockX+","+p.blockY+","+p.blockZ);
 			
-			if(ObservingRegistry.observeBlock(var2[1], p.blockX, p.blockY, p.blockZ,player.worldObj.provider.dimensionId)){
+			if(ObservingRegistry.observeBlock(var2[1], p.blockX, p.blockY, p.blockZ, player.worldObj.provider.dimensionId)){
 				sendMessage(var1,"Successfully added block to observer list.");
 			}
 			else{

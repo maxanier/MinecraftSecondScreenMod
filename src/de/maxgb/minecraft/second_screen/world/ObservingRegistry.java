@@ -14,7 +14,7 @@ public class ObservingRegistry {
 	 * @param z
 	 * @return false if there already was a observed block with that label
 	 */
-	public static boolean observeBlock(String label,int dimensionId,int x,int y,int z){
+	public static boolean observeBlock(String label,int x,int y,int z,int dimensionId){
 		if(map==null){
 			map=new HashMap<String,ObservedBlock>();
 		}
