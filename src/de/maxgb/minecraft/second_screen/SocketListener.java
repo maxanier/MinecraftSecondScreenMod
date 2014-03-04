@@ -79,7 +79,7 @@ public class SocketListener implements Runnable {
 			running = true;
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.e(TAG, "Failed to create socket",e);
 			return false;
 		}
 	}
@@ -88,7 +88,7 @@ public class SocketListener implements Runnable {
 	public void run() {
 		FMLLog.log(Level.DEBUG, "Starting SocketListener");
 		if (!init()) {
-			FMLLog.log(Level.ERROR, "Failed to start SocketListener");
+			Logger.e(TAG,"Failed to start SocketListener");
 		}
 		try {
 			while (running) {
