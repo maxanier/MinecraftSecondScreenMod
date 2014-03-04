@@ -1,7 +1,15 @@
 package de.maxgb.minecraft.second_screen.info_listener;
 
+import java.lang.reflect.InvocationTargetException;
+
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -9,6 +17,7 @@ import org.json.JSONObject;
 import de.maxgb.minecraft.second_screen.StandardListener;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.util.PROTOKOLL;
+import de.maxgb.minecraft.second_screen.util.ReadPrivate;
 
 public class PlayerInventoryListener extends StandardListener {
 
@@ -53,8 +62,12 @@ public class PlayerInventoryListener extends StandardListener {
 					if (s != null) {
 						JSONObject stack = new JSONObject();
 
-						stack.put("displayname", s.getDisplayName());
+						stack.put("displayname", s.getUnlocalizedName());
 						stack.put("size", s.stackSize);
+						
+						
+				
+						stack.put("icon", getTextureString(s.getItem()));
 						items.put(stack);
 					}
 				}
@@ -66,6 +79,72 @@ public class PlayerInventoryListener extends StandardListener {
 		}
 		return PROTOKOLL.S_PLAYERINFO_LISTENER + ":" + response.toString();
 
+	}
+	
+	private String getTextureString(Item i){
+		
+		
+		try {
+				ItemBlock ib=(ItemBlock)i;
+		} catch (java.lang.ClassCastException e) {
+					
+			try {
+					FakeIconRegister register=new FakeIconRegister();
+					i.registerIcons(register);
+					return register.getTextureString();
+			} catch (NullPointerException e1) {}
+		}
+				
+		return null;
+		
+	}
+	
+	private class FakeIconRegister implements IIconRegister{
+		
+		String texture;
+		@Override
+		public IIcon registerIcon(String var1) {
+			texture=var1;
+			
+			//Should throw a nullpointer
+			String n=null;
+			n.charAt(1);
+			
+			return createTextureAtlasSprite(texture);
+
+		}
+		public String getTextureString(){
+			return texture;
+		}
+		
+		private IIcon createTextureAtlasSprite(String s){
+			try {
+				Class<?> c = TextureAtlasSprite.class;
+				java.lang.reflect.Constructor constr=c.getDeclaredConstructor(String.class);
+				constr.setAccessible(true);
+				return (IIcon)constr.newInstance(s);
+			} catch (NoSuchMethodException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SecurityException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return null;
+		}
+		
 	}
 
 }
