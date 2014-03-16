@@ -8,6 +8,8 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import org.json.JSONObject;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
@@ -15,6 +17,7 @@ import de.maxgb.minecraft.second_screen.info_listener.PlayerInfoListener;
 import de.maxgb.minecraft.second_screen.info_listener.PlayerInventoryListener;
 import de.maxgb.minecraft.second_screen.info_listener.ServerInfoListener;
 import de.maxgb.minecraft.second_screen.info_listener.WorldInfoListener;
+import de.maxgb.minecraft.second_screen.util.Constants;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.util.PROTOKOLL;
 
@@ -95,6 +98,7 @@ public class SocketHandler extends Thread {
 				// ProcessMessage
 				if (msg != null) {
 					Logger.i(TAG, "Received Message: " + msg);// TODO Remove
+					
 					if (msg.startsWith(PROTOKOLL.REGISTER_S_PLAYERINFO_LISTENER)) {
 
 						String params = null;
@@ -202,6 +206,11 @@ public class SocketHandler extends Thread {
 							.startsWith(PROTOKOLL.UNREGISTER_ALL_LISTENER)) {
 						listeners = new ArrayList<StandardListener>();
 						System.gc();
+					}
+					else if(msg.startsWith(PROTOKOLL.CONNECT)){
+						JSONObject result=new JSONObject();
+						result.put("versionid",Constants.FEATURE_VERSION);
+						send(PROTOKOLL.CONNECT_RESULT+" "+result.toString());
 					}
 					else if(msg.startsWith(PROTOKOLL.DISCONNECT)){
 						close();
