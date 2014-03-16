@@ -7,11 +7,13 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
+import de.maxgb.minecraft.second_screen.commands.GetIPCommand;
+import de.maxgb.minecraft.second_screen.commands.GetMSSPortCommand;
+import de.maxgb.minecraft.second_screen.commands.RegisterRedstoneInfoCommand;
 import de.maxgb.minecraft.second_screen.data.DataStorageDriver;
 import de.maxgb.minecraft.second_screen.util.Constants;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.world.ObservingRegistry;
-import de.maxgb.minecraft.second_screen.world.RegisterRedstoneInfoCommand;
 
 @Mod(modid = Constants.MOD_ID, name = Constants.NAME, version = Constants.VERSION, dependencies = "required-after:FML")
 public class SecondScreenMod {
@@ -20,6 +22,8 @@ public class SecondScreenMod {
 	public static int port;
 	public static String hostname;
 	private static int id = 0;
+	public static boolean connected;
+	public static String error;
 
 	public static int id() {
 		return id++;
@@ -49,13 +53,18 @@ public class SecondScreenMod {
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent e) {
 		
+		hostname = Configs.hostname;
+		port = Configs.port;
+		
 		DataStorageDriver.setWorldName(e.getServer().getFolderName());
 		
 		ObservingRegistry.loadObservingMap();
 		
 		e.registerServerCommand( new RegisterRedstoneInfoCommand());
-		hostname = Configs.hostname;
-		port = Configs.port;
+		e.registerServerCommand(new GetIPCommand());
+		e.registerServerCommand(new GetMSSPortCommand());
+		
+
 		start();
 	}
 
