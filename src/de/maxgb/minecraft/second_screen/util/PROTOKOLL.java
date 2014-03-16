@@ -25,6 +25,8 @@ public class PROTOKOLL {
 	public static final String LOGIN="login";// <json> (json contains username,password)
 	public static final String LOGIN_RESULT="login_result";//<json> (json contains success (0/1),error if success = 0, user(userobject))
 	
+	public static final String SERVER_STOPPING="server_stopping";
+	
 	//Etc
 	public static final String UNKNOWN="unknown";
 }

@@ -65,7 +65,7 @@ public class SocketListener implements Runnable {
 		synchronized (socketList) {
 			for (SocketHandler handler : socketList) {
 				try {
-					handler.close();
+					handler.stopping();
 				} catch (Exception e) {
 				}
 			}

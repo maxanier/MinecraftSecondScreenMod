@@ -50,13 +50,11 @@ public class SocketHandler extends Thread {
 	}
 
 	/**
-	 * Stops the run method, closes the socket and if remove is true, removes this from SocketListener.socketList
-	 * @param remove Remove from socketList
+	 * Stops the run method and sets remove to true so that the listener thread removes it from the list
 	 */
-	public void close() {
+	private void close() {
 
 		running = false;
-
 		try {
 			socket.close();
 			
@@ -66,6 +64,14 @@ public class SocketHandler extends Thread {
 		socket = null;
 		remove=true;
 
+	}
+	
+	/**
+	 * Sends a stopping message to the client and closes the handler
+	 */
+	public void stopping(){
+		send(PROTOKOLL.SERVER_STOPPING);
+		close();
 	}
 	
 
