@@ -16,6 +16,7 @@ public class GetIPCommand implements ICommand {
 		this.aliases = new ArrayList();
 		this.aliases.add("getIP");
 		this.aliases.add("getip");
+		this.aliases.add("getIp");
 		this.aliases.add("gethostname");
 	}
 
