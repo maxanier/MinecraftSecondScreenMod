@@ -44,26 +44,24 @@ public class SecondScreenMod {
 		Logger.d(TAG, "Test");
 		Configuration config = new Configuration(
 				event.getSuggestedConfigurationFile());
-		
+
 		Configs.load(config);
-		
 
 	}
 
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent e) {
-		
+
 		hostname = Configs.hostname;
 		port = Configs.port;
-		
+
 		DataStorageDriver.setWorldName(e.getServer().getFolderName());
-		
+
 		ObservingRegistry.loadObservingMap();
-		
-		e.registerServerCommand( new RegisterRedstoneInfoCommand());
+
+		e.registerServerCommand(new RegisterRedstoneInfoCommand());
 		e.registerServerCommand(new GetIPCommand());
 		e.registerServerCommand(new GetMSSPortCommand());
-		
 
 		start();
 	}

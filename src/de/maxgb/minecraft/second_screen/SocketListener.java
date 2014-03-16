@@ -46,14 +46,13 @@ public class SocketListener implements Runnable {
 
 			port = MinecraftServer.getServer().getPort();
 		}
-		
-		
+
 		socketList = Collections
 				.synchronizedList(new ArrayList<SocketHandler>());
-		
-		//Registering to Eventbus
+
+		// Registering to Eventbus
 		FMLCommonHandler.instance().bus().register(this);
-		
+
 		Logger.i(TAG, "Starting Listener Thread on " + inetAddress.toString()
 				+ ":" + port);
 		thread = new Thread(this, "SecondScreen - SocketListener");
@@ -77,14 +76,14 @@ public class SocketListener implements Runnable {
 		try {
 			socket = new ServerSocket(port, 0, inetAddress);
 			running = true;
-			SecondScreenMod.connected=true;
+			SecondScreenMod.connected = true;
 			return true;
 		} catch (Exception e) {
-			Logger.e(TAG, "Failed to create socket",e);
-			SecondScreenMod.connected=false;
-			if(e.getMessage().contains("JVM_Bind")){
-				
-				SecondScreenMod.error="Port already in use";
+			Logger.e(TAG, "Failed to create socket", e);
+			SecondScreenMod.connected = false;
+			if (e.getMessage().contains("JVM_Bind")) {
+
+				SecondScreenMod.error = "Port already in use";
 			}
 			return false;
 		}
@@ -94,12 +93,12 @@ public class SocketListener implements Runnable {
 	public void run() {
 		FMLLog.log(Level.DEBUG, "Starting SocketListener");
 		if (!init()) {
-			Logger.e(TAG,"Failed to start SocketListener");
+			Logger.e(TAG, "Failed to start SocketListener");
 		}
 		try {
 			while (running) {
 				try {
-					SocketHandler handler=new SocketHandler(socket.accept(), this);
+					SocketHandler handler = new SocketHandler(socket.accept());
 					socketList.add(handler);
 
 				} catch (SocketException e) {
@@ -134,15 +133,13 @@ public class SocketListener implements Runnable {
 		System.gc();
 
 	}
-	
 
-	
 	@SubscribeEvent
 	public void tick(ServerTickEvent e) {
-		synchronized(socketList){
-			for(int i=0;i<socketList.size();i++){
+		synchronized (socketList) {
+			for (int i = 0; i < socketList.size(); i++) {
 				socketList.get(i).tick();
-				if(socketList.get(i).remove){
+				if (socketList.get(i).remove) {
 					socketList.remove(i);
 					i--;
 				}

@@ -3,12 +3,12 @@ package de.maxgb.minecraft.second_screen.util;
 import net.minecraft.item.Item;
 
 public class ReadPrivate {
-	public static String getIconString(Item i){
+	public static String getIconString(Item i) {
 		try {
 			Class<?> c = Item.class;
-			java.lang.reflect.Field field = c.getDeclaredField( "iconString" );
+			java.lang.reflect.Field field = c.getDeclaredField("iconString");
 			field.setAccessible(true);
-			return (String)field.get(i);
+			return (String) field.get(i);
 		} catch (NoSuchFieldException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
