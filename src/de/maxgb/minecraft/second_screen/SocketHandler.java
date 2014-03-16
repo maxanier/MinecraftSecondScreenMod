@@ -244,10 +244,11 @@ public class SocketHandler extends Thread {
 		try {
 			writer = new BufferedWriter(new OutputStreamWriter(
 					socket.getOutputStream()));
-		} catch (IOException e) {
+		} catch (Exception e) {
 			Logger.e(TAG, "Failed to get BufferedWriter", e);
 			this.close();
 		}
+		
 		// if it is available, write
 		if (writer != null) {
 			try {

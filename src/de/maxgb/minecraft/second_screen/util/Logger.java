@@ -1,5 +1,9 @@
 package de.maxgb.minecraft.second_screen.util;
 
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
+import java.io.StringWriter;
+
 import org.apache.logging.log4j.Level;
 
 public class Logger {
@@ -14,8 +18,16 @@ public class Logger {
 	}
 
 	public static void e(String tag, String msg, Throwable t) {
+		String stacktrace="";
+		PrintStream p;
+		try {
+			p = new PrintStream(stacktrace);
+			t.printStackTrace(p);
+		} catch (FileNotFoundException e1) {
+			stacktrace=t.getMessage();
+		}
 		log(Level.ERROR,
-				"[" + tag + "]" + msg + "\nMessage: " + t.getLocalizedMessage());
+				"[" + tag + "]" + msg + "\nStacktrace: " + stacktrace);
 	}
 
 	public static void i(String tag, String msg) {

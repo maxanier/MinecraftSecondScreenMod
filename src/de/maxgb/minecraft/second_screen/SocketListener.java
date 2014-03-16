@@ -77,9 +77,15 @@ public class SocketListener implements Runnable {
 		try {
 			socket = new ServerSocket(port, 0, inetAddress);
 			running = true;
+			SecondScreenMod.connected=true;
 			return true;
 		} catch (Exception e) {
 			Logger.e(TAG, "Failed to create socket",e);
+			SecondScreenMod.connected=false;
+			if(e.getMessage().contains("JVM_Bind")){
+				
+				SecondScreenMod.error="Port already in use";
+			}
 			return false;
 		}
 	}
