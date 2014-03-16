@@ -7,8 +7,10 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
+import de.maxgb.minecraft.second_screen.data.DataStorageDriver;
 import de.maxgb.minecraft.second_screen.util.Constants;
 import de.maxgb.minecraft.second_screen.util.Logger;
+import de.maxgb.minecraft.second_screen.world.ObservingRegistry;
 import de.maxgb.minecraft.second_screen.world.RegisterRedstoneInfoCommand;
 
 @Mod(modid = Constants.MOD_ID, name = Constants.NAME, version = Constants.VERSION, dependencies = "required-after:FML")
@@ -46,6 +48,11 @@ public class SecondScreenMod {
 
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent e) {
+		
+		DataStorageDriver.setWorldName(e.getServer().getFolderName());
+		
+		ObservingRegistry.loadObservingMap();
+		
 		e.registerServerCommand( new RegisterRedstoneInfoCommand());
 		hostname = Configs.hostname;
 		port = Configs.port;
@@ -55,6 +62,7 @@ public class SecondScreenMod {
 	@EventHandler
 	public void serverStopping(FMLServerStoppingEvent e) {
 		stop();
+		ObservingRegistry.saveObservingMap();
 	}
 
 	private void start() {

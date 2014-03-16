@@ -2,9 +2,48 @@ package de.maxgb.minecraft.second_screen.world;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+
+import de.maxgb.minecraft.second_screen.data.DataStorageDriver;
+import de.maxgb.minecraft.second_screen.util.Logger;
 
 public class ObservingRegistry {
 	private static HashMap<String,ObservedBlock> map;
+	private final static String TAG="OberservingRegistry";
+	private final static String FILE="observingMap.txt";
+	
+	/**
+	 * Loads the HashMap<String,ObservedBlock>, creates a new one if none exists
+	 */
+	public static void loadObservingMap(){
+		map=new HashMap<String,ObservedBlock>();
+		ArrayList<String> lines = DataStorageDriver.readFromWorldFile(FILE);
+		if(lines==null){
+			Logger.i(TAG, "No saved data found");
+			return;
+		}
+		else{
+			for(String line : lines){
+				String[] part = line.split(":");
+				ObservedBlock b = ObservedBlock.fromString(part[1]);
+				if(b!=null){
+					map.put(part[0], b);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Saves the HashMap<String,ObservedBlock>
+	 */
+	public static void saveObservingMap(){
+		ArrayList<String> lines=new ArrayList<String>();
+		
+		for(Map.Entry<String, ObservedBlock> entry : map.entrySet()){
+			lines.add(entry.getKey()+":"+entry.getValue().toString());
+		}
+		DataStorageDriver.writeToWorldFile(FILE, lines);
+	}
 	
 	/**
 	 * Adds a block to the observing list, overrides blocks with the same label
@@ -51,6 +90,37 @@ public class ObservingRegistry {
 			this.z=z;
 			this.label=label;
 			this.dimensionId=dimensionId;
+		}
+		
+		public String toString(){
+			return label+","+x+","+y+","+z+","+dimensionId;
+			
+		}
+		
+		public static ObservedBlock fromString(String s){
+			if(s == null){
+				Logger.w(TAG, "Cannot create ObservedBlock from null String");
+				return null;
+			}
+			
+			String[] parts = s.split(",");
+			if(parts.length!=5){
+				Logger.w(TAG,"ObservedBlock Strin has to contain 5 parts");
+				return null;
+			}
+
+			try {
+				String label=parts[0];
+				int x=Integer.parseInt(parts[1]);
+				int y=Integer.parseInt(parts[2]);
+				int z=Integer.parseInt(parts[3]);
+				int dimensionId=Integer.parseInt(parts[4]);
+				
+				return new ObservedBlock(label,x,y,z,dimensionId);
+			} catch (NumberFormatException e) {
+				Logger.e(TAG, "Failed to parse coordinates",e);
+				return null;
+			}
 		}
 		
 	}

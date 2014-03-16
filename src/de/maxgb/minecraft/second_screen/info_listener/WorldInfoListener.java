@@ -5,7 +5,9 @@ import java.util.HashMap;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.storage.WorldInfo;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import de.maxgb.minecraft.second_screen.StandardListener;
@@ -33,13 +35,33 @@ public class WorldInfoListener extends StandardListener {
 	public String update() {
 		JSONObject info = new JSONObject();
 		
-		JSONObject redstone=new JSONObject();
+		//General Overworldinfo
+		JSONObject ow=new JSONObject();
+		
+		for(WorldServer w : server.worldServers){
+			if(w.provider.dimensionId==0){
+				WorldInfo i = w.getWorldInfo();
+				ow.put("name", i.getWorldName());
+				ow.put("time", parseTime((int)i.getWorldTime()+6000));
+				ow.put("rain", i.isRaining());
+				ow.put("timetillrain",parseTime((int)i.getRainTime()));
+				break;
+			}
+		}
+		info.put("overworld", ow);
+		
+		
+		
+		
+		//Redstone info---------------------------------------------------------------
+		JSONArray redstone=new JSONArray();
 		
 		ArrayList<ObservedBlock> blocks =ObservingRegistry.getObservedBlocks();
 		for(int i=0;i<blocks.size();i++){
 			ObservedBlock block = blocks.get(i);
 			
 			WorldServer world=worlds.get(block.dimensionId);
+			
 			if(world==null){
 				Logger.w(TAG, "Dimension corrosponding to the block not found: "+block.dimensionId);
 				ObservingRegistry.removeObservedBlock(block.label);
@@ -51,14 +73,65 @@ public class WorldInfoListener extends StandardListener {
 					ObservingRegistry.removeObservedBlock(block.label);
 				}
 				else{
-					redstone.put(block.label,world.isBlockIndirectlyGettingPowered(block.x, block.y, block.z));
+					JSONArray in=new JSONArray();
+					in.put(block.label).put(world.isBlockIndirectlyGettingPowered(block.x, block.y, block.z));
+					redstone.put(in);
 				}
 				
 			}
 		}
 		
 		info.put("redstone", redstone);
+		//--------------------------------------------------------------------------------
+		
+		
 		return PROTOKOLL.WORLD_INFO_LISTENER+":"+info.toString();
 	}
+	
+	/**
+	 * MinecraftTime
+	* Gets a string with only needed elements.
+	* Max time is weeks
+	* @param timeInTicks
+	* @return Time in string format
+	*/
+	public static String parseTime(int timeInTicks)
+	{
+		String time = "";
+		int weeks = timeInTicks / (168000);
+		int remainder = timeInTicks % (168000);
+		int days = remainder / 24000;
+		remainder = timeInTicks % 24000;
+		int hours = remainder / 1000;
+		remainder = timeInTicks % 1000;
+		int minutes = remainder / 17;
+		
+		
+		if (weeks != 0)
+		{
+			time += weeks + " weeks ";
+		}
+		
+		if (days != 0)
+		{
+			time += (days < 10 ? "0" : "") + days + " days ";
+		}
+		
+		if (hours != 0)
+		{
+			time += (hours < 10 ? "0" : "") + hours + " h ";
+		}
+		
+		if (minutes != 0)
+		{
+			time += (minutes < 10 ? "0" : "") + minutes + " min ";
+		}
+	
+		
+		
+		return time;
+	}
+
+
 
 }
