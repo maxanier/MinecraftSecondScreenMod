@@ -1,7 +1,9 @@
-package de.maxgb.minecraft.second_screen.world;
+package de.maxgb.minecraft.second_screen.commands;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.maxgb.minecraft.second_screen.world.ObservingRegistry;
 
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -35,7 +37,7 @@ public class RegisterRedstoneInfoCommand implements ICommand{
 
 	@Override
 	public String getCommandUsage(ICommandSender var1) {
-		return "redstoneinfo add <label>\nredstoneinfo remove <label>";
+		return "/redstoneinfo add <label> or /redstoneinfo remove <label>";
 	}
 
 	@Override
