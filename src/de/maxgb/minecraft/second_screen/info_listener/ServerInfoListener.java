@@ -2,6 +2,7 @@ package de.maxgb.minecraft.second_screen.info_listener;
 
 import org.json.JSONObject;
 
+import de.maxgb.minecraft.second_screen.Configs;
 import de.maxgb.minecraft.second_screen.StandardListener;
 import de.maxgb.minecraft.second_screen.util.PROTOKOLL;
 
@@ -9,7 +10,7 @@ public class ServerInfoListener extends StandardListener {
 
 	public ServerInfoListener(String params) {
 		super(params);
-		everyTick = 2000;// TODO make config related
+		everyTick = Configs.server_info_update_time;
 	}
 
 	@Override

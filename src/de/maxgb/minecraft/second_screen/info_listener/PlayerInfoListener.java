@@ -4,6 +4,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 
 import org.json.JSONObject;
 
+import de.maxgb.minecraft.second_screen.Configs;
 import de.maxgb.minecraft.second_screen.StandardListener;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.util.PROTOKOLL;
@@ -17,7 +18,7 @@ public class PlayerInfoListener extends StandardListener {
 	public PlayerInfoListener(String params) {
 		super(params);
 		setParams(params);
-		everyTick = 40;// TODO make config related
+		everyTick = Configs.player_info_update_time;
 		Logger.i(TAG, "Created Playerlistener");// TODO remove
 	}
 

@@ -9,6 +9,7 @@ import net.minecraft.world.storage.WorldInfo;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import de.maxgb.minecraft.second_screen.Configs;
 import de.maxgb.minecraft.second_screen.StandardListener;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.util.PROTOKOLL;
@@ -56,7 +57,7 @@ public class WorldInfoListener extends StandardListener {
 
 	public WorldInfoListener(String params) {
 		super(params);
-		everyTick = 200;// TODO make config related
+		everyTick = Configs.world_info_update_time;
 		worlds = new HashMap<Integer, WorldServer>();
 
 		for (WorldServer s : server.worldServers) {
