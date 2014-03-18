@@ -129,10 +129,14 @@ public class PlayerInventoryListener extends StandardListener {
 					if (s != null) {
 						JSONObject stack = new JSONObject();
 
-						stack.put("displayname", s.getUnlocalizedName());
+						stack.put("displayname", s.getDisplayName());
 						stack.put("size", s.stackSize);
-
-						stack.put("icon", getTextureString(s.getItem()));
+						Item it = s.getItem();
+						if(it!=null){
+							stack.put("tab", it.getCreativeTab().getTabLabel());
+						}
+						
+						//stack.put("icon", getTextureString(s.getItem()));
 						items.put(stack);
 					}
 				}
