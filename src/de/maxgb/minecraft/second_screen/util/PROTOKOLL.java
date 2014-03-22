@@ -16,6 +16,9 @@ public class PROTOKOLL {
 	public static final String REGISTER_WORLD_INFO_LISTENER = "r-wil";
 	public static final String UNREGISTER_WORLD_INFO_LISTENER = "ur-wil";
 	public static final String WORLD_INFO_LISTENER = "wil";
+	public static final String CHAT_LISTENER = "cl";
+	public static final String REGISTER_CHAT_LISTENER = "r-cl";
+	public static final String UNREGISTER_CHAT_LISTENER ="ur-cl";
 
 	// Connection
 	public static final String DISCONNECT = "disconnect";

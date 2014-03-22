@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import org.json.JSONObject;
 
+import de.maxgb.minecraft.second_screen.info_listener.ChatListener;
 import de.maxgb.minecraft.second_screen.info_listener.PlayerInfoListener;
 import de.maxgb.minecraft.second_screen.info_listener.PlayerInventoryListener;
 import de.maxgb.minecraft.second_screen.info_listener.ServerInfoListener;
@@ -193,7 +194,20 @@ public class SocketHandler extends Thread {
 								break;
 							}
 						}
-					} else if (msg
+						
+					
+					} 
+					else if(msg.startsWith(PROTOKOLL.REGISTER_CHAT_LISTENER)){
+						listeners.add(new ChatListener(null));
+					}
+					else if(msg.startsWith(PROTOKOLL.UNREGISTER_CHAT_LISTENER)){
+						for (int i = 0; i < listeners.size(); i++) {
+							if (listeners.get(i) instanceof ChatListener) {
+								listeners.remove(i);
+								break;
+							}
+						}
+					}else if (msg
 							.startsWith(PROTOKOLL.UNREGISTER_ALL_LISTENER)) {
 						listeners = new ArrayList<StandardListener>();
 						System.gc();
