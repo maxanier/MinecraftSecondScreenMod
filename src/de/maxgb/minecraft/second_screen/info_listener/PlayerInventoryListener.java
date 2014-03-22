@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -133,7 +134,13 @@ public class PlayerInventoryListener extends StandardListener {
 						stack.put("size", s.stackSize);
 						Item it = s.getItem();
 						if(it!=null){
-							stack.put("tab", it.getCreativeTab().getTabLabel());
+							CreativeTabs tab = it.getCreativeTab(); //Dirty since its actually client only
+							if(tab!=null){
+								stack.put("tab", it.getCreativeTab().getTabLabel());
+							}
+							else{
+								stack.put("tab", "otherMatters");
+							}
 						}
 						
 						//stack.put("icon", getTextureString(s.getItem()));
