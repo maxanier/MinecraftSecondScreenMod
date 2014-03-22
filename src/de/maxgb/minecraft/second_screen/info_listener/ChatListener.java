@@ -1,5 +1,7 @@
 package de.maxgb.minecraft.second_screen.info_listener;
 
+import java.util.Date;
+
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ServerChatEvent;
 
@@ -39,10 +41,13 @@ public class ChatListener extends StandardListener {
 	
 	@SubscribeEvent
 	public void chatMessage(ServerChatEvent e){
+		
 		JSONObject msg = new JSONObject();
 		msg.put("sender", e.username);
 		msg.put("msg", e.message);
-		msg.put("time", System.currentTimeMillis());
+		Date timeDate=new Date(System.currentTimeMillis());
+		String time=timeDate.getHours()+":"+timeDate.getMinutes()+":"+timeDate.getSeconds();
+		msg.put("time", time);
 		buffer.put(msg);
 	}
 	
