@@ -36,6 +36,9 @@ public abstract class StandardListener {
 		if (tick < 1) {
 			tick = everyTick;
 			String newMessage = update();
+			if(newMessage==null){
+				return null;
+			}
 			if (!newMessage.equals(lastMessage)) {
 				lastMessage = newMessage;
 				return newMessage;
