@@ -46,7 +46,7 @@ public class ChatListener extends StandardListener {
 		msg.put("sender", e.username);
 		msg.put("msg", e.message);
 		Date timeDate=new Date(System.currentTimeMillis());
-		String time=timeDate.getHours()+":"+timeDate.getMinutes()+":"+timeDate.getSeconds();
+		String time=timeDate.getHours()+":"+timeDate.getMinutes();
 		msg.put("time", time);
 		buffer.put(msg);
 	}
