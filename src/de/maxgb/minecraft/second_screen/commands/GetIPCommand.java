@@ -67,7 +67,7 @@ public class GetIPCommand implements ICommand {
 				SecondScreenMod.error = "Unknown";
 			}
 			sendMessage(var1, "IP: " + SecondScreenMod.hostname
-					+ ". But the mod isn´t running. Error: "
+					+ ". But the mod isnt running. Error: "
 					+ SecondScreenMod.error);
 		}
 

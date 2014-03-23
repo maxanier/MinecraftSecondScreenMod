@@ -16,7 +16,7 @@ import de.maxgb.minecraft.second_screen.world.ObservingRegistry;
 public class RegisterRedstoneInfoCommand implements ICommand {
 
 	/**
-	 * Gets player´s looking spot.
+	 * Gets players looking spot.
 	 * 
 	 * @param player
 	 * @param restricts

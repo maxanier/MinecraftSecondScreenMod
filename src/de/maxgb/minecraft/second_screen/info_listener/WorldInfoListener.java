@@ -103,7 +103,7 @@ public class WorldInfoListener extends StandardListener {
 
 			} else {
 				if (world.getBlock(block.x, block.y, block.z).getMaterial() == net.minecraft.block.material.Material.air) {
-					Logger.w(TAG, "Block´s material is air -> remove");
+					Logger.w(TAG, "Blocks material is air -> remove");
 					ObservingRegistry.removeObservedBlock(block.label);
 				} else {
 					JSONArray in = new JSONArray();

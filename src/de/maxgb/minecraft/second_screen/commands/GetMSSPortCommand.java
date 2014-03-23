@@ -68,7 +68,7 @@ public class GetMSSPortCommand implements ICommand {
 			}
 			sendMessage(var1, "Minecraft Second Screen Port: "
 					+ SecondScreenMod.port
-					+ ". But the mod isn´t running. Error: "
+					+ ". But the mod isnt running. Error: "
 					+ SecondScreenMod.error);
 		}
 
