@@ -4,6 +4,7 @@ import java.util.Date;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ServerChatEvent;
+import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -45,6 +46,24 @@ public class ChatListener extends StandardListener {
 		JSONObject msg = new JSONObject();
 		msg.put("sender", e.username);
 		msg.put("msg", e.message);
+		
+		
+		msg.put("time", getCurrentTimeString());
+		buffer.put(msg);
+	}
+	
+	@SubscribeEvent
+	public void playerDies(PlayerDropsEvent e){
+		JSONObject msg = new JSONObject();
+		msg.put("info",true);
+		msg.put("color", "orange");
+		msg.put("time", getCurrentTimeString());
+		msg.put("msg", e.entityPlayer.getDisplayName()+" died");
+		msg.put("success", 1);
+		buffer.put(msg);
+	}
+	
+	private String getCurrentTimeString(){
 		Date timeDate=new Date(System.currentTimeMillis());
 		String min=""+timeDate.getMinutes();
 		if(min.length()<2){
@@ -54,12 +73,8 @@ public class ChatListener extends StandardListener {
 		if(h.length()<2){
 			h="0"+h;
 		}
-		String time=h+":"+min;
-		msg.put("time", time);
-		buffer.put(msg);
+		return h+":"+min;
 	}
-	
-	
 	
 
 }
