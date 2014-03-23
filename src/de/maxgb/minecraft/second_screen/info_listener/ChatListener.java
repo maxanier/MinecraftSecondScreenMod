@@ -9,7 +9,9 @@ import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
 
 import de.maxgb.minecraft.second_screen.Configs;
 import de.maxgb.minecraft.second_screen.StandardListener;
@@ -23,6 +25,7 @@ public class ChatListener extends StandardListener {
 		super(params);
 		buffer = new JSONArray();
 		MinecraftForge.EVENT_BUS.register(this);
+		FMLCommonHandler.instance().bus().register(this);
 		everyTick=Configs.chat_update_time;
 	}
 
@@ -61,6 +64,30 @@ public class ChatListener extends StandardListener {
 		msg.put("msg", e.entityPlayer.getDisplayName()+" died");
 		msg.put("success", 1);
 		buffer.put(msg);
+	}
+	
+	@SubscribeEvent
+	public void playerJoined(PlayerEvent.PlayerLoggedInEvent e){
+		JSONObject msg = new JSONObject();
+		msg.put("info",true);
+		msg.put("color", "orange");
+		msg.put("time", getCurrentTimeString());
+		msg.put("msg", e.player.getDisplayName()+" joined");
+		msg.put("success", 1);
+		buffer.put(msg);
+		
+	}
+	
+	@SubscribeEvent
+	public void playerLeft(PlayerEvent.PlayerLoggedOutEvent e){
+		JSONObject msg = new JSONObject();
+		msg.put("info",true);
+		msg.put("color", "orange");
+		msg.put("time", getCurrentTimeString());
+		msg.put("msg", e.player.getDisplayName()+" left");
+		msg.put("success", 1);
+		buffer.put(msg);
+		
 	}
 	
 	private String getCurrentTimeString(){
