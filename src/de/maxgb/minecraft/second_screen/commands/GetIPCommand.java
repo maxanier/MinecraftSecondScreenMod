@@ -8,7 +8,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 import de.maxgb.minecraft.second_screen.SecondScreenMod;
 
-public class GetIPCommand implements ICommand {
+public class GetIPCommand extends BaseCommand {
 
 	private List aliases;
 
@@ -73,8 +73,5 @@ public class GetIPCommand implements ICommand {
 
 	}
 
-	private void sendMessage(ICommandSender target, String message) {
-		target.addChatMessage(new ChatComponentText(message));
-	}
 
 }

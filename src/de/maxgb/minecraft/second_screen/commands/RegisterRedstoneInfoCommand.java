@@ -13,7 +13,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import de.maxgb.minecraft.second_screen.world.ObservingRegistry;
 
-public class RegisterRedstoneInfoCommand implements ICommand {
+public class RegisterRedstoneInfoCommand extends BaseCommand {
 
 	/**
 	 * Gets players looking spot.
@@ -163,8 +163,5 @@ public class RegisterRedstoneInfoCommand implements ICommand {
 
 	}
 
-	private void sendMessage(ICommandSender target, String message) {
-		target.addChatMessage(new ChatComponentText(message));
-	}
 
 }

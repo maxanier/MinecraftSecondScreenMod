@@ -8,7 +8,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 import de.maxgb.minecraft.second_screen.SecondScreenMod;
 
-public class GetMSSPortCommand implements ICommand {
+public class GetMSSPortCommand extends BaseCommand {
 
 	private List aliase;
 
@@ -74,8 +74,5 @@ public class GetMSSPortCommand implements ICommand {
 
 	}
 
-	private void sendMessage(ICommandSender target, String message) {
-		target.addChatMessage(new ChatComponentText(message));
-	}
 
 }
