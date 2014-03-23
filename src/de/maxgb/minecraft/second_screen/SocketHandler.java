@@ -214,6 +214,7 @@ public class SocketHandler extends Thread {
 					} else if (msg.startsWith(PROTOKOLL.CONNECT)) {
 						JSONObject result = new JSONObject();
 						result.put("versionid", Constants.FEATURE_VERSION);
+						result.put("minecraftversion", Constants.MINECRAFT_VERSION);
 						send(PROTOKOLL.CONNECT_RESULT + " " + result.toString());
 					} else if (msg.startsWith(PROTOKOLL.DISCONNECT)) {
 						close();
