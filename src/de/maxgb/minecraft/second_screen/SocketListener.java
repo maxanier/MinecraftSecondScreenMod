@@ -60,7 +60,7 @@ public class SocketListener implements Runnable {
 	}
 
 	private void closeAll() {
-		FMLLog.log(Level.DEBUG, "Closing all SocketHandler");
+		Logger.i(Tag,"Stopping all handlers");
 		synchronized (socketList) {
 			for (SocketHandler handler : socketList) {
 				try {
