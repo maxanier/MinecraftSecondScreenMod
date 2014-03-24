@@ -60,7 +60,7 @@ public class SocketListener implements Runnable {
 	}
 
 	private void closeAll() {
-		Logger.i(Tag,"Stopping all handlers");
+		Logger.i(TAG,"Stopping all handlers");
 		synchronized (socketList) {
 			for (SocketHandler handler : socketList) {
 				try {

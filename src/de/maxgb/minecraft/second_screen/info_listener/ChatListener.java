@@ -16,13 +16,14 @@ import cpw.mods.fml.common.gameevent.PlayerEvent;
 import de.maxgb.minecraft.second_screen.Configs;
 import de.maxgb.minecraft.second_screen.StandardListener;
 import de.maxgb.minecraft.second_screen.util.PROTOKOLL;
+import de.maxgb.minecraft.second_screen.util.User;
 
 public class ChatListener extends StandardListener {
 
 	private JSONArray buffer;
 	
-	public ChatListener(String params) {
-		super(params);
+	public ChatListener(User user) {
+		super(user);
 		buffer = new JSONArray();
 		MinecraftForge.EVENT_BUS.register(this);
 		FMLCommonHandler.instance().bus().register(this);

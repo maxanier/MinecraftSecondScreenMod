@@ -2,30 +2,23 @@ package de.maxgb.minecraft.second_screen;
 
 import net.minecraft.server.MinecraftServer;
 import cpw.mods.fml.common.FMLCommonHandler;
+import de.maxgb.minecraft.second_screen.util.User;
 
 public abstract class StandardListener {
 
-	private String params;
+	protected User user;
 	protected MinecraftServer server;
 	protected int everyTick = 0;
 	private int tick;
 	private String lastMessage;
 
-	public StandardListener(String params) {
-		this.params = params;
+	public StandardListener(User user) {
+		this.user=user;
 		server = FMLCommonHandler.instance().getMinecraftServerInstance();
 		tick = 0;
 	}
 
-	/**
-	 * Checks if the listener has this params
-	 * 
-	 * @param params
-	 * @return
-	 */
-	public final boolean matchesParams(String params) {
-		return this.params == params;
-	}
+
 
 	/**
 	 * Is called every tick

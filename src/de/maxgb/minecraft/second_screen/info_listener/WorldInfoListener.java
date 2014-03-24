@@ -13,6 +13,7 @@ import de.maxgb.minecraft.second_screen.Configs;
 import de.maxgb.minecraft.second_screen.StandardListener;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.util.PROTOKOLL;
+import de.maxgb.minecraft.second_screen.util.User;
 import de.maxgb.minecraft.second_screen.world.ObservingRegistry;
 import de.maxgb.minecraft.second_screen.world.ObservingRegistry.ObservedBlock;
 
@@ -55,8 +56,8 @@ public class WorldInfoListener extends StandardListener {
 
 	private final String TAG = "WorldInfoListener";
 
-	public WorldInfoListener(String params) {
-		super(params);
+	public WorldInfoListener(User user) {
+		super(user);
 		everyTick = Configs.world_info_update_time;
 		worlds = new HashMap<Integer, WorldServer>();
 
