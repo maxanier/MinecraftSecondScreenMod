@@ -34,13 +34,14 @@ public class WorldInfoListener extends StandardListener {
 		remainder = timeInTicks % 1000;
 		int minutes = remainder / 17;
 
-		if (weeks != 0) {
-			time += weeks + " weeks ";
-		}
-
-		if (days != 0) {
-			time += (days < 10 ? "0" : "") + days + " days ";
-		}
+		// Not interesting
+//		if (weeks != 0) {
+//			time += weeks + " weeks ";
+//		}
+//
+//		if (days != 0) {
+//			time += (days < 10 ? "0" : "") + days + " days ";
+//		}
 
 		if (hours != 0) {
 			time += (hours < 10 ? "0" : "") + hours + " h ";
