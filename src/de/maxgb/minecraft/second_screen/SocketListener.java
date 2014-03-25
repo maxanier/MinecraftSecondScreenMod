@@ -112,9 +112,16 @@ public class SocketListener implements Runnable {
 		} finally {
 			try {
 				socket.close();
+				
+				
+			} catch (Exception e) {
+				Logger.e(TAG, "Error while closing socket",e);
+			}
+			try{
 				closeAll();
-			} catch (IOException e) {
-				e.printStackTrace();
+			}
+			catch(Exception e){
+				Logger.e(TAG, "Error while closing handlers",e);
 			}
 		}
 	}

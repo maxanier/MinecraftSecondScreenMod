@@ -124,7 +124,13 @@ public class PlayerInventoryListener extends StandardListener {
 						stack.put("size", s.stackSize);
 						Item it = s.getItem();
 						if(it!=null){
-							CreativeTabs tab = it.getCreativeTab(); //Dirty since its actually client only
+							CreativeTabs tab=null;
+							try {
+								tab = it.getCreativeTab();
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 							if(tab!=null){
 								stack.put("tab", it.getCreativeTab().getTabLabel());
 							}
