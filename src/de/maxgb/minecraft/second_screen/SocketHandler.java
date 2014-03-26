@@ -47,6 +47,11 @@ public class SocketHandler extends Thread {
 
 	}
 
+	private boolean auth(String name, String passhash) {
+		// TODO
+		return true;
+	}
+
 	/**
 	 * Stops the run method and sets remove to true so that the listener thread
 	 * removes it from the list
@@ -63,6 +68,159 @@ public class SocketHandler extends Thread {
 		socket = null;
 		remove = true;
 
+	}
+
+	/**
+	 * Handles the connect message
+	 */
+	private void onConnectMessage() {
+		JSONObject result = new JSONObject();
+		result.put("versionid", Constants.FEATURE_VERSION);
+		result.put("minecraftversion", Constants.MINECRAFT_VERSION);
+		result.put("login_required", Configs.login_required);
+		send(PROTOKOLL.CONNECT_RESULT + " " + result.toString());
+
+	}
+
+	/**
+	 * Handles the disconnect message
+	 */
+	private void onDisconnectMessage() {
+		close();
+	}
+
+	/**
+	 * Handles the login message
+	 * 
+	 * @param params
+	 *            The parameter Json string
+	 */
+	private void onLoginMessage(String params) {
+		JSONObject data = new JSONObject(params);
+		String username = data.getString("username");
+
+		int appversion = data.getInt("appversion");
+
+		if (Configs.login_required) {
+			if (!data.has("password")) {
+				Logger.w(
+						TAG,
+						"Login message is missing password. It is set to required in the config options");
+				JSONObject result = new JSONObject();
+				result.put("success", 0);
+				result.put("error", "Password required");
+				send(PROTOKOLL.LOGIN_RESULT + " " + result.toString());
+
+				return;
+			} else if (!auth(username, data.getString("password"))) {
+				Logger.w(TAG,
+						"Authentification failed. Username or password is wrong");
+				JSONObject result = new JSONObject();
+				result.put("success", 0);
+				result.put("error", "Username or password wrong");
+				send(PROTOKOLL.LOGIN_RESULT + " " + result.toString());
+				return;
+			}
+		}
+		user = new User(username, appversion);
+		JSONObject result = new JSONObject();
+		result.put("success", 1);
+		result.put("newer_app_version", Version.isNewestAppVersion(appversion));
+		send(PROTOKOLL.LOGIN_RESULT + " " + result.toString());
+		Logger.i(TAG, "Sucessfully logged in user " + username);
+	}
+
+	/**
+	 * Handles the register listener message
+	 * 
+	 * @param l
+	 *            The string representation of the listener which should be
+	 *            registered
+	 */
+	private void onRegisterMessage(final String l) {
+
+		// Check is user object is availible and so if the user is authentified
+		if (user == null) {
+			JSONObject result = new JSONObject();
+			result.put("success", 0);
+			result.put("error", "Login request required");
+			send(PROTOKOLL.ERROR + " " + result.toString());
+			Logger.w(TAG,
+					"Cannot register a listener before login. It is required by the configs");
+			return;
+		}
+
+		if (l.startsWith(PROTOKOLL.S_PLAYERINFO_LISTENER)) {
+
+			listeners.add(new PlayerInfoListener(user));
+
+		} else if (l.startsWith(PROTOKOLL.PLAYER_INVENTORY_LISTENER)) {
+
+			listeners.add(new PlayerInventoryListener(user));
+
+		} else if (l.startsWith(PROTOKOLL.SERVER_INFO_LISTENER)) {
+			listeners.add(new ServerInfoListener(user));
+
+		} else if (l.startsWith(PROTOKOLL.WORLD_INFO_LISTENER)) {
+			listeners.add(new WorldInfoListener(user));
+		} else if (l.startsWith(PROTOKOLL.CHAT_LISTENER)) {
+			listeners.add(new ChatListener(user));
+		}
+	}
+
+	/**
+	 * Handles the unregister listener messages
+	 * 
+	 * @param l
+	 *            The string representation of the listener, which should be
+	 *            unregistered
+	 */
+	private void onUnregisterMessage(String l) {
+		int listenercount = listeners.size();
+		if (l.startsWith(PROTOKOLL.S_PLAYERINFO_LISTENER)) {
+
+			for (int i = 0; i < listeners.size(); i++) {
+				StandardListener sl = listeners.get(i);
+				if (sl instanceof PlayerInfoListener) {
+					listeners.remove(i);
+				}
+			}
+
+		} else if (l.startsWith(PROTOKOLL.PLAYER_INVENTORY_LISTENER)) {
+
+			for (int i = 0; i < listeners.size(); i++) {
+				StandardListener sl = listeners.get(i);
+				if (sl instanceof PlayerInventoryListener) {
+					listeners.remove(i);
+				}
+			}
+
+		} else if (l.startsWith(PROTOKOLL.SERVER_INFO_LISTENER)) {
+			for (int i = 0; i < listeners.size(); i++) {
+				if (listeners.get(i) instanceof ServerInfoListener) {
+					listeners.remove(i);
+				}
+			}
+		} else if (l.startsWith(PROTOKOLL.WORLD_INFO_LISTENER)) {
+			for (int i = 0; i < listeners.size(); i++) {
+				if (listeners.get(i) instanceof WorldInfoListener) {
+					listeners.remove(i);
+				}
+			}
+
+		} else if (l.startsWith(PROTOKOLL.CHAT_LISTENER)) {
+			for (int i = 0; i < listeners.size(); i++) {
+				if (listeners.get(i) instanceof ChatListener) {
+					listeners.remove(i);
+					break;
+				}
+			}
+		} else if (l.startsWith(PROTOKOLL.ALL_LISTENERS)) {
+			listeners = new ArrayList<StandardListener>();
+			System.gc();
+		}
+		Logger.i(TAG, "Removed " + (listenercount - listeners.size())
+				+ " listeners");
 	}
 
 	@Override
@@ -92,128 +250,54 @@ public class SocketHandler extends Thread {
 				}
 				// ProcessMessage
 				if (msg != null) {
-					Logger.i(TAG, "Received Message: " + msg);// TODO Remove
-					if(msg.startsWith(PROTOKOLL.REGISTER_COMMAND_BEGIN)){
-						if(user==null){
-							JSONObject result=new JSONObject();
-							result.put("success", 0);
-							result.put("error", "Login request required");
-							send(PROTOKOLL.ERROR+" "+result.toString());
-							return;
+					try {
+						Logger.i(TAG, "Received Message: " + msg);// TODO Remove
+						if (msg.startsWith(PROTOKOLL.REGISTER_COMMAND_BEGIN)) {
+							try {
+								String listener = msg.replace(
+										PROTOKOLL.REGISTER_COMMAND_BEGIN, "")
+										.trim();
+								onRegisterMessage(listener);
+							} catch (Exception e) {
+								Logger.e(
+										TAG,
+										"Failed to parse listener from register command",
+										e);
+								send(PROTOKOLL.ERROR
+										+ " Failed to register listener");
+							}
+
+						} else if (msg
+								.startsWith(PROTOKOLL.UNREGISTER_COMMAND_BEGIN)) {
+							try {
+								String listener = msg.replace(
+										PROTOKOLL.UNREGISTER_COMMAND_BEGIN, "")
+										.trim();
+								onUnregisterMessage(listener);
+							} catch (Exception e) {
+								Logger.e(
+										TAG,
+										"Failed to parse listener from unregister command",
+										e);
+								send(PROTOKOLL.ERROR
+										+ " Failed to unregister listener");
+							}
+						} else if (msg.startsWith(PROTOKOLL.CONNECT)) {
+							onConnectMessage();
+						} else if (msg.startsWith(PROTOKOLL.LOGIN)) {
+							String params = msg.substring(PROTOKOLL.LOGIN
+									.length() + 1);
+							onLoginMessage(params);
+
 						}
-					}
-					if (msg.startsWith(PROTOKOLL.REGISTER_S_PLAYERINFO_LISTENER)) {
 
-						listeners.add(new PlayerInfoListener(user));
-
-					} else if (msg
-							.startsWith(PROTOKOLL.UNREGISTER_S_PLAYERINFO_LISTENER)) {
-
-
-							for (int i = 0; i < listeners.size(); i++) {
-								StandardListener l = listeners.get(i);
-								if (l instanceof PlayerInfoListener) {
-									listeners.remove(i);
-								}
-							}
-
-					} else if (msg
-							.startsWith(PROTOKOLL.REGISTER_PLAYER_INVENTORY_LISTENER)) {
-
-						
-
-							listeners.add(new PlayerInventoryListener(user));
-						
-					} else if (msg
-							.startsWith(PROTOKOLL.UNREGISTER_PLAYER_INVENTORY_LISTENER)) {
-						
-							for (int i = 0; i < listeners.size(); i++) {
-								StandardListener l = listeners.get(i);
-								if (l instanceof PlayerInventoryListener) {
-									listeners.remove(i);
-								}
-							}
-						
-					} else if (msg
-							.startsWith(PROTOKOLL.REGISTER_SERVER_INFO_LISTENER)) {
-						listeners.add(new ServerInfoListener(user));
-
-					} else if (msg
-							.startsWith(PROTOKOLL.UNREGISTER_SERVER_INFO_LISTENER)) {
-						for (int i = 0; i < listeners.size(); i++) {
-							if (listeners.get(i) instanceof ServerInfoListener) {
-								listeners.remove(i);
-							}
+						else if (msg.startsWith(PROTOKOLL.DISCONNECT)) {
+							onDisconnectMessage();
+						} else {
+							send(PROTOKOLL.UNKNOWN);
 						}
-					} else if (msg
-							.startsWith(PROTOKOLL.REGISTER_WORLD_INFO_LISTENER)) {
-						listeners.add(new WorldInfoListener(user));
-					} else if (msg
-							.startsWith(PROTOKOLL.UNREGISTER_WORLD_INFO_LISTENER)) {
-						for (int i = 0; i < listeners.size(); i++) {
-							if (listeners.get(i) instanceof WorldInfoListener) {
-								listeners.remove(i);
-							}
-						}
-						
-					
-					} 
-					else if(msg.startsWith(PROTOKOLL.REGISTER_CHAT_LISTENER)){
-						listeners.add(new ChatListener(user));
-					}
-					else if(msg.startsWith(PROTOKOLL.UNREGISTER_CHAT_LISTENER)){
-						for (int i = 0; i < listeners.size(); i++) {
-							if (listeners.get(i) instanceof ChatListener) {
-								listeners.remove(i);
-								break;
-							}
-						}
-					}else if (msg
-							.startsWith(PROTOKOLL.UNREGISTER_ALL_LISTENER)) {
-						listeners = new ArrayList<StandardListener>();
-						System.gc();
-					} else if (msg.startsWith(PROTOKOLL.CONNECT)) {
-						JSONObject result = new JSONObject();
-						result.put("versionid", Constants.FEATURE_VERSION);
-						result.put("minecraftversion", Constants.MINECRAFT_VERSION);
-						result.put("login_required", Configs.login_required);
-						send(PROTOKOLL.CONNECT_RESULT + " " + result.toString());
-					}
-					else if(msg.startsWith(PROTOKOLL.LOGIN)){
-						String params=msg.substring(PROTOKOLL.LOGIN.length()+1);
-						JSONObject data=new JSONObject(params);
-						String username=data.getString("username");
-						
-						int appversion=data.getInt("appversion");
-						
-						if(Configs.login_required){
-							if(!data.has("password")){
-								JSONObject result=new JSONObject();
-								result.put("success", 0);
-								result.put("error", "Password required");
-								send(PROTOKOLL.LOGIN_RESULT+" "+result.toString());
-								return;
-							}
-							else if(!auth(username,data.getString("password"))){
-								JSONObject result=new JSONObject();
-								result.put("success", 0);
-								result.put("error", "Username or password wrong");
-								send(PROTOKOLL.LOGIN_RESULT+" "+result.toString());
-								return;
-							}
-						}
-						user=new User(username,appversion);
-						JSONObject result=new JSONObject();
-						result.put("success", 1);
-						result.put("newer_app_version", Version.isNewestAppVersion(appversion));
-						send(PROTOKOLL.LOGIN_RESULT+" "+result.toString());
-						
-					}
-							
-					else if (msg.startsWith(PROTOKOLL.DISCONNECT)) {
-						close();
-					} else {
-						send(PROTOKOLL.UNKNOWN);
+					} catch (Exception e) {
+						Logger.e(TAG, "Failed to process message", e);
 					}
 
 				}
@@ -224,6 +308,12 @@ public class SocketHandler extends Thread {
 
 	}
 
+	/**
+	 * Sends a message to the client in the same thread
+	 * 
+	 * @param s
+	 *            Message
+	 */
 	private void send(String s) {
 		if (s == null) {
 			return;
@@ -266,11 +356,6 @@ public class SocketHandler extends Thread {
 		for (StandardListener l : listeners) {
 			send(l.tick());
 		}
-	}
-	
-	private boolean auth(String name,String passhash){
-		//TODO
-		return true;
 	}
 
 }
