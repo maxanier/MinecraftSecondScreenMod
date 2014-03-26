@@ -20,6 +20,7 @@ public class PROTOKOLL {
 	 * Connect message Connection procedure: C-S: CONNECT S-C: CONNECT_RESULT
 	 * C-S: LOGIN (if auth is required, with password hash) S-C: LOGIN_RESULT
 	 * S-C or C-S DISCONNECT or SERVER_STOPPING
+	 * All messages which contain success=0 should contain an "error" field with an error message
 	 */
 	public static final String CONNECT = "connecting";
 

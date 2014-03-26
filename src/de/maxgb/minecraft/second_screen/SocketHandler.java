@@ -97,6 +97,13 @@ public class SocketHandler extends Thread {
 	 */
 	private void onLoginMessage(String params) {
 		JSONObject data = new JSONObject(params);
+		if(!data.has("username")){
+			Logger.w(TAG, "Login message is missing username.");
+			JSONObject result = new JSONObject();
+			result.put("success", 0);
+			result.put("error", "Username is missing");
+			send(PROTOKOLL.LOGIN_RESULT + " " + result.toString());
+		}
 		String username = data.getString("username");
 
 		if(!data.has("appversion")){
