@@ -139,7 +139,7 @@ public class SocketHandler extends Thread {
 	 */
 	private void onRegisterMessage(final String l) {
 
-		// Check is user object is availible and so if the user is authentified
+		// Check is user object is available and so if the user is authentified
 		if (user == null) {
 			JSONObject result = new JSONObject();
 			result.put("success", 0);
