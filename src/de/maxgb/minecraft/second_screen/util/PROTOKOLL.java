@@ -44,6 +44,13 @@ public class PROTOKOLL {
 	public static final String DISCONNECT = "disconnect";
 
 	// Etc
+	/**
+	 * If the message is unknown. Followed by " ["+orginalmessage+"]"
+	 */
 	public static final String UNKNOWN = "unknown";
+	
+	/**
+	 * If an error occured, while processing a message. Followed by error message and by " ["+orginalmessage+"]"
+	 */
 	public static final String ERROR = "error";
 }

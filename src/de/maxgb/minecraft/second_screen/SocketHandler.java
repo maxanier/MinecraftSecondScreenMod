@@ -99,6 +99,13 @@ public class SocketHandler extends Thread {
 		JSONObject data = new JSONObject(params);
 		String username = data.getString("username");
 
+		if(!data.has("appversion")){
+			Logger.w(TAG, "Login message is missing appversion.");
+			JSONObject result = new JSONObject();
+			result.put("success", 0);
+			result.put("error", "Appversion is missing");
+			send(PROTOKOLL.LOGIN_RESULT + " " + result.toString());
+		}
 		int appversion = data.getInt("appversion");
 
 		if (Configs.auth_required) {
@@ -141,10 +148,8 @@ public class SocketHandler extends Thread {
 
 		// Check is user object is available and so if the user is authentified
 		if (user == null) {
-			JSONObject result = new JSONObject();
-			result.put("success", 0);
-			result.put("error", "Login request required");
-			send(PROTOKOLL.ERROR + " " + result.toString());
+			
+			send(PROTOKOLL.ERROR + " " + "Login required. ["+PROTOKOLL.REGISTER_COMMAND_BEGIN+l+"]");
 			Logger.w(TAG,
 					"Cannot register a listener before login. It is required by the configs");
 			return;
@@ -263,8 +268,7 @@ public class SocketHandler extends Thread {
 										TAG,
 										"Failed to parse listener from register command",
 										e);
-								send(PROTOKOLL.ERROR
-										+ " Failed to register listener");
+								send(PROTOKOLL.ERROR + " " + "Failed to register listener. ["+msg+"]");
 							}
 
 						} else if (msg
@@ -279,8 +283,7 @@ public class SocketHandler extends Thread {
 										TAG,
 										"Failed to parse listener from unregister command",
 										e);
-								send(PROTOKOLL.ERROR
-										+ " Failed to unregister listener");
+								send(PROTOKOLL.ERROR + " " + "Failed to unregister listener. ["+msg+"]");
 							}
 						} else if (msg.startsWith(PROTOKOLL.CONNECT)) {
 							onConnectMessage();
@@ -294,7 +297,7 @@ public class SocketHandler extends Thread {
 						else if (msg.startsWith(PROTOKOLL.DISCONNECT)) {
 							onDisconnectMessage();
 						} else {
-							send(PROTOKOLL.UNKNOWN);
+							send(PROTOKOLL.UNKNOWN+" ["+msg+"]");
 						}
 					} catch (Exception e) {
 						Logger.e(TAG, "Failed to process message", e);
