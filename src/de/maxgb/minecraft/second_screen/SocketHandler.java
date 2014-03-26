@@ -139,7 +139,7 @@ public class SocketHandler extends Thread {
 		user = new User(username, appversion);
 		JSONObject result = new JSONObject();
 		result.put("success", 1);
-		result.put("newer_app_version", Version.isNewestAppVersion(appversion));
+		result.put("appupdate", Version.isNewestAppVersion(appversion));
 		send(PROTOKOLL.LOGIN_RESULT + " " + result.toString());
 		Logger.i(TAG, "Sucessfully logged in user " + username);
 	}
