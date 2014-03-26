@@ -77,7 +77,7 @@ public class SocketHandler extends Thread {
 		JSONObject result = new JSONObject();
 		result.put("versionid", Constants.FEATURE_VERSION);
 		result.put("minecraftversion", Constants.MINECRAFT_VERSION);
-		result.put("login_required", Configs.login_required);
+		result.put("login_required", Configs.auth_required);
 		send(PROTOKOLL.CONNECT_RESULT + " " + result.toString());
 
 	}
@@ -101,7 +101,7 @@ public class SocketHandler extends Thread {
 
 		int appversion = data.getInt("appversion");
 
-		if (Configs.login_required) {
+		if (Configs.auth_required) {
 			if (!data.has("password")) {
 				Logger.w(
 						TAG,

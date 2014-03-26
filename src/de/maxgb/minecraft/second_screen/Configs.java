@@ -16,7 +16,7 @@ public class Configs {
 	public static int world_info_update_time;
 	public static int player_info_update_time;
 	public static int chat_update_time;
-	public static boolean login_required;
+	public static boolean auth_required;
 	private final static String TAG = "Configs";
 
 	public static void load(Configuration config) {
@@ -47,9 +47,9 @@ public class Configs {
 		prop.comment="How often is the chat updated.  (Measured in ServerTicks, just try out some values)";
 		chat_update_time=prop.getInt();
 		
-		prop=config.get(Configuration.CATEGORY_GENERAL, "login_required", true);
-		prop.comment="Whether the second screen user need to login with username and password set in game";
-		login_required=prop.getBoolean(true);
+		prop=config.get(Configuration.CATEGORY_GENERAL, "auth_required", true);
+		prop.comment="Whether the second screen user need to login with username and password, which can be set in game";
+		auth_required=prop.getBoolean(true);
 		
 		if(config.hasChanged()){
 			config.save();
