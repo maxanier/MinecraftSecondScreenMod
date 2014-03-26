@@ -176,7 +176,7 @@ public class SocketHandler extends Thread {
 						JSONObject result = new JSONObject();
 						result.put("versionid", Constants.FEATURE_VERSION);
 						result.put("minecraftversion", Constants.MINECRAFT_VERSION);
-						result.put("login_requires", Configs.login_required);
+						result.put("login_required", Configs.login_required);
 						send(PROTOKOLL.CONNECT_RESULT + " " + result.toString());
 					}
 					else if(msg.startsWith(PROTOKOLL.LOGIN)){
