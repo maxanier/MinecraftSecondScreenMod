@@ -15,25 +15,35 @@ public class PROTOKOLL {
 	public static final String ALL_LISTENERS = "all";
 
 	// Connection
-	public static final String DISCONNECT = "disconnect";
 
+	/**
+	 * Connect message Connection procedure: C-S: CONNECT S-C: CONNECT_RESULT
+	 * C-S: LOGIN (if auth is required, with password hash) S-C: LOGIN_RESULT
+	 * S-C or C-S DISCONNECT or SERVER_STOPPING
+	 */
 	public static final String CONNECT = "connecting";
-	public static final String CONNECT_RESULT = "conncted";// <json> (json
-															// contains
-															// versionid)
-	public static final String LOGIN = "login";// <json> (json contains
-												// username,password)
-	public static final String LOGIN_RESULT = "login_result";// <json> (json
-																// contains
-																// success
-																// (0/1),error
-																// if success =
-																// 0,
-																// user(userobject))
-	public static final String ERROR = "error";
+
+	/**
+	 * Connect result send to the client. Followed by Json string containing:
+	 * "versionid"(int),"minecraftversion"(String),"login_required"(boolean)
+	 */
+	public static final String CONNECT_RESULT = "conncted";
+	/**
+	 * Login message send to the server. Followed by Json string containing:
+	 * "username"(String),"password"(md5 hash of password as
+	 * String),"appversion"(int)
+	 */
+	public static final String LOGIN = "login";
+	/**
+	 * Login result message send to the client. Followed by Json string
+	 * containing: "success"(int [0/1]),"appupdate"(boolean)
+	 */
+	public static final String LOGIN_RESULT = "login_result";
 
 	public static final String SERVER_STOPPING = "server_stopping";
+	public static final String DISCONNECT = "disconnect";
 
 	// Etc
 	public static final String UNKNOWN = "unknown";
+	public static final String ERROR = "error";
 }
