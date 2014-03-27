@@ -4,28 +4,26 @@ import net.minecraftforge.common.config.Configuration;
 
 public class User {
 	public final String username;
-	private String password;
+	private int password;
 	
-	public User(String username,String password){
+	public User(String username,int password){
 		this.username=username;
 		this.password=password;
 	}
 	
-	public String getPassword(){
+	public int getPassword(){
 		return password;
 	}
 	
-	public void setPassword(String p){
-		if(p==null){
-			p="";
-		}
+	public void setPassword(int p){
+
 		password=p;
 	}
 	
 	public static User readFromConfig(Configuration config){
 		String name=config.get(Configuration.CATEGORY_GENERAL, "username", "").getString();
-		String pass =config.get(Configuration.CATEGORY_GENERAL, "password","").getString();
-		if(pass.equals("")||name.equals("")){
+		int pass =config.get(Configuration.CATEGORY_GENERAL, "password",0).getInt();
+		if(pass==0){
 			return null;
 		}
 		return new User(name,pass);

@@ -32,15 +32,15 @@ public class UserManager {
 		
 	}
 	
-	public static void addUser(String username,String password){
+	public static void addUser(String username,int pass){
 		if(username!=null&&!username.equals("")){
 			for(User u:auth_users){
 				if(u.username.equals(username)){
-					u.setPassword(password);
+					u.setPassword(pass);
 					return;
 				}
 			}
-			auth_users.add(new User(username,password));
+			auth_users.add(new User(username,pass));
 		}
 
 	}
@@ -59,7 +59,7 @@ public class UserManager {
 			}
 			return null;
 		}
-		User u=new User(username,"");
+		User u=new User(username,0);
 		temp_users.add(u);
 		return u;
 		
@@ -71,12 +71,12 @@ public class UserManager {
 	 * @param password Passwordhash
 	 * @return
 	 */
-	public static boolean auth(String username,String password){
+	public static boolean auth(String username,int pass){
 		User u = getUser(username);
 		if(u==null){
 			return false;
 		}
-		return u.getPassword().equals(password);
+		return u.getPassword()==pass;
 		
 	}
 	

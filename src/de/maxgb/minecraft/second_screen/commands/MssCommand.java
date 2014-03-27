@@ -28,9 +28,9 @@ public class MssCommand extends BaseCommand{
 
 	@Override
 	public String getCommandUsage(ICommandSender var1) {
-			String usage="/mss <action> <params>\nActions:\n";
+			String usage="/mss <action> <params> Actions: ";
 			for(MssSubCommand c : commands){
-				usage+=c.getCommandUsage(var1)+"\n";
+				usage+=c.getCommandUsage(var1)+" OR ";
 			}
 			
 			return usage;

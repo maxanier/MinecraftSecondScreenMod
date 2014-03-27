@@ -124,7 +124,7 @@ public class SocketHandler extends Thread {
 				send(PROTOKOLL.LOGIN_RESULT + " " + result.toString());
 
 				return;
-			} else if (!UserManager.auth(username, data.getString("password"))) {
+			} else if (!UserManager.auth(username, data.getInt("password"))) {
 				Logger.w(TAG,
 						"Authentification failed. Username or password is wrong");
 				JSONObject result = new JSONObject();

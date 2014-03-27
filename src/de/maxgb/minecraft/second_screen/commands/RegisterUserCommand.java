@@ -21,37 +21,28 @@ public class RegisterUserCommand implements MssCommand.MssSubCommand{
 		}
 		if(var1 instanceof EntityPlayer){
 			if(var2.length!=1){
-				BaseCommand.sendMessage(var1, "Missing arguments. Usage: "+getCommandUsage(var1));
+				BaseCommand.sendMessage(var1, "Wrong arguments. Usage: "+getCommandUsage(var1));
 				return;
 			}
-			try {
-				MessageDigest md5 =MessageDigest.getInstance("MD5");
-				String hash=new String(md5.digest(var2[0].getBytes()));
+
+				int hash=var2[0].hashCode();
 				UserManager.addUser(var1.getCommandSenderName(), hash);
 				BaseCommand.sendMessage(var1, "Added user "+var1.getCommandSenderName());
 				Logger.i(TAG, "Added user "+var1.getCommandSenderName()+" with pass: "+hash);
-			} catch (NoSuchAlgorithmException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
 			return;
 
 		}
 		else if(var1.getCommandSenderName().equals("Rcon")){
 			if(var2.length!=2){
-				BaseCommand.sendMessage(var1, "Missing arguments. Usage: "+getCommandUsage(var1));
+				BaseCommand.sendMessage(var1, "Wrong arguments. Usage: "+getCommandUsage(var1));
 				return;
 			}
-			try {
-				MessageDigest md5 =MessageDigest.getInstance("MD5");
-				String hash=new String(md5.digest(var2[1].getBytes()));
+				int hash=var2[1].hashCode();
 				UserManager.addUser(var2[0], hash);
 				BaseCommand.sendMessage(var1, "Added user "+var2[0]);
 				Logger.i(TAG, "Added user "+var2[0]+" with pass: "+hash);
-			} catch (NoSuchAlgorithmException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
 			return;
 		}
 		else{
