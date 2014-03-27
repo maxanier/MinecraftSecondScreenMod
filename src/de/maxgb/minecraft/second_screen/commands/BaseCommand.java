@@ -6,6 +6,11 @@ import net.minecraft.util.ChatComponentText;
 
 public abstract class BaseCommand implements ICommand {
 	protected static void sendMessage(ICommandSender target, String message) {
-		target.addChatMessage(new ChatComponentText(message));
+		String[] lines=message.split("\\n");
+		for(String line:lines){
+			target.addChatMessage(new ChatComponentText(line));
+		}
+		
+
 	}
 }

@@ -33,6 +33,7 @@ public class User {
 	public boolean saveToConfig(Configuration config){
 		config.get(Configuration.CATEGORY_GENERAL, "username", username).set(username);
 		config.get(Configuration.CATEGORY_GENERAL, "password", password).set(password);
+
 		if(config.hasChanged()){
 			config.save();
 		}

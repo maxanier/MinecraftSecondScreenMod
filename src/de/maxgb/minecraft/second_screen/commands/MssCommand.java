@@ -62,9 +62,10 @@ public class MssCommand extends BaseCommand{
 				}
 
 				c.processCommand(var1, var);
-				break;
+				return;
 			}
 		}
+		BaseCommand.sendMessage(var1, "Action not found. Usage: "+getCommandUsage(var1));
 		
 	}
 

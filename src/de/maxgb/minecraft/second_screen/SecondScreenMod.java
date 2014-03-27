@@ -11,6 +11,7 @@ import de.maxgb.minecraft.second_screen.commands.GetIPCommand;
 import de.maxgb.minecraft.second_screen.commands.GetMSSPortCommand;
 import de.maxgb.minecraft.second_screen.commands.MssCommand;
 import de.maxgb.minecraft.second_screen.commands.RegisterRedstoneInfoCommand;
+import de.maxgb.minecraft.second_screen.commands.RegisterUserCommand;
 import de.maxgb.minecraft.second_screen.data.DataStorageDriver;
 import de.maxgb.minecraft.second_screen.data.UserManager;
 import de.maxgb.minecraft.second_screen.util.Constants;
@@ -64,6 +65,7 @@ public class SecondScreenMod {
 		
 		MssCommand mssc=new MssCommand();
 		mssc.addSubCommand(new RegisterRedstoneInfoCommand());
+		mssc.addSubCommand(new RegisterUserCommand());
 		e.registerServerCommand(mssc);
 		e.registerServerCommand(new GetIPCommand());
 		e.registerServerCommand(new GetMSSPortCommand());

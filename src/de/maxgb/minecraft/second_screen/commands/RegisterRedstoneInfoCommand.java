@@ -80,7 +80,7 @@ public class RegisterRedstoneInfoCommand implements MssCommand.MssSubCommand{
 
 	@Override
 	public String getCommandUsage(ICommandSender var1) {
-		return "/redinfo add <label> or /redinfo remove <label>";
+		return "redinfo add <label> or redinfo remove <label>";
 	}
 
 
