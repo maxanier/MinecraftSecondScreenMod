@@ -33,7 +33,7 @@ public class RegisterUserCommand implements MssCommand.MssSubCommand{
 			return;
 
 		}
-		else if(var1.getCommandSenderName().equals("Rcon")){
+		else if(var1.getCommandSenderName().equals("Rcon")||var1.getCommandSenderName().equals("Server")){
 			if(var2.length!=2){
 				BaseCommand.sendMessage(var1, "Wrong arguments. Usage: "+getCommandUsage(var1));
 				return;
@@ -59,7 +59,7 @@ public class RegisterUserCommand implements MssCommand.MssSubCommand{
 
 	@Override
 	public String getCommandUsage(ICommandSender var1) {
-		if(var1.getCommandSenderName().equals("Rcon")){
+		if(var1.getCommandSenderName().equals("Rcon")||var1.getCommandSenderName().equals("Server")){
 			return "register <username> <password>";
 		}
 		return "register <password>";

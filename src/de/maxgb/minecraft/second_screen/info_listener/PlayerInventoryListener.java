@@ -14,13 +14,14 @@ import net.minecraft.util.IIcon;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import de.maxgb.minecraft.second_screen.Configs;
 import de.maxgb.minecraft.second_screen.StandardListener;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.util.PROTOKOLL;
 import de.maxgb.minecraft.second_screen.util.User;
 
 public class PlayerInventoryListener extends StandardListener {
-
+	/*
 	private class FakeIconRegister implements IIconRegister {
 
 		String texture;
@@ -69,17 +70,7 @@ public class PlayerInventoryListener extends StandardListener {
 			return createTextureAtlasSprite(texture);
 
 		}
-
-	}
-	private final String TAG = "PlayerInventoryListener";
-
-
-	public PlayerInventoryListener(User user) {
-		super(user);
-		everyTick = 200;// TODO Make config related
-	}
-
-	private String getTextureString(Item i) {
+		private String getTextureString(Item i) {
 
 		try {
 			ItemBlock ib = (ItemBlock) i;
@@ -96,6 +87,16 @@ public class PlayerInventoryListener extends StandardListener {
 		return null;
 
 	}
+	}*/
+	private final String TAG = "PlayerInventoryListener";
+
+
+	public PlayerInventoryListener(User user) {
+		super(user);
+		everyTick = Configs.player_info_update_time;
+	}
+
+
 
 
 	@Override
