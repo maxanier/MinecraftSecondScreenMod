@@ -4,6 +4,7 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import de.maxgb.minecraft.second_screen.util.Logger;
@@ -21,33 +22,37 @@ public class Configs {
 
 	public static void load(Configuration config) {
 		config.load();
+		ConfigCategory update_times=config.getCategory("update times");
+		update_times.setComment("How often are the information updated (Measured in ServerTicks, just try out some values).");
+		ConfigCategory con=config.getCategory("connection settings");
+		con.setComment("On what Ip and port should the mod listen");
 		try {
-			hostname = config.get(Configuration.CATEGORY_GENERAL, "hostname",
+			hostname = config.get(con.getQualifiedName(), "hostname",
 					InetAddress.getLocalHost().getHostAddress()).getString();
 		} catch (UnknownHostException e) {
 			Logger.e(TAG, "Failed to retrieve host address" + e);
 			hostname = "localhost";
 		}
-		port = config.get(Configuration.CATEGORY_GENERAL, "port", 25566)
+		port = config.get(con.getQualifiedName(), "port", 25566)
 				.getInt();
 		
-		Property prop = config.get(Configuration.CATEGORY_GENERAL, "server_info_update_time", 500);
-		prop.comment="How often is the server info updated. (Measured in ServerTicks, just try out some values)";
+		Property prop = config.get(update_times.getQualifiedName(), "server_info_update_time", 500);
+		prop.comment="General server info";
 		server_info_update_time = prop.getInt();
 		
-		prop=config.get(Configuration.CATEGORY_GENERAL, "world_info_update_time", 200);
-		prop.comment="How often is the world info updated.  (Measured in ServerTicks, just try out some values)";
+		prop=config.get(update_times.getQualifiedName(), "world_info_update_time", 200);
+		prop.comment="World info";
 		world_info_update_time = prop.getInt();
 		
-		prop=config.get(Configuration.CATEGORY_GENERAL, "player_info_update_time", 40);
-		prop.comment="How often is the player info updated.  (Measured in ServerTicks, just try out some values)";
+		prop=config.get(update_times.getQualifiedName(), "player_info_update_time", 40);
+		prop.comment="Player info";
 		player_info_update_time = prop.getInt();
 		
-		prop=config.get(Configuration.CATEGORY_GENERAL, "chat_update_time", 10);
-		prop.comment="How often is the chat updated.  (Measured in ServerTicks, just try out some values)";
+		prop=config.get(update_times.getQualifiedName(), "chat_update_time", 10);
+		prop.comment="Chat";
 		chat_update_time=prop.getInt();
 		
-		prop=config.get(Configuration.CATEGORY_GENERAL, "auth_required", true);
+		prop=config.get(Configuration.CATEGORY_GENERAL, "auth_required", false);
 		prop.comment="Whether the second screen user need to login with username and password, which can be set in game";
 		auth_required=prop.getBoolean(true);
 		
