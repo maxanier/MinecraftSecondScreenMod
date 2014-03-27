@@ -9,8 +9,10 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import de.maxgb.minecraft.second_screen.commands.GetIPCommand;
 import de.maxgb.minecraft.second_screen.commands.GetMSSPortCommand;
+import de.maxgb.minecraft.second_screen.commands.MssCommand;
 import de.maxgb.minecraft.second_screen.commands.RegisterRedstoneInfoCommand;
 import de.maxgb.minecraft.second_screen.data.DataStorageDriver;
+import de.maxgb.minecraft.second_screen.data.UserManager;
 import de.maxgb.minecraft.second_screen.util.Constants;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.world.ObservingRegistry;
@@ -41,7 +43,6 @@ public class SecondScreenMod {
 
 		Logger.init(event.getModLog());
 
-		Logger.d(TAG, "Test");
 		Configuration config = new Configuration(
 				event.getSuggestedConfigurationFile());
 
@@ -58,8 +59,12 @@ public class SecondScreenMod {
 		DataStorageDriver.setWorldName(e.getServer().getFolderName());
 
 		ObservingRegistry.loadObservingMap();
-
-		e.registerServerCommand(new RegisterRedstoneInfoCommand());
+		
+		UserManager.loadUsers();
+		
+		MssCommand mssc=new MssCommand();
+		mssc.addSubCommand(new RegisterRedstoneInfoCommand());
+		e.registerServerCommand(mssc);
 		e.registerServerCommand(new GetIPCommand());
 		e.registerServerCommand(new GetMSSPortCommand());
 
@@ -70,6 +75,7 @@ public class SecondScreenMod {
 	public void serverStopping(FMLServerStoppingEvent e) {
 		stop();
 		ObservingRegistry.saveObservingMap();
+		UserManager.saveUsers();
 	}
 
 	private void start() {

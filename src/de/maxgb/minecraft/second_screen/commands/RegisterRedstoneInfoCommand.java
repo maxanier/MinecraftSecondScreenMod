@@ -13,7 +13,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import de.maxgb.minecraft.second_screen.world.ObservingRegistry;
 
-public class RegisterRedstoneInfoCommand extends BaseCommand {
+public class RegisterRedstoneInfoCommand implements MssCommand.MssSubCommand{
 
 	/**
 	 * Gets players looking spot.
@@ -57,59 +57,37 @@ public class RegisterRedstoneInfoCommand extends BaseCommand {
 		// !true);
 	}
 
-	private List aliases;
 
 	public RegisterRedstoneInfoCommand() {
-		this.aliases = new ArrayList();
-		this.aliases.add("redstoneinfo");
-		this.aliases.add("redinfo");
+
 	}
 
-	@Override
-	public List addTabCompletionOptions(ICommandSender var1, String[] var2) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender var1) {
-		if (var1.getCommandSenderName() == "Rcon") {
-			return false;
+		if(var1 instanceof EntityPlayer){
+			return true;
 		}
-		return true;
+		return false;
 	}
 
-	@Override
-	public int compareTo(Object arg0) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public List getCommandAliases() {
-		return aliases;
-	}
 
 	@Override
 	public String getCommandName() {
-		return "redstoneinfo";
+		return "redinfo";
 	}
 
 	@Override
 	public String getCommandUsage(ICommandSender var1) {
-		return "/redstoneinfo add <label> or /redstoneinfo remove <label>";
+		return "/redinfo add <label> or /redinfo remove <label>";
 	}
 
-	@Override
-	public boolean isUsernameIndex(String[] var1, int var2) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 	@Override
 	public void processCommand(ICommandSender var1, String[] var2) {
 
-		if (var2.length < 2) {
+		if (var2==null||var2.length < 2) {
 			sendMessage(var1, "Invalid arguments. Usage: "
 					+ getCommandUsage(var1));
 			return;
@@ -161,6 +139,10 @@ public class RegisterRedstoneInfoCommand extends BaseCommand {
 
 		}
 
+	}
+	
+	private void sendMessage(ICommandSender var1,String msg){
+		MssCommand.sendMessage(var1, msg);
 	}
 
 
