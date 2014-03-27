@@ -11,5 +11,7 @@ public class Constants {
 	* Feature version for the app to know what feautures the modversion supports
 	*/
 	public static final int FEATURE_VERSION = 3;
+	
+	public static final String USER_SAVE_DIR="mss-users";
 
 }

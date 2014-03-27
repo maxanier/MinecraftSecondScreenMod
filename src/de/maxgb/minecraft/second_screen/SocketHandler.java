@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import org.json.JSONObject;
 
+import de.maxgb.minecraft.second_screen.data.UserManager;
 import de.maxgb.minecraft.second_screen.info_listener.ChatListener;
 import de.maxgb.minecraft.second_screen.info_listener.PlayerInfoListener;
 import de.maxgb.minecraft.second_screen.info_listener.PlayerInventoryListener;
@@ -47,10 +48,7 @@ public class SocketHandler extends Thread {
 
 	}
 
-	private boolean auth(String name, String passhash) {
-		// TODO
-		return true;
-	}
+
 
 	/**
 	 * Stops the run method and sets remove to true so that the listener thread
@@ -126,7 +124,7 @@ public class SocketHandler extends Thread {
 				send(PROTOKOLL.LOGIN_RESULT + " " + result.toString());
 
 				return;
-			} else if (!auth(username, data.getString("password"))) {
+			} else if (!UserManager.auth(username, data.getString("password"))) {
 				Logger.w(TAG,
 						"Authentification failed. Username or password is wrong");
 				JSONObject result = new JSONObject();
@@ -136,7 +134,7 @@ public class SocketHandler extends Thread {
 				return;
 			}
 		}
-		user = new User(username, appversion);
+		user = UserManager.getUser(username);
 		JSONObject result = new JSONObject();
 		result.put("success", 1);
 		result.put("appupdate", Version.isNewestAppVersion(appversion));

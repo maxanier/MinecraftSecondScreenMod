@@ -16,7 +16,7 @@ public class DataStorageDriver {
 	private static String worldName;
 	private final static String TAG = "DataStorageDriver";
 
-	private static File getSaveDir() {
+	public static File getSaveDir() {
 		return new File(DimensionManager.getCurrentSaveRootDirectory(),
 				"secondscreen");
 	}
