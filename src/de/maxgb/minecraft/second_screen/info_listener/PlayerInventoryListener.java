@@ -103,12 +103,8 @@ public class PlayerInventoryListener extends StandardListener {
 	public String update() {
 		JSONObject response = new JSONObject();
 
-		if (user.username == null || user.username.equals("")) {
-			response.put("success", 0);
-			response.put("error", "username required");
-		} else {
-			EntityPlayerMP player = server.getConfigurationManager()
-					.getPlayerForUsername(user.username);
+
+			EntityPlayerMP player = user.getPlayer(server);
 
 			if (player == null) {
 				response.put("success", 0).put("error",
@@ -149,7 +145,7 @@ public class PlayerInventoryListener extends StandardListener {
 
 				response.put("success", 1);
 			}
-		}
+		
 		return PROTOKOLL.PLAYER_INVENTORY_LISTENER + ":" + response.toString();
 
 	}

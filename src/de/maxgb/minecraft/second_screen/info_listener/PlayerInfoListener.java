@@ -18,7 +18,7 @@ public class PlayerInfoListener extends StandardListener {
 	public PlayerInfoListener(User user) {
 		super(user);
 		everyTick = Configs.player_info_update_time;
-		Logger.i(TAG, "Created Playerlistener");// TODO remove
+
 	}
 
 
@@ -27,12 +27,7 @@ public class PlayerInfoListener extends StandardListener {
 	public String update() {
 		JSONObject response = new JSONObject();
 
-		if (user.username == null || user.username.equals("")) {
-			response.put("success", 0);
-			response.put("error", "username required");
-		} else {
-			EntityPlayerMP player = server.getConfigurationManager()
-					.getPlayerForUsername(user.username);
+			EntityPlayerMP player = user.getPlayer(server);
 
 			if (player == null) {
 				response.put("success", 0).put("error",
@@ -43,7 +38,7 @@ public class PlayerInfoListener extends StandardListener {
 
 				response.put("success", 1);
 			}
-		}
+
 		return PROTOKOLL.S_PLAYERINFO_LISTENER + ":" + response.toString();
 
 	}

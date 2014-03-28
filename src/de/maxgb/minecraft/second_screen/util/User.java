@@ -1,10 +1,13 @@
 package de.maxgb.minecraft.second_screen.util;
 
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.config.Configuration;
 
 public class User {
 	public final String username;
 	private int password;
+	private final String TAG="UserObject";
 	
 	public User(String username,int password){
 		this.username=username;
@@ -36,5 +39,12 @@ public class User {
 			config.save();
 		}
 		return true;
+	}
+	public EntityPlayerMP getPlayer(MinecraftServer s){
+		if(s==null){
+			Logger.w(TAG, "Server null, cant find user");
+			return null;
+		}
+		return s.getConfigurationManager().getPlayerForUsername(username);
 	}
 }
