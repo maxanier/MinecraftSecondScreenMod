@@ -13,6 +13,13 @@ public class PROTOKOLL {
 	public static final String WORLD_INFO_LISTENER = "wil";
 	public static final String CHAT_LISTENER = "cl";
 	public static final String ALL_LISTENERS = "all";
+	
+	//Action commands
+	public static final String ACTION_COMMAND_BEGIN ="do-";
+	public static final String ACTION_RESULT_BEGIN="doresult-";
+	
+	public static final String A_CHAT_MSG="cm";
+	public static final String A_RED_CONTROL="rc";
 
 	// Connection
 

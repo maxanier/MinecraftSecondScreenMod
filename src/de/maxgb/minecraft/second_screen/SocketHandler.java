@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 import org.json.JSONObject;
 
+import de.maxgb.minecraft.second_screen.actions.ActionManager;
+import de.maxgb.minecraft.second_screen.actions.ActionManager.ActionResultListener;
 import de.maxgb.minecraft.second_screen.data.UserManager;
 import de.maxgb.minecraft.second_screen.info_listener.ChatListener;
 import de.maxgb.minecraft.second_screen.info_listener.PlayerInfoListener;
@@ -22,7 +24,7 @@ import de.maxgb.minecraft.second_screen.util.PROTOKOLL;
 import de.maxgb.minecraft.second_screen.util.User;
 import de.maxgb.minecraft.second_screen.util.Version;
 
-public class SocketHandler extends Thread {
+public class SocketHandler extends Thread implements ActionResultListener{
 
 	public Socket socket;
 	private boolean running;
@@ -232,6 +234,13 @@ public class SocketHandler extends Thread {
 		Logger.i(TAG, "Removed " + (listenercount - listeners.size())
 				+ " listeners");
 	}
+	
+	private void onActionMessage(String action,String params){
+		JSONObject p=new JSONObject(params);
+		if(!ActionManager.doAction(action, p, this)){
+			send(PROTOKOLL.ERROR+" "+"Action not found. ["+PROTOKOLL.ACTION_COMMAND_BEGIN+action+" "+params+"]");
+		}
+	}
 
 	@Override
 	public void run() {
@@ -290,7 +299,19 @@ public class SocketHandler extends Thread {
 										e);
 								send(PROTOKOLL.ERROR + " " + "Failed to unregister listener. ["+msg+"]");
 							}
-						} else if (msg.startsWith(PROTOKOLL.CONNECT)) {
+						}
+						else if(msg.startsWith(PROTOKOLL.ACTION_COMMAND_BEGIN)){
+							try {
+								String s=msg.replace(PROTOKOLL.ACTION_COMMAND_BEGIN, "");
+								String action=s.substring(0,s.indexOf(' '));
+								String params=s.substring(s.indexOf(' '));
+								onActionMessage(action,params);
+							} catch (Exception e) {
+								Logger.e(TAG, "Failed processing action command",e);
+								send(PROTOKOLL.ERROR+" "+"Failed processing action command. ["+msg+"]");
+							}
+						}else if (msg.startsWith(PROTOKOLL.CONNECT)) {
+						
 							onConnectMessage();
 						} else if (msg.startsWith(PROTOKOLL.LOGIN)) {
 							String params = msg.substring(PROTOKOLL.LOGIN
@@ -364,6 +385,14 @@ public class SocketHandler extends Thread {
 		for (StandardListener l : listeners) {
 			send(l.tick());
 		}
+	}
+
+
+
+	@Override
+	public void onActionResult(String command,JSONObject r) {
+		send(PROTOKOLL.ACTION_RESULT_BEGIN+command+" "+r.toString());
+		
 	}
 
 }

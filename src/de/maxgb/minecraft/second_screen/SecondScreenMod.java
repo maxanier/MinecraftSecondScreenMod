@@ -7,6 +7,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
+import de.maxgb.minecraft.second_screen.actions.ActionManager;
 import de.maxgb.minecraft.second_screen.commands.GetIPCommand;
 import de.maxgb.minecraft.second_screen.commands.GetMSSPortCommand;
 import de.maxgb.minecraft.second_screen.commands.MssCommand;
@@ -63,6 +64,8 @@ public class SecondScreenMod {
 		
 		UserManager.loadUsers();
 		
+		ActionManager.registerStandardActions();
+		
 		MssCommand mssc=new MssCommand();
 		mssc.addSubCommand(new RegisterRedstoneInfoCommand());
 		mssc.addSubCommand(new RegisterUserCommand());
@@ -78,6 +81,7 @@ public class SecondScreenMod {
 		stop();
 		ObservingRegistry.saveObservingMap();
 		UserManager.saveUsers();
+		ActionManager.removeAllActions();
 	}
 
 	private void start() {
