@@ -18,6 +18,9 @@ public class PROTOKOLL {
 	public static final String ACTION_COMMAND_BEGIN ="do-";
 	public static final String ACTION_RESULT_BEGIN="doresult-";
 	
+	/**
+	 * Chat message action. Followed by Json string containing "msg"(String)
+	 */
 	public static final String A_CHAT_MSG="cm";
 	public static final String A_RED_CONTROL="rc";
 
