@@ -158,7 +158,7 @@ public class SocketHandler extends Thread implements ActionResultListener{
 			
 			send(PROTOKOLL.ERROR + " " + "Login required. ["+PROTOKOLL.REGISTER_COMMAND_BEGIN+l+"]");
 			Logger.w(TAG,
-					"Cannot register a listener before login. It is required by the configs");
+					"Cannot register a listener before login.");
 			return;
 		}
 
@@ -236,8 +236,18 @@ public class SocketHandler extends Thread implements ActionResultListener{
 	}
 	
 	private void onActionMessage(String action,String params){
+		
+		// Check is user object is available and so if the user is authentified
+		if (user == null) {
+			
+			send(PROTOKOLL.ERROR + " " + "Login required. ["+PROTOKOLL.ACTION_COMMAND_BEGIN+action+" "+params+"]");
+			Logger.w(TAG,
+					"Cannot execute action before login. ");
+			return;
+		}
+		
 		JSONObject p=new JSONObject(params);
-		if(!ActionManager.doAction(action, p, this)){
+		if(!ActionManager.doAction(action, p,user, this)){
 			send(PROTOKOLL.ERROR+" "+"Action not found. ["+PROTOKOLL.ACTION_COMMAND_BEGIN+action+" "+params+"]");
 		}
 	}

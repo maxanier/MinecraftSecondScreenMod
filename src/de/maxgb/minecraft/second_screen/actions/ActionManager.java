@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.util.PROTOKOLL;
+import de.maxgb.minecraft.second_screen.util.User;
 
 public class ActionManager {
 	
@@ -21,7 +22,7 @@ public class ActionManager {
 		 * @param listener Listener which should get the action result
 		 * @return
 		 */
-		public void doAction(JSONObject param,ActionResultListener listener);
+		public void doAction(JSONObject param,User user,ActionResultListener listener);
 	}
 	public interface ActionResultListener{
 		public void onActionResult(String command,JSONObject r);
@@ -49,7 +50,7 @@ public class ActionManager {
 	 * @param listener Listener to receive the action result
 	 * @return whether the action was found or not
 	 */
-	public static boolean doAction(String command,final JSONObject params,final ActionResultListener listener){
+	public static boolean doAction(String command,final JSONObject params,final User user,final ActionResultListener listener){
 		if(!actions.containsKey(command)){
 			Logger.w(TAG, "No action fitting: "+command+" found");
 			return false;
@@ -59,7 +60,7 @@ public class ActionManager {
 
 			@Override
 			public void run() {
-				a.doAction(params, listener);
+				a.doAction(params,user, listener);
 				
 			}
 			
