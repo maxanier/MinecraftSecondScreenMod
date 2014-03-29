@@ -37,7 +37,7 @@ public class ActionManager {
 	 * @param action The action
 	 */
 	public static void registerAction(String command,IAction action){
-		if(action==null){
+		if(actions==null){
 			actions=new HashMap<String,IAction>();
 		}
 		actions.put(command, action);

@@ -337,6 +337,7 @@ public class SocketHandler extends Thread implements ActionResultListener{
 						}
 					} catch (Exception e) {
 						Logger.e(TAG, "Failed to process message", e);
+						send(PROTOKOLL.ERROR+" "+"Failed to process message. ["+msg+"]");
 					}
 
 				}
