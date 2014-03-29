@@ -59,7 +59,9 @@ public class UserManager {
 			}
 			return null;
 		}
+		
 		User u=new User(username,0);
+		u.setAllAllowed(true);
 		temp_users.add(u);
 		return u;
 		
