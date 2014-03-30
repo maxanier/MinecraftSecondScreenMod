@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 
@@ -21,6 +22,16 @@ import de.maxgb.minecraft.second_screen.util.User;
 public class ChatListener extends StandardListener {
 
 	private JSONArray buffer;
+	
+	public static class RemoteChatMessageEvent extends Event{
+		public final String username;
+		public final String msg;
+		
+		public RemoteChatMessageEvent(String username,String message){
+			this.username=username;
+			this.msg=message;
+		}
+	}
 	
 	public ChatListener(User user) {
 		super(user);
@@ -43,6 +54,16 @@ public class ChatListener extends StandardListener {
 		return PROTOKOLL.CHAT_LISTENER+":"+response.toString();
 	}
 	
+	@SubscribeEvent
+	public void mssChatMessage(RemoteChatMessageEvent e){
+		JSONObject msg = new JSONObject();
+		msg.put("sender", "mss~"+e.username);
+		msg.put("msg", e.msg);
+		
+		
+		msg.put("time", getCurrentTimeString());
+		buffer.put(msg);
+	}
 	
 	@SubscribeEvent
 	public void chatMessage(ServerChatEvent e){

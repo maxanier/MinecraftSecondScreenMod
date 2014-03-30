@@ -1,7 +1,11 @@
 package de.maxgb.minecraft.second_screen.actions;
 
+import java.util.ListIterator;
+
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.world.WorldServer;
 
 import org.json.JSONObject;
 
@@ -12,6 +16,7 @@ import de.maxgb.minecraft.second_screen.actions.ActionManager.IAction;
 import de.maxgb.minecraft.second_screen.shared.PROTOKOLL;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.util.User;
+import de.maxgb.minecraft.second_screen.info_listener.ChatListener.RemoteChatMessageEvent;
 
 public class ChatMessageAction implements IAction{
 
@@ -43,7 +48,10 @@ public class ChatMessageAction implements IAction{
 		}
 		String msg=param.getString("msg");
 		MinecraftServer server=FMLCommonHandler.instance().getMinecraftServerInstance();
-		server.addChatMessage(new ChatComponentText(msg));
+		
+		server.getConfigurationManager().sendChatMsg(new ChatComponentText("[MSS] <"+user.username+"> "+msg));
+
+		FMLCommonHandler.instance().bus().post(new RemoteChatMessageEvent(user.username,msg));
 		
 		JSONObject result=new JSONObject();
 		result.put("success", 1);
