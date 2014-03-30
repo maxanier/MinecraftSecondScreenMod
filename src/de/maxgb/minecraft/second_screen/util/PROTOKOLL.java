@@ -42,7 +42,7 @@ public class PROTOKOLL {
 	/**
 	 * Login message send to the server. Followed by Json string containing:
 	 * "username"(String),"password"(md5 hash of password as
-	 * String),"appversion"(int)
+	 * String),"clientid"(String),"clientversion"(int)
 	 */
 	public static final String LOGIN = "login";
 	/**

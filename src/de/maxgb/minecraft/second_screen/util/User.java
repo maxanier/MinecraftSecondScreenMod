@@ -10,12 +10,21 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
 public class User {
+	
 	public final String username;
 	private int password;
 	private final String TAG="UserObject";
 	private static final String perm_category="permissions";
+	public ClientVersion.ClientInfo getClient() {
+		return client;
+	}
+
+	public void setClient(ClientVersion.ClientInfo client) {
+		this.client = client;
+	}
 	private HashMap<String,Boolean> perm;
 	private boolean all_allowed;
+	private ClientVersion.ClientInfo client;
 	
 	public User(String username,int password,HashMap<String,Boolean> perm){
 		this.username=username;

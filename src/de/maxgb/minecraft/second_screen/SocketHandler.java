@@ -22,7 +22,7 @@ import de.maxgb.minecraft.second_screen.util.Constants;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.util.PROTOKOLL;
 import de.maxgb.minecraft.second_screen.util.User;
-import de.maxgb.minecraft.second_screen.util.Version;
+import de.maxgb.minecraft.second_screen.util.ClientVersion;
 
 public class SocketHandler extends Thread implements ActionResultListener{
 
@@ -106,14 +106,7 @@ public class SocketHandler extends Thread implements ActionResultListener{
 		}
 		String username = data.getString("username");
 
-		if(!data.has("appversion")){
-			Logger.w(TAG, "Login message is missing appversion.");
-			JSONObject result = new JSONObject();
-			result.put("success", 0);
-			result.put("error", "Appversion is missing");
-			send(PROTOKOLL.LOGIN_RESULT + " " + result.toString());
-		}
-		int appversion = data.getInt("appversion");
+
 
 		if (Configs.auth_required) {
 			if (!data.has("password")) {
@@ -139,7 +132,18 @@ public class SocketHandler extends Thread implements ActionResultListener{
 		user = UserManager.getUser(username);
 		JSONObject result = new JSONObject();
 		result.put("success", 1);
-		result.put("appupdate", Version.isNewestAppVersion(appversion));
+		
+		if(data.has("clientid")&&data.has("clientversion")){
+			String id=data.getString("clientid");
+			int v=data.getInt("clientversion");
+			Logger.i(TAG, "Clientinfo: "+id+" Version: "+v);
+			result.put("clientupdate", ClientVersion.isUpdateAvailable(id, v));
+			user.setClient(new ClientVersion.ClientInfo(id, v));
+		}
+		else{
+			Logger.w(TAG, "Login message is missing client information.");
+		}
+		
 		send(PROTOKOLL.LOGIN_RESULT + " " + result.toString());
 		Logger.i(TAG, "Sucessfully logged in user " + username);
 	}
