@@ -3,6 +3,8 @@ package de.maxgb.minecraft.second_screen.commands;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockLever;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,9 +13,12 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
+import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.world.ObservingRegistry;
 
 public class RegisterRedstoneInfoCommand implements MssCommand.MssSubCommand{
+
+	private static final String TAG = "RegisterRedstoneCommand";
 
 	/**
 	 * Gets players looking spot.
@@ -109,9 +114,18 @@ public class RegisterRedstoneInfoCommand implements MssCommand.MssSubCommand{
 				sendMessage(var1, "You have to look at a block");
 				return;
 			}
-
+			Block b=player.worldObj.getBlock(p.blockX, p.blockY, p.blockZ);
 			sendMessage(var1, "You are looking at: " + p.blockX + ","
-					+ p.blockY + "," + p.blockZ);
+					+ p.blockY + "," + p.blockZ+ " "+b.getLocalizedName());
+			if( b instanceof BlockLever){
+				Logger.i(TAG, "Registering lever");
+			}
+			else if(!b.isNormalCube()){
+				Logger.w(TAG, "Block is not a normal cube");
+				sendMessage(var1,"You can only register solid blocks or levers");
+				return;
+			}
+			
 
 			if (ObservingRegistry.observeBlock(var2[1], p.blockX, p.blockY,
 					p.blockZ, player.worldObj.provider.dimensionId)) {
