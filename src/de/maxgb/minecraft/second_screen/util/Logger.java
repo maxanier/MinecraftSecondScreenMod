@@ -44,6 +44,5 @@ public class Logger {
 	public static void w(String tag, String msg) {
 		log(Level.WARN, "[" + tag + "]" + msg);
 
-
 	}
 }

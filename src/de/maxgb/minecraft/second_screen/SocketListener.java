@@ -60,7 +60,7 @@ public class SocketListener implements Runnable {
 	}
 
 	private void closeAll() {
-		Logger.i(TAG,"Stopping all handlers");
+		Logger.i(TAG, "Stopping all handlers");
 		synchronized (socketList) {
 			for (SocketHandler handler : socketList) {
 				try {
@@ -112,16 +112,14 @@ public class SocketListener implements Runnable {
 		} finally {
 			try {
 				socket.close();
-				
-				
+
 			} catch (Exception e) {
-				Logger.e(TAG, "Error while closing socket",e);
+				Logger.e(TAG, "Error while closing socket", e);
 			}
-			try{
+			try {
 				closeAll();
-			}
-			catch(Exception e){
-				Logger.e(TAG, "Error while closing handlers",e);
+			} catch (Exception e) {
+				Logger.e(TAG, "Error while closing handlers", e);
 			}
 		}
 	}

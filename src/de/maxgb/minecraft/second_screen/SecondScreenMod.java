@@ -61,12 +61,12 @@ public class SecondScreenMod {
 		DataStorageDriver.setWorldName(e.getServer().getFolderName());
 
 		ObservingRegistry.loadObservingMap();
-		
+
 		UserManager.loadUsers();
-		
+
 		ActionManager.registerStandardActions();
-		
-		MssCommand mssc=new MssCommand();
+
+		MssCommand mssc = new MssCommand();
 		mssc.addSubCommand(new RegisterRedstoneInfoCommand());
 		mssc.addSubCommand(new RegisterUserCommand());
 		e.registerServerCommand(mssc);

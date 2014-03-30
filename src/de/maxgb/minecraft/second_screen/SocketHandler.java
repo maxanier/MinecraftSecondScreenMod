@@ -18,13 +18,13 @@ import de.maxgb.minecraft.second_screen.info_listener.PlayerInfoListener;
 import de.maxgb.minecraft.second_screen.info_listener.PlayerInventoryListener;
 import de.maxgb.minecraft.second_screen.info_listener.ServerInfoListener;
 import de.maxgb.minecraft.second_screen.info_listener.WorldInfoListener;
+import de.maxgb.minecraft.second_screen.shared.ClientVersion;
 import de.maxgb.minecraft.second_screen.shared.PROTOKOLL;
 import de.maxgb.minecraft.second_screen.util.Constants;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.util.User;
-import de.maxgb.minecraft.second_screen.shared.ClientVersion;
 
-public class SocketHandler extends Thread implements ActionResultListener{
+public class SocketHandler extends Thread implements ActionResultListener {
 
 	public Socket socket;
 	private boolean running;
@@ -50,8 +50,6 @@ public class SocketHandler extends Thread implements ActionResultListener{
 
 	}
 
-
-
 	/**
 	 * Stops the run method and sets remove to true so that the listener thread
 	 * removes it from the list
@@ -67,6 +65,32 @@ public class SocketHandler extends Thread implements ActionResultListener{
 		}
 		socket = null;
 		remove = true;
+
+	}
+
+	private void onActionMessage(String action, String params) {
+
+		// Check is user object is available and so if the user is authentified
+		if (user == null) {
+
+			send(PROTOKOLL.ERROR + " " + "Login required. ["
+					+ PROTOKOLL.ACTION_COMMAND_BEGIN + action + " " + params
+					+ "]");
+			Logger.w(TAG, "Cannot execute action before login. ");
+			return;
+		}
+
+		JSONObject p = new JSONObject(params);
+		if (!ActionManager.doAction(action, p, user, this)) {
+			send(PROTOKOLL.ERROR + " " + "Action not found. ["
+					+ PROTOKOLL.ACTION_COMMAND_BEGIN + action + " " + params
+					+ "]");
+		}
+	}
+
+	@Override
+	public void onActionResult(String command, JSONObject r) {
+		send(PROTOKOLL.ACTION_RESULT_BEGIN + command + " " + r.toString());
 
 	}
 
@@ -97,7 +121,7 @@ public class SocketHandler extends Thread implements ActionResultListener{
 	 */
 	private void onLoginMessage(String params) {
 		JSONObject data = new JSONObject(params);
-		if(!data.has("username")){
+		if (!data.has("username")) {
 			Logger.w(TAG, "Login message is missing username.");
 			JSONObject result = new JSONObject();
 			result.put("success", 0);
@@ -105,8 +129,6 @@ public class SocketHandler extends Thread implements ActionResultListener{
 			send(PROTOKOLL.LOGIN_RESULT + " " + result.toString());
 		}
 		String username = data.getString("username");
-
-
 
 		if (Configs.auth_required) {
 			if (!data.has("password")) {
@@ -132,18 +154,17 @@ public class SocketHandler extends Thread implements ActionResultListener{
 		user = UserManager.getUser(username);
 		JSONObject result = new JSONObject();
 		result.put("success", 1);
-		
-		if(data.has("clientid")&&data.has("clientversion")){
-			String id=data.getString("clientid");
-			int v=data.getInt("clientversion");
-			Logger.i(TAG, "Clientinfo: "+id+" Version: "+v);
+
+		if (data.has("clientid") && data.has("clientversion")) {
+			String id = data.getString("clientid");
+			int v = data.getInt("clientversion");
+			Logger.i(TAG, "Clientinfo: " + id + " Version: " + v);
 			result.put("clientupdate", ClientVersion.isUpdateAvailable(id, v));
 			user.setClient(new ClientVersion.ClientInfo(id, v));
-		}
-		else{
+		} else {
 			Logger.w(TAG, "Login message is missing client information.");
 		}
-		
+
 		send(PROTOKOLL.LOGIN_RESULT + " " + result.toString());
 		Logger.i(TAG, "Sucessfully logged in user " + username);
 	}
@@ -159,10 +180,10 @@ public class SocketHandler extends Thread implements ActionResultListener{
 
 		// Check is user object is available and so if the user is authentified
 		if (user == null) {
-			
-			send(PROTOKOLL.ERROR + " " + "Login required. ["+PROTOKOLL.REGISTER_COMMAND_BEGIN+l+"]");
-			Logger.w(TAG,
-					"Cannot register a listener before login.");
+
+			send(PROTOKOLL.ERROR + " " + "Login required. ["
+					+ PROTOKOLL.REGISTER_COMMAND_BEGIN + l + "]");
+			Logger.w(TAG, "Cannot register a listener before login.");
 			return;
 		}
 
@@ -238,23 +259,6 @@ public class SocketHandler extends Thread implements ActionResultListener{
 		Logger.i(TAG, "Removed " + (listenercount - listeners.size())
 				+ " listeners");
 	}
-	
-	private void onActionMessage(String action,String params){
-		
-		// Check is user object is available and so if the user is authentified
-		if (user == null) {
-			
-			send(PROTOKOLL.ERROR + " " + "Login required. ["+PROTOKOLL.ACTION_COMMAND_BEGIN+action+" "+params+"]");
-			Logger.w(TAG,
-					"Cannot execute action before login. ");
-			return;
-		}
-		
-		JSONObject p=new JSONObject(params);
-		if(!ActionManager.doAction(action, p,user, this)){
-			send(PROTOKOLL.ERROR+" "+"Action not found. ["+PROTOKOLL.ACTION_COMMAND_BEGIN+action+" "+params+"]");
-		}
-	}
 
 	@Override
 	public void run() {
@@ -297,7 +301,9 @@ public class SocketHandler extends Thread implements ActionResultListener{
 										TAG,
 										"Failed to parse listener from register command",
 										e);
-								send(PROTOKOLL.ERROR + " " + "Failed to register listener. ["+msg+"]");
+								send(PROTOKOLL.ERROR + " "
+										+ "Failed to register listener. ["
+										+ msg + "]");
 							}
 
 						} else if (msg
@@ -312,21 +318,27 @@ public class SocketHandler extends Thread implements ActionResultListener{
 										TAG,
 										"Failed to parse listener from unregister command",
 										e);
-								send(PROTOKOLL.ERROR + " " + "Failed to unregister listener. ["+msg+"]");
+								send(PROTOKOLL.ERROR + " "
+										+ "Failed to unregister listener. ["
+										+ msg + "]");
 							}
-						}
-						else if(msg.startsWith(PROTOKOLL.ACTION_COMMAND_BEGIN)){
+						} else if (msg
+								.startsWith(PROTOKOLL.ACTION_COMMAND_BEGIN)) {
 							try {
-								String s=msg.replace(PROTOKOLL.ACTION_COMMAND_BEGIN, "");
-								String action=s.substring(0,s.indexOf(' '));
-								String params=s.substring(s.indexOf(' '));
-								onActionMessage(action,params);
+								String s = msg.replace(
+										PROTOKOLL.ACTION_COMMAND_BEGIN, "");
+								String action = s.substring(0, s.indexOf(' '));
+								String params = s.substring(s.indexOf(' '));
+								onActionMessage(action, params);
 							} catch (Exception e) {
-								Logger.e(TAG, "Failed processing action command",e);
-								send(PROTOKOLL.ERROR+" "+"Failed processing action command. ["+msg+"]");
+								Logger.e(TAG,
+										"Failed processing action command", e);
+								send(PROTOKOLL.ERROR + " "
+										+ "Failed processing action command. ["
+										+ msg + "]");
 							}
-						}else if (msg.startsWith(PROTOKOLL.CONNECT)) {
-						
+						} else if (msg.startsWith(PROTOKOLL.CONNECT)) {
+
 							onConnectMessage();
 						} else if (msg.startsWith(PROTOKOLL.LOGIN)) {
 							String params = msg.substring(PROTOKOLL.LOGIN
@@ -338,11 +350,12 @@ public class SocketHandler extends Thread implements ActionResultListener{
 						else if (msg.startsWith(PROTOKOLL.DISCONNECT)) {
 							onDisconnectMessage();
 						} else {
-							send(PROTOKOLL.UNKNOWN+" ["+msg+"]");
+							send(PROTOKOLL.UNKNOWN + " [" + msg + "]");
 						}
 					} catch (Exception e) {
 						Logger.e(TAG, "Failed to process message", e);
-						send(PROTOKOLL.ERROR+" "+"Failed to process message. ["+msg+"]");
+						send(PROTOKOLL.ERROR + " "
+								+ "Failed to process message. [" + msg + "]");
 					}
 
 				}
@@ -401,14 +414,6 @@ public class SocketHandler extends Thread implements ActionResultListener{
 		for (StandardListener l : listeners) {
 			send(l.tick());
 		}
-	}
-
-
-
-	@Override
-	public void onActionResult(String command,JSONObject r) {
-		send(PROTOKOLL.ACTION_RESULT_BEGIN+command+" "+r.toString());
-		
 	}
 
 }

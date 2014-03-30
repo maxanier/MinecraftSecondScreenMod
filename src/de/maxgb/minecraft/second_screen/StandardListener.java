@@ -13,12 +13,10 @@ public abstract class StandardListener {
 	private String lastMessage;
 
 	public StandardListener(User user) {
-		this.user=user;
+		this.user = user;
 		server = FMLCommonHandler.instance().getMinecraftServerInstance();
 		tick = 0;
 	}
-
-
 
 	/**
 	 * Is called every tick
@@ -29,7 +27,7 @@ public abstract class StandardListener {
 		if (tick < 1) {
 			tick = everyTick;
 			String newMessage = update();
-			if(newMessage==null){
+			if (newMessage == null) {
 				return null;
 			}
 			if (!newMessage.equals(lastMessage)) {

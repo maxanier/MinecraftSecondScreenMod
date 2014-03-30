@@ -6,7 +6,6 @@ import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
-
 import de.maxgb.minecraft.second_screen.data.DataStorageDriver;
 import de.maxgb.minecraft.second_screen.util.Logger;
 
@@ -37,6 +36,7 @@ public class ObservingRegistry {
 				return null;
 			}
 		}
+
 		public String label;
 
 		public int x, y, z, dimensionId;
@@ -49,17 +49,18 @@ public class ObservingRegistry {
 			this.dimensionId = dimensionId;
 		}
 
+		public Block getBlock(IBlockAccess world) {
+			return world.getBlock(x, y, z);
+		}
+
 		@Override
 		public String toString() {
 			return label + "," + x + "," + y + "," + z + "," + dimensionId;
 
 		}
-		
-		public Block getBlock(IBlockAccess world){
-			return world.getBlock(x, y, z);
-		}
 
 	}
+
 	private static HashMap<String, ObservedBlock> map;
 	private final static String TAG = "OberservingRegistry";
 

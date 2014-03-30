@@ -3,8 +3,8 @@ package de.maxgb.minecraft.second_screen.util;
 import net.minecraft.item.Item;
 
 /**
-* Util class to read private attributesa from Minecraft classes
-*/
+ * Util class to read private attributesa from Minecraft classes
+ */
 public class ReadPrivate {
 	public static String getIconString(Item i) {
 		try {

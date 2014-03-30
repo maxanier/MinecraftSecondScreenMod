@@ -1,22 +1,17 @@
 package de.maxgb.minecraft.second_screen.commands;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLever;
-import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.world.ObservingRegistry;
 
-public class RegisterRedstoneInfoCommand implements MssCommand.MssSubCommand{
+public class RegisterRedstoneInfoCommand implements MssCommand.MssSubCommand {
 
 	private static final String TAG = "RegisterRedstoneCommand";
 
@@ -62,21 +57,17 @@ public class RegisterRedstoneInfoCommand implements MssCommand.MssSubCommand{
 		// !true);
 	}
 
-
 	public RegisterRedstoneInfoCommand() {
 
 	}
 
-
-
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender var1) {
-		if(var1 instanceof EntityPlayer){
+		if (var1 instanceof EntityPlayer) {
 			return true;
 		}
 		return false;
 	}
-
 
 	@Override
 	public String getCommandName() {
@@ -88,11 +79,10 @@ public class RegisterRedstoneInfoCommand implements MssCommand.MssSubCommand{
 		return "redinfo add <label> or redinfo remove <label>";
 	}
 
-
 	@Override
 	public void processCommand(ICommandSender var1, String[] var2) {
 
-		if (var2==null||var2.length < 2) {
+		if (var2 == null || var2.length < 2) {
 			sendMessage(var1, "Invalid arguments. Usage: "
 					+ getCommandUsage(var1));
 			return;
@@ -114,18 +104,17 @@ public class RegisterRedstoneInfoCommand implements MssCommand.MssSubCommand{
 				sendMessage(var1, "You have to look at a block");
 				return;
 			}
-			Block b=player.worldObj.getBlock(p.blockX, p.blockY, p.blockZ);
+			Block b = player.worldObj.getBlock(p.blockX, p.blockY, p.blockZ);
 			sendMessage(var1, "You are looking at: " + p.blockX + ","
-					+ p.blockY + "," + p.blockZ+ " "+b.getLocalizedName());
-			if( b instanceof BlockLever){
+					+ p.blockY + "," + p.blockZ + " " + b.getLocalizedName());
+			if (b instanceof BlockLever) {
 				Logger.i(TAG, "Registering lever");
-			}
-			else if(!b.isNormalCube()){
+			} else if (!b.isNormalCube()) {
 				Logger.w(TAG, "Block is not a normal cube");
-				sendMessage(var1,"You can only register solid blocks or levers");
+				sendMessage(var1,
+						"You can only register solid blocks or levers");
 				return;
 			}
-			
 
 			if (ObservingRegistry.observeBlock(var2[1], p.blockX, p.blockY,
 					p.blockZ, player.worldObj.provider.dimensionId)) {
@@ -154,10 +143,9 @@ public class RegisterRedstoneInfoCommand implements MssCommand.MssSubCommand{
 		}
 
 	}
-	
-	private void sendMessage(ICommandSender var1,String msg){
-		MssCommand.sendMessage(var1, msg);
-	}
 
+	private void sendMessage(ICommandSender var1, String msg) {
+		BaseCommand.sendMessage(var1, msg);
+	}
 
 }

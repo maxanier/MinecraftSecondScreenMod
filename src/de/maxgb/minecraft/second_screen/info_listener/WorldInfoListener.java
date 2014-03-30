@@ -36,13 +36,13 @@ public class WorldInfoListener extends StandardListener {
 		int minutes = remainder / 17;
 
 		// Not interesting
-//		if (weeks != 0) {
-//			time += weeks + " weeks ";
-//		}
-//
-//		if (days != 0) {
-//			time += (days < 10 ? "0" : "") + days + " days ";
-//		}
+		// if (weeks != 0) {
+		// time += weeks + " weeks ";
+		// }
+		//
+		// if (days != 0) {
+		// time += (days < 10 ? "0" : "") + days + " days ";
+		// }
 
 		if (hours != 0) {
 			time += (hours < 10 ? "0" : "") + hours + " h ";
@@ -54,6 +54,7 @@ public class WorldInfoListener extends StandardListener {
 
 		return time;
 	}
+
 	HashMap<Integer, WorldServer> worlds;
 
 	private final String TAG = "WorldInfoListener";
@@ -110,9 +111,10 @@ public class WorldInfoListener extends StandardListener {
 					ObservingRegistry.removeObservedBlock(block.label);
 				} else {
 					JSONArray in = new JSONArray();
-					in.put(block.label).put(
-							world.isBlockIndirectlyGettingPowered(block.x,
-									block.y, block.z)).put(block.getBlock(world) instanceof BlockLever);
+					in.put(block.label)
+							.put(world.isBlockIndirectlyGettingPowered(block.x,
+									block.y, block.z))
+							.put(block.getBlock(world) instanceof BlockLever);
 					redstone.put(in);
 				}
 

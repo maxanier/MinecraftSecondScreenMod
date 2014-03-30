@@ -3,9 +3,7 @@ package de.maxgb.minecraft.second_screen.commands;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.ChatComponentText;
 import de.maxgb.minecraft.second_screen.SecondScreenMod;
 
 public class GetMSSPortCommand extends BaseCommand {
@@ -73,6 +71,5 @@ public class GetMSSPortCommand extends BaseCommand {
 		}
 
 	}
-
 
 }
