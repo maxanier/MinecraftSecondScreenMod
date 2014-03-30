@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+
 import net.minecraftforge.common.config.Configuration;
 
 import de.maxgb.minecraft.second_screen.Configs;
@@ -54,6 +56,9 @@ public class UserManager {
 		if(Configs.auth_required){
 			for(User u : auth_users){
 				if(u.username.equals(username)){
+					if(FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().isPlayerOpped(u.username)){
+						u.setAllAllowed(true);
+					}
 					return u;
 				}
 			}
