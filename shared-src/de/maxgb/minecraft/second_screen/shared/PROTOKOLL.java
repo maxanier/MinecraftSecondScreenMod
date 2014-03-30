@@ -24,6 +24,9 @@ public class PROTOKOLL {
 	 * Chat message action. Followed by Json string containing "msg"(String)
 	 */
 	public static final String A_CHAT_MSG="cm";
+	/**
+	 * Switch lever state action. Followed by Json string containing "label"(String),"state"(Boolean)
+	 */
 	public static final String A_RED_CONTROL="rc";
 
 	// Connection

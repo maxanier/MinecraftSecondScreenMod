@@ -75,6 +75,7 @@ public class ActionManager {
 	 */
 	public static void registerStandardActions(){
 		registerAction(PROTOKOLL.A_CHAT_MSG, new ChatMessageAction());
+		registerAction(PROTOKOLL.A_RED_CONTROL,new RedstoneControlAction());
 	}
 	
 	public static void removeAllActions(){
