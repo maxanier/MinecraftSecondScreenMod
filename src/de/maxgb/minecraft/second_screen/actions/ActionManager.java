@@ -4,8 +4,8 @@ import java.util.HashMap;
 
 import org.json.JSONObject;
 
+import de.maxgb.minecraft.second_screen.shared.PROTOKOLL;
 import de.maxgb.minecraft.second_screen.util.Logger;
-import de.maxgb.minecraft.second_screen.util.PROTOKOLL;
 import de.maxgb.minecraft.second_screen.util.User;
 
 public class ActionManager {

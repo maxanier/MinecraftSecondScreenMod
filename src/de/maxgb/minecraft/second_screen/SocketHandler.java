@@ -18,11 +18,11 @@ import de.maxgb.minecraft.second_screen.info_listener.PlayerInfoListener;
 import de.maxgb.minecraft.second_screen.info_listener.PlayerInventoryListener;
 import de.maxgb.minecraft.second_screen.info_listener.ServerInfoListener;
 import de.maxgb.minecraft.second_screen.info_listener.WorldInfoListener;
+import de.maxgb.minecraft.second_screen.shared.PROTOKOLL;
 import de.maxgb.minecraft.second_screen.util.Constants;
 import de.maxgb.minecraft.second_screen.util.Logger;
-import de.maxgb.minecraft.second_screen.util.PROTOKOLL;
 import de.maxgb.minecraft.second_screen.util.User;
-import de.maxgb.minecraft.second_screen.util.ClientVersion;
+import de.maxgb.minecraft.second_screen.shared.ClientVersion;
 
 public class SocketHandler extends Thread implements ActionResultListener{
 

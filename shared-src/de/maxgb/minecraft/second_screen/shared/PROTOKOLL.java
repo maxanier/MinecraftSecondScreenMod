@@ -1,4 +1,6 @@
-package de.maxgb.minecraft.second_screen.util;
+package de.maxgb.minecraft.second_screen.shared;
+
+
 
 public class PROTOKOLL {
 

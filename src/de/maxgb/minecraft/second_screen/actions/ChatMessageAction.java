@@ -9,8 +9,8 @@ import cpw.mods.fml.common.FMLCommonHandler;
 
 import de.maxgb.minecraft.second_screen.actions.ActionManager.ActionResultListener;
 import de.maxgb.minecraft.second_screen.actions.ActionManager.IAction;
+import de.maxgb.minecraft.second_screen.shared.PROTOKOLL;
 import de.maxgb.minecraft.second_screen.util.Logger;
-import de.maxgb.minecraft.second_screen.util.PROTOKOLL;
 import de.maxgb.minecraft.second_screen.util.User;
 
 public class ChatMessageAction implements IAction{

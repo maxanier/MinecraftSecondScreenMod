@@ -4,7 +4,7 @@ import org.json.JSONObject;
 
 import de.maxgb.minecraft.second_screen.Configs;
 import de.maxgb.minecraft.second_screen.StandardListener;
-import de.maxgb.minecraft.second_screen.util.PROTOKOLL;
+import de.maxgb.minecraft.second_screen.shared.PROTOKOLL;
 import de.maxgb.minecraft.second_screen.util.User;
 
 public class ServerInfoListener extends StandardListener {

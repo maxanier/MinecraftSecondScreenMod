@@ -1,4 +1,6 @@
-package de.maxgb.minecraft.second_screen.util;
+package de.maxgb.minecraft.second_screen.shared;
+
+
 
 /**
  * Version class which should be used in the clients to determine which features are available with the mod feature id which is sent on connect

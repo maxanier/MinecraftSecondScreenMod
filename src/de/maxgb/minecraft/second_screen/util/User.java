@@ -3,6 +3,8 @@ package de.maxgb.minecraft.second_screen.util;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import de.maxgb.minecraft.second_screen.shared.ClientVersion;
+
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.config.ConfigCategory;
