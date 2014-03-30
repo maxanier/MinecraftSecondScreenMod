@@ -10,11 +10,15 @@ package de.maxgb.minecraft.second_screen.shared;
 public class ModVersion {
 	public static ModVersion getVersion(int feature_id) {
 		//Set to newest known version if higher than known
-		if(feature_id>3){
-			feature_id=3;
+		if(feature_id>4){
+			feature_id=4;
 		}
 		ModVersion v = new ModVersion();
 		//Set Features
+		if(feature_id>=4){
+			v.sendchat=true;
+			
+		}
 		if(feature_id>=3){
 			v.chat=true;
 			v.newest=true;
@@ -38,6 +42,7 @@ public class ModVersion {
 	private boolean chat =false;
 	private int versionid = 0;
 	private boolean newest = false;
+	private boolean sendchat=false;
 
 
 	private ModVersion() {
