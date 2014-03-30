@@ -3,6 +3,7 @@ package de.maxgb.minecraft.second_screen.info_listener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import net.minecraft.block.BlockLever;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.WorldInfo;
 
@@ -111,7 +112,7 @@ public class WorldInfoListener extends StandardListener {
 					JSONArray in = new JSONArray();
 					in.put(block.label).put(
 							world.isBlockIndirectlyGettingPowered(block.x,
-									block.y, block.z));
+									block.y, block.z)).put(block.getBlock(world) instanceof BlockLever);
 					redstone.put(in);
 				}
 
