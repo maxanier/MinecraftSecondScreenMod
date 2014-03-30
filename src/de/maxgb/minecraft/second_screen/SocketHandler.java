@@ -267,6 +267,7 @@ public class SocketHandler extends Thread implements ActionResultListener{
 				reader = new BufferedReader(new InputStreamReader(
 						socket.getInputStream()));
 			} catch (IOException e) {
+				Logger.e(TAG, "Unable to create reader -> closing");
 				this.close();
 				return;
 			}
