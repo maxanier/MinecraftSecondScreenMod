@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.minecraft.block.Block;
+import net.minecraft.world.IBlockAccess;
+
 import de.maxgb.minecraft.second_screen.data.DataStorageDriver;
 import de.maxgb.minecraft.second_screen.util.Logger;
 
@@ -50,6 +53,10 @@ public class ObservingRegistry {
 		public String toString() {
 			return label + "," + x + "," + y + "," + z + "," + dimensionId;
 
+		}
+		
+		public Block getBlock(IBlockAccess world){
+			return world.getBlock(x, y, z);
 		}
 
 	}
