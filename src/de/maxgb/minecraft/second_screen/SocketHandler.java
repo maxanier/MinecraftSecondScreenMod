@@ -274,8 +274,8 @@ public class SocketHandler extends Thread implements ActionResultListener{
 				try {
 					msg = reader.readLine();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					Logger.e(TAG, "Error reading line -> closing");
+					this.close();
 				}
 				// ProcessMessage
 				if (msg != null) {
