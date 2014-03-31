@@ -52,7 +52,7 @@ public class PROTOKOLL {
 	public static final String LOGIN = "login";
 	/**
 	 * Login result message send to the client. Followed by Json string
-	 * containing: "success"(int [0/1]),"appupdate"(boolean)
+	 * containing: "success"(int [0/1]),"clientupdate"(boolean),"clientupdatenecessary"(boolean)
 	 */
 	public static final String LOGIN_RESULT = "login_result";
 
