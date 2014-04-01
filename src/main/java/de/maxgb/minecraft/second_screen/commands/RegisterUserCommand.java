@@ -11,7 +11,7 @@ public class RegisterUserCommand implements MssCommand.MssSubCommand {
 
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender var1) {
-		// TODO Auto-generated method stub
+
 		return false;
 	}
 

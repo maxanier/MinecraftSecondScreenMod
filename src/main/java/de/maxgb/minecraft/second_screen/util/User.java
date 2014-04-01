@@ -38,6 +38,7 @@ public class User {
 
 	private boolean all_allowed;
 	private ClientVersion.ClientInfo client;
+
 	public User(String username, int password) {
 		this(username, password, null);
 	}

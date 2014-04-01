@@ -15,6 +15,7 @@ public class MssCommand extends BaseCommand {
 
 		public void processCommand(ICommandSender var1, String[] var2);
 	}
+
 	private List aliases;
 
 	private ArrayList<MssSubCommand> commands;
@@ -33,7 +34,7 @@ public class MssCommand extends BaseCommand {
 
 	@Override
 	public List addTabCompletionOptions(ICommandSender var1, String[] var2) {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
@@ -44,7 +45,7 @@ public class MssCommand extends BaseCommand {
 
 	@Override
 	public int compareTo(Object arg0) {
-		// TODO Auto-generated method stub
+
 		return 0;
 	}
 
@@ -71,7 +72,7 @@ public class MssCommand extends BaseCommand {
 
 	@Override
 	public boolean isUsernameIndex(String[] var1, int var2) {
-		// TODO Auto-generated method stub
+
 		return false;
 	}
 

@@ -125,12 +125,11 @@ public class SocketListener implements Runnable {
 	}
 
 	public void stop() {
-		FMLLog.log(Level.DEBUG, "Stopping SocketListener");
+		Logger.i(TAG, "Stopping socket listener");
 		running = false;
 		try {
 			socket.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		closeAll();

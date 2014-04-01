@@ -102,7 +102,7 @@ public class SocketHandler extends Thread implements ActionResultListener {
 		result.put("versionid", Constants.FEATURE_VERSION);
 		result.put("minecraftversion", Constants.MINECRAFT_VERSION);
 		result.put("login_required", Configs.auth_required);
-		
+
 		send(PROTOKOLL.CONNECT_RESULT + " " + result.toString());
 
 	}
@@ -161,7 +161,8 @@ public class SocketHandler extends Thread implements ActionResultListener {
 			int v = data.getInt("clientversion");
 			Logger.i(TAG, "Clientinfo: " + id + " Version: " + v);
 			result.put("clientupdate", ClientVersion.isUpdateAvailable(id, v));
-			result.put("clientupdatenecessary", ClientVersion.isUpdateNecessary(id, v));
+			result.put("clientupdatenecessary",
+					ClientVersion.isUpdateNecessary(id, v));
 			user.setClient(new ClientVersion.ClientInfo(id, v));
 		} else {
 			Logger.w(TAG, "Login message is missing client information.");

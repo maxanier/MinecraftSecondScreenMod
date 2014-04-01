@@ -20,7 +20,7 @@ public class GetIPCommand extends BaseCommand {
 
 	@Override
 	public List addTabCompletionOptions(ICommandSender var1, String[] var2) {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
@@ -31,7 +31,7 @@ public class GetIPCommand extends BaseCommand {
 
 	@Override
 	public int compareTo(Object arg0) {
-		// TODO Auto-generated method stub
+
 		return 0;
 	}
 
@@ -52,7 +52,6 @@ public class GetIPCommand extends BaseCommand {
 
 	@Override
 	public boolean isUsernameIndex(String[] var1, int var2) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

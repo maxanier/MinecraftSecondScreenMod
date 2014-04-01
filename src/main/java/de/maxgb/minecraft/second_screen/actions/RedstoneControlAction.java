@@ -1,7 +1,6 @@
 package de.maxgb.minecraft.second_screen.actions;
 
 import net.minecraft.block.BlockLever;
-import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.world.World;
 
 import org.json.JSONObject;
@@ -102,10 +101,9 @@ public class RedstoneControlAction implements IAction {
 				meta = meta ^ 0x8;
 			}
 			w.setBlockMetadataWithNotify(b.x, b.y, b.z, meta, 3);
-			Logger.i(TAG,"Spawning particle");
-			w.spawnParticle("reddust",b.x,b.y+1,b.z,0.0D,255.0D,0.0D);
-			
-			
+			Logger.i(TAG, "Spawning particle");
+			w.spawnParticle("reddust", b.x, b.y + 1, b.z, 0.0D, 255.0D, 0.0D);
+
 			return true;
 		}
 		return false;
