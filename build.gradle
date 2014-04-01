@@ -23,8 +23,7 @@ sourceSets
 {
     main
     {
-        java { srcDirs = ["$projectDir/src"] }
-	   resources { srcDirs = ["$projectDir/res"] }
+        java { srcDirs = ["$projectDir/src/main/java","$projectDir/src/shared/java"] }	   resources { srcDirs = ["$projectDir/main/resources"] }
     }
 }
 
