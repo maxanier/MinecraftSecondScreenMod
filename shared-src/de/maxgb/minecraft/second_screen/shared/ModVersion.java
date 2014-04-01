@@ -17,11 +17,13 @@ public class ModVersion {
 		//Set Features
 		if(feature_id>=4){
 			v.sendchat=true;
+			v.controlRed=true;
+			v.newest=true;
 			
 		}
 		if(feature_id>=3){
 			v.chat=true;
-			v.newest=true;
+			
 		}
 		if(feature_id>=2){
 			v.inventoryinfo_simple=true;
@@ -43,11 +45,10 @@ public class ModVersion {
 	private int versionid = 0;
 	private boolean newest = false;
 	private boolean sendchat=false;
+	private boolean controlRed=false;
 
 
-	private ModVersion() {
 
-	}
 
 	public int getVersionId() {
 		return versionid;
@@ -75,5 +76,12 @@ public class ModVersion {
 	
 	public boolean isChat(){
 		return chat;
+	}
+	
+	public boolean isSendChat(){
+		return sendchat;
+	}
+	public boolean isControlRed(){
+		return this.controlRed;
 	}
 }
