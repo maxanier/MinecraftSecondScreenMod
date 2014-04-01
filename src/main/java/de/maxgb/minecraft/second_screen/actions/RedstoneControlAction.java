@@ -8,7 +8,9 @@ import org.json.JSONObject;
 import cpw.mods.fml.common.FMLCommonHandler;
 import de.maxgb.minecraft.second_screen.actions.ActionManager.ActionResultListener;
 import de.maxgb.minecraft.second_screen.actions.ActionManager.IAction;
+import de.maxgb.minecraft.second_screen.info_listener.WorldInfoListener;
 import de.maxgb.minecraft.second_screen.shared.PROTOKOLL;
+import de.maxgb.minecraft.second_screen.util.ForceUpdateEvent;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.util.User;
 import de.maxgb.minecraft.second_screen.world.ObservingRegistry;
@@ -62,7 +64,8 @@ public class RedstoneControlAction implements IAction {
 					result.put("success", 1);
 					result.put("allowed", true);
 
-					listener.onActionResult(PROTOKOLL.A_CHAT_MSG, result);
+					listener.onActionResult(PROTOKOLL.A_RED_CONTROL, result);
+					FMLCommonHandler.instance().bus().post(new ForceUpdateEvent(WorldInfoListener.class));
 					return;
 				} else {
 					Logger.w(TAG,
@@ -73,10 +76,12 @@ public class RedstoneControlAction implements IAction {
 							"Block connected with this label is not a lever");
 
 					listener.onActionResult(PROTOKOLL.A_RED_CONTROL, result);
+					
 					return;
 				}
 			}
 		}
+		
 
 	}
 

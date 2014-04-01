@@ -21,6 +21,7 @@ import de.maxgb.minecraft.second_screen.info_listener.WorldInfoListener;
 import de.maxgb.minecraft.second_screen.shared.ClientVersion;
 import de.maxgb.minecraft.second_screen.shared.PROTOKOLL;
 import de.maxgb.minecraft.second_screen.util.Constants;
+import de.maxgb.minecraft.second_screen.util.ForceUpdateEvent;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.util.User;
 
@@ -415,8 +416,17 @@ public class SocketHandler extends Thread implements ActionResultListener {
 
 	public void tick() {
 		for (StandardListener l : listeners) {
-			send(l.tick());
+			send(l.tick(false));
 		}
+	}
+
+	public void forceUpdate(ForceUpdateEvent e) {
+		for (StandardListener l : listeners) {
+			if( l.getClass().equals(e.listener)){
+				send(l.tick(true));
+			}
+		}
+		
 	}
 
 }
