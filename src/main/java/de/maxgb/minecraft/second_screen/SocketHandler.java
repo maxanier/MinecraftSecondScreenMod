@@ -64,6 +64,9 @@ public class SocketHandler extends Thread implements ActionResultListener {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		catch (NullPointerException e){
+			e.printStackTrace();
+		}
 		socket = null;
 		remove = true;
 
@@ -292,76 +295,18 @@ public class SocketHandler extends Thread implements ActionResultListener {
 				}
 				// ProcessMessage
 				if (msg != null) {
-					try {
-						Logger.i(TAG, "Received Message: " + msg);// TODO Remove
-						if (msg.startsWith(PROTOKOLL.REGISTER_COMMAND_BEGIN)) {
-							try {
-								String listener = msg.replace(
-										PROTOKOLL.REGISTER_COMMAND_BEGIN, "")
-										.trim();
-								onRegisterMessage(listener);
-							} catch (Exception e) {
-								Logger.e(
-										TAG,
-										"Failed to parse listener from register command",
-										e);
-								send(PROTOKOLL.ERROR + " "
-										+ "Failed to register listener. ["
-										+ msg + "]");
-							}
+					final String pmsg=msg;
+					Thread receive = new Thread(new Runnable(){
 
-						} else if (msg
-								.startsWith(PROTOKOLL.UNREGISTER_COMMAND_BEGIN)) {
-							try {
-								String listener = msg.replace(
-										PROTOKOLL.UNREGISTER_COMMAND_BEGIN, "")
-										.trim();
-								onUnregisterMessage(listener);
-							} catch (Exception e) {
-								Logger.e(
-										TAG,
-										"Failed to parse listener from unregister command",
-										e);
-								send(PROTOKOLL.ERROR + " "
-										+ "Failed to unregister listener. ["
-										+ msg + "]");
-							}
-						} else if (msg
-								.startsWith(PROTOKOLL.ACTION_COMMAND_BEGIN)) {
-							try {
-								String s = msg.replace(
-										PROTOKOLL.ACTION_COMMAND_BEGIN, "");
-								String action = s.substring(0, s.indexOf(' '));
-								String params = s.substring(s.indexOf(' '));
-								onActionMessage(action, params);
-							} catch (Exception e) {
-								Logger.e(TAG,
-										"Failed processing action command", e);
-								send(PROTOKOLL.ERROR + " "
-										+ "Failed processing action command. ["
-										+ msg + "]");
-							}
-						} else if (msg.startsWith(PROTOKOLL.CONNECT)) {
-
-							onConnectMessage();
-						} else if (msg.startsWith(PROTOKOLL.LOGIN)) {
-							String params = msg.substring(PROTOKOLL.LOGIN
-									.length() + 1);
-							onLoginMessage(params);
-
+						@Override
+						public void run() {
+							receive(pmsg);
+							
 						}
-
-						else if (msg.startsWith(PROTOKOLL.DISCONNECT)) {
-							onDisconnectMessage();
-						} else {
-							send(PROTOKOLL.UNKNOWN + " [" + msg + "]");
-						}
-					} catch (Exception e) {
-						Logger.e(TAG, "Failed to process message", e);
-						send(PROTOKOLL.ERROR + " "
-								+ "Failed to process message. [" + msg + "]");
-					}
-
+					},"ProcessMessage");
+					receive.start();
+					Logger.i(TAG, "Started receive thread");
+					
 				}
 
 			}
@@ -427,6 +372,80 @@ public class SocketHandler extends Thread implements ActionResultListener {
 			}
 		}
 		
+	}
+	
+	public void receive(String msg){
+		try {
+			Logger.i(TAG, "Received Message: " + msg);// TODO Remove
+			if (msg.startsWith(PROTOKOLL.REGISTER_COMMAND_BEGIN)) {
+				try {
+					String listener = msg.replace(
+							PROTOKOLL.REGISTER_COMMAND_BEGIN, "")
+							.trim();
+					onRegisterMessage(listener);
+				} catch (Exception e) {
+					Logger.e(
+							TAG,
+							"Failed to parse listener from register command",
+							e);
+					send(PROTOKOLL.ERROR + " "
+							+ "Failed to register listener. ["
+							+ msg + "]");
+				}
+
+			} else if (msg
+					.startsWith(PROTOKOLL.UNREGISTER_COMMAND_BEGIN)) {
+				try {
+					String listener = msg.replace(
+							PROTOKOLL.UNREGISTER_COMMAND_BEGIN, "")
+							.trim();
+					onUnregisterMessage(listener);
+				} catch (Exception e) {
+					Logger.e(
+							TAG,
+							"Failed to parse listener from unregister command",
+							e);
+					send(PROTOKOLL.ERROR + " "
+							+ "Failed to unregister listener. ["
+							+ msg + "]");
+				}
+			} else if (msg
+					.startsWith(PROTOKOLL.ACTION_COMMAND_BEGIN)) {
+				try {
+					String s = msg.replace(
+							PROTOKOLL.ACTION_COMMAND_BEGIN, "");
+					String action = s.substring(0, s.indexOf(' '));
+					String params = s.substring(s.indexOf(' '));
+					onActionMessage(action, params);
+				} catch (Exception e) {
+					Logger.e(TAG,
+							"Failed processing action command", e);
+					send(PROTOKOLL.ERROR + " "
+							+ "Failed processing action command. ["
+							+ msg + "]");
+				}
+			} else if (msg.startsWith(PROTOKOLL.CONNECT)) {
+
+				onConnectMessage();
+			} else if (msg.startsWith(PROTOKOLL.LOGIN)) {
+				String params = msg.substring(PROTOKOLL.LOGIN
+						.length() + 1);
+				onLoginMessage(params);
+
+			}
+
+			else if (msg.startsWith(PROTOKOLL.DISCONNECT)) {
+				onDisconnectMessage();
+			} else {
+				send(PROTOKOLL.UNKNOWN + " [" + msg + "]");
+			}
+		} catch (Exception e) {
+			Logger.e(TAG, "Failed to process message", e);
+			send(PROTOKOLL.ERROR + " "
+					+ "Failed to process message. [" + msg + "]");
+		}
+
+	
 	}
 
 }
