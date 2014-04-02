@@ -1,7 +1,11 @@
 package de.maxgb.minecraft.second_screen.info_listener;
 
-import net.minecraft.entity.player.EntityPlayerMP;
+import java.util.Collection;
 
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.potion.PotionEffect;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import de.maxgb.minecraft.second_screen.Configs;
@@ -31,6 +35,23 @@ public class PlayerInfoListener extends StandardListener {
 		} else {
 			response.put("health", player.getHealth());
 			response.put("foodlevel", player.getFoodStats().getFoodLevel());
+			response.put("eplevel", player.experienceLevel);
+			response.put("posx", (int)player.posX);
+			response.put("posy", (int)player.posY);
+			response.put("posz", (int)player.posZ);
+			response.put("ping", player.ping);
+			
+			JSONArray potions=new JSONArray();
+			Collection<PotionEffect> pot=player.getActivePotionEffects();
+			for(PotionEffect i :pot){
+				JSONArray p=new JSONArray();
+				p.put(i.getEffectName());
+				p.put(i.getDuration()/20);
+				potions.put(p);
+			}
+			response.put("potions",potions );
+			
+			
 
 			response.put("success", 1);
 		}
