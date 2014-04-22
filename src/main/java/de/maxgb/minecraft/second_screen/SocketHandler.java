@@ -321,34 +321,44 @@ public class SocketHandler extends Thread implements ActionResultListener {
 	 * @param s
 	 *            Message
 	 */
-	private void send(String s) {
+	private void send(final String s) {
 		if (s == null) {
 			return;
 		}
 
-		// Start sending
-		// try to get a writer
-		BufferedWriter writer = null;
-		try {
-			writer = new BufferedWriter(new OutputStreamWriter(
-					socket.getOutputStream()));
-		} catch (Exception e) {
-			Logger.e(TAG, "Failed to get BufferedWriter", e);
-			this.close();
-		}
+		Thread sender = new Thread(new Runnable(){
 
-		// if it is available, write
-		if (writer != null) {
-			try {
+			@Override
+			public void run() {
+				// Start sending in new Thread
+				// try to get a writer
+				BufferedWriter writer = null;
+				try {
+					writer = new BufferedWriter(new OutputStreamWriter(
+							socket.getOutputStream()));
+				} catch (Exception e) {
+					Logger.e(TAG, "Failed to get BufferedWriter", e);
+					close();
+				}
 
-				writer.append(s + "\n");
-				writer.flush();
-				Logger.i(TAG, "Send message: " + s);
-			} catch (IOException e) {
-				Logger.e(TAG, "Failed to send message", e);
-				close();
+				// if it is available, write
+				if (writer != null) {
+					try {
+
+						writer.append(s + "\n");
+						writer.flush();
+						Logger.i(TAG, "Send message: " + s);
+					} catch (IOException e) {
+						Logger.e(TAG, "Failed to send message", e);
+						close();
+					}
+				}
+				
 			}
-		}
+			
+		});
+		sender.start();
+		
 	}
 
 	/**
