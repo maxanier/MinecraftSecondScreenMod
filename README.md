@@ -11,7 +11,7 @@ Author: maxanier
 Uses the Java-Websocket implementation by TooTallNate/Nathan Rajlich https://github.com/TooTallNate/Java-WebSocket
 and the JSON-java by douglascrockford/Douglas Crockford https://github.com/douglascrockford/JSON-java
 
-Everything else here is published under the Licence LGPL v3
+Everything else here is published under the Licence LGPL v3.
 Feel free to make pull request or suggestions what could be improved.
 
 You also may create clients which use this mod respectivly its web "api", you also may earn money with you clients. 
