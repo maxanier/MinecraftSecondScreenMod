@@ -42,7 +42,7 @@ public class PROTOKOLL {
 	 * Connect result send to the client. Followed by Json string containing:
 	 * "versionid"(int),"minecraftversion"(String),"login_required"(boolean)
 	 */
-	public static final String CONNECT_RESULT = "conncted";
+	public static final String CONNECT_RESULT = "conncted";//!!!typing mistake
 	/**
 	 * Login message send to the server. Followed by Json string containing:
 	 * "username"(String),"password"(md5 hash of password as

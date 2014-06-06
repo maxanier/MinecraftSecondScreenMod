@@ -119,7 +119,7 @@ public class ChatListener extends StandardListener {
 		response.put("messages", buffer);
 		buffer = new JSONArray();
 
-		return PROTOKOLL.CHAT_LISTENER + ":" + response.toString();
+		return PROTOKOLL.CHAT_LISTENER + "-" + response.toString();
 	}
 
 }

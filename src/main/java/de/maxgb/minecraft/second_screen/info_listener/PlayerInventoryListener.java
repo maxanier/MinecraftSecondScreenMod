@@ -108,7 +108,7 @@ public class PlayerInventoryListener extends StandardListener {
 			response.put("success", 1);
 		}
 
-		return PROTOKOLL.PLAYER_INVENTORY_LISTENER + ":" + response.toString();
+		return PROTOKOLL.PLAYER_INVENTORY_LISTENER + "-" + response.toString();
 
 	}
 

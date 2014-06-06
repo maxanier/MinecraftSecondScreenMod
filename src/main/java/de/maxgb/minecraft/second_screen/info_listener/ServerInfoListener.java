@@ -21,7 +21,7 @@ public class ServerInfoListener extends StandardListener {
 		info.put("maxplayer", server.getMaxPlayers());
 		info.put("usernames", server.getAllUsernames());
 		info.put("playercount", server.getCurrentPlayerCount());
-		return PROTOKOLL.SERVER_INFO_LISTENER + ":" + info.toString();
+		return PROTOKOLL.SERVER_INFO_LISTENER + "-" + info.toString();
 	}
 
 }

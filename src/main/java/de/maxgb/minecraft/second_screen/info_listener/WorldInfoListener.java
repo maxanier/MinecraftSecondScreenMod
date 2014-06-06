@@ -124,7 +124,7 @@ public class WorldInfoListener extends StandardListener {
 		info.put("redstone", redstone);
 		// --------------------------------------------------------------------------------
 
-		return PROTOKOLL.WORLD_INFO_LISTENER + ":" + info.toString();
+		return PROTOKOLL.WORLD_INFO_LISTENER + "-" + info.toString();
 	}
 
 }

@@ -56,7 +56,7 @@ public class PlayerInfoListener extends StandardListener {
 			response.put("success", 1);
 		}
 
-		return PROTOKOLL.S_PLAYERINFO_LISTENER + ":" + response.toString();
+		return PROTOKOLL.S_PLAYERINFO_LISTENER + "-" + response.toString();
 
 	}
 
