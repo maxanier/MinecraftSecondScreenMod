@@ -1,5 +1,6 @@
 package de.maxgb.minecraft.second_screen;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
@@ -76,11 +77,16 @@ public class WebSocketListener{
 	public void stop(){
 		closeAll();
 		try {
-			socketServer.stop(100);
+			socketServer.stop();
 		} catch (InterruptedException e) {
+			
+			e.printStackTrace();
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		socketServer=null;
+		
 		Logger.i(TAG, "Stopped server");
 	}
 	
