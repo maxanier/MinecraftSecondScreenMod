@@ -57,8 +57,9 @@ public class WebSocketListener{
 		
 		if(socketServer!=null){
 			serverThread=new Thread(socketServer);
-			serverThread.start();
 			SecondScreenMod.connected=true;
+			serverThread.start();
+			
 		}
 		else{
 			Logger.e(TAG, "Socket server null");
@@ -167,6 +168,9 @@ public class WebSocketListener{
 		@Override
 		public void onError(WebSocket conn, Exception ex) {
 			Logger.e(TAG, "Received Error",ex);
+			
+			SecondScreenMod.error=ex.getMessage();
+			SecondScreenMod.connected=false;
 			
 		}
 		
