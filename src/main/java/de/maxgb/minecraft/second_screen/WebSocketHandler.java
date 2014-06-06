@@ -62,8 +62,7 @@ public class WebSocketHandler implements ActionResultListener {
 		if(msg==null||remove){
 			return;
 		}
-		msg=msg.replace('-','!');
-		msg=msg.replaceFirst("!", "-");
+		
 		socket.send(msg);
 		//TODO make async test etc
 	}
