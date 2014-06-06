@@ -58,6 +58,7 @@ public class WebSocketListener{
 		if(socketServer!=null){
 			serverThread=new Thread(socketServer);
 			serverThread.start();
+			SecondScreenMod.connected=true;
 		}
 		else{
 			Logger.e(TAG, "Socket server null");
