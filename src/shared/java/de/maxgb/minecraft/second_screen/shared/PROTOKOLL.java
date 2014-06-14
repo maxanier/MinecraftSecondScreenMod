@@ -58,6 +58,8 @@ public class PROTOKOLL {
 
 	public static final String SERVER_STOPPING = "server_stopping";
 	public static final String DISCONNECT = "disconnect";
+	
+	
 
 	// Etc
 	/**
