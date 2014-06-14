@@ -108,7 +108,7 @@ public class WebSocketHandler implements ActionResultListener {
 					String s = msg.replace(
 							PROTOKOLL.ACTION_COMMAND_BEGIN, "");
 					String action = s.substring(0, s.indexOf('-'));
-					String params = s.substring(s.indexOf('-'));
+					String params = s.substring(s.indexOf('-')+1);
 					onActionMessage(action, params);
 				} catch (Exception e) {
 					Logger.e(TAG,
