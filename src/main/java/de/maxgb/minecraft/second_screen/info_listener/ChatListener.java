@@ -38,6 +38,13 @@ public class ChatListener extends StandardListener {
 		MinecraftForge.EVENT_BUS.register(this);
 		FMLCommonHandler.instance().bus().register(this);
 		everyTick = Configs.chat_update_time;
+		
+		JSONObject msg = new JSONObject();
+		msg.put("info", true);
+		msg.put("color", "orange");
+		msg.put("time", getCurrentTimeString());
+		msg.put("msg", "Connected to chat");
+		buffer.put(msg);
 	}
 
 	@SubscribeEvent
@@ -81,7 +88,6 @@ public class ChatListener extends StandardListener {
 		msg.put("color", "orange");
 		msg.put("time", getCurrentTimeString());
 		msg.put("msg", e.entityPlayer.getDisplayName() + " died");
-		msg.put("success", 1);
 		buffer.put(msg);
 	}
 
@@ -92,7 +98,6 @@ public class ChatListener extends StandardListener {
 		msg.put("color", "orange");
 		msg.put("time", getCurrentTimeString());
 		msg.put("msg", e.player.getDisplayName() + " joined");
-		msg.put("success", 1);
 		buffer.put(msg);
 
 	}
