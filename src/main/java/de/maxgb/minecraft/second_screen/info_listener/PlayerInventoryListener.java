@@ -87,9 +87,8 @@ public class PlayerInventoryListener extends StandardListener {
 							tab = it.getCreativeTab();
 						} catch (Exception e) {
 							e.printStackTrace();
-						}
-						catch(NoSuchMethodError e){
-							
+						} catch (NoSuchMethodError e) {
+
 						}
 						if (tab != null) {
 							stack.put("tab", it.getCreativeTab().getTabLabel());

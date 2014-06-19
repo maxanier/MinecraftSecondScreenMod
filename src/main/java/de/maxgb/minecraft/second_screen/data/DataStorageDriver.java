@@ -36,6 +36,7 @@ public class DataStorageDriver {
 				lines.add(line);
 				line = reader.readLine();
 			}
+			reader.close();
 			return lines;
 
 		} catch (FileNotFoundException e) {

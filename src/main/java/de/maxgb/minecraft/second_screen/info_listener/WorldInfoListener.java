@@ -27,9 +27,9 @@ public class WorldInfoListener extends StandardListener {
 	 */
 	public static String parseTime(int timeInTicks) {
 		String time = "";
-		int weeks = timeInTicks / (168000);
+		//int weeks = timeInTicks / (168000);
 		int remainder = timeInTicks % (168000);
-		int days = remainder / 24000;
+		//int days = remainder / 24000;
 		remainder = timeInTicks % 24000;
 		int hours = remainder / 1000;
 		remainder = timeInTicks % 1000;

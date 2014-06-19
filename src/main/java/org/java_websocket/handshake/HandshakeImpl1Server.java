@@ -1,10 +1,16 @@
 package org.java_websocket.handshake;
 
-public class HandshakeImpl1Server extends HandshakedataImpl1 implements ServerHandshakeBuilder {
+public class HandshakeImpl1Server extends HandshakedataImpl1 implements
+		ServerHandshakeBuilder {
 	private short httpstatus;
 	private String httpstatusmessage;
 
 	public HandshakeImpl1Server() {
+	}
+
+	@Override
+	public short getHttpStatus() {
+		return httpstatus;
 	}
 
 	@Override
@@ -13,17 +19,13 @@ public class HandshakeImpl1Server extends HandshakedataImpl1 implements ServerHa
 	}
 
 	@Override
-	public short getHttpStatus() {
-		return httpstatus;
-	}
-
-	public void setHttpStatusMessage( String message ) {
-		this.httpstatusmessage = message;
-	}
-
-	public void setHttpStatus( short status ) {
+	public void setHttpStatus(short status) {
 		httpstatus = status;
 	}
 
+	@Override
+	public void setHttpStatusMessage(String message) {
+		this.httpstatusmessage = message;
+	}
 
 }

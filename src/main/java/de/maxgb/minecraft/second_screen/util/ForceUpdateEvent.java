@@ -4,7 +4,8 @@ import cpw.mods.fml.common.eventhandler.Event;
 
 public class ForceUpdateEvent extends Event {
 	public final Class listener;
-	public ForceUpdateEvent(Class updateListener){
-		listener=updateListener;
+
+	public ForceUpdateEvent(Class updateListener) {
+		listener = updateListener;
 	}
 }

@@ -38,7 +38,7 @@ public class ChatListener extends StandardListener {
 		MinecraftForge.EVENT_BUS.register(this);
 		FMLCommonHandler.instance().bus().register(this);
 		everyTick = Configs.chat_update_time;
-		
+
 		JSONObject msg = new JSONObject();
 		msg.put("info", true);
 		msg.put("color", "orange");

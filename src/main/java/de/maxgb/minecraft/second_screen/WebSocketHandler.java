@@ -1,4 +1,5 @@
 package de.maxgb.minecraft.second_screen;
+
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 
@@ -23,124 +24,32 @@ import de.maxgb.minecraft.second_screen.util.User;
 public class WebSocketHandler implements ActionResultListener {
 	private WebSocket socket;
 	public final InetSocketAddress address;
-	private static String TAG="WebSocketHandler-";
+	private static String TAG = "WebSocketHandler-";
 	private ArrayList<StandardListener> listeners;
 	private User user;
-	public boolean remove=false;
-	
-	
-	public WebSocketHandler(WebSocket socket){
-		address=socket.getRemoteSocketAddress();
-		this.socket=socket;
-		TAG+=WebSocketListener.getNewHandlerID();
-		listeners=new ArrayList<StandardListener>();
-	}
-	
+	public boolean remove = false;
 
-	
-	public void close(){
+	public WebSocketHandler(WebSocket socket) {
+		address = socket.getRemoteSocketAddress();
+		this.socket = socket;
+		TAG += WebSocketListener.getNewHandlerID();
+		listeners = new ArrayList<StandardListener>();
+	}
+
+	public void close() {
 		socket.close();
-		remove=true;
+		remove = true;
 
 	}
-	
-	public void tick(){
+
+	public void forceUpdate(ForceUpdateEvent e) {
 		for (StandardListener l : listeners) {
-			send(l.tick(false));
-		}
-	}
-	
-	public void forceUpdate(ForceUpdateEvent e){
-		for (StandardListener l : listeners) {
-			if( l.getClass().equals(e.listener)){
+			if (l.getClass().equals(e.listener)) {
 				send(l.tick(true));
 			}
 		}
 	}
-	
-	private void send(String msg){
-		if(msg==null||remove){
-			return;
-		}
-		
-		socket.send(msg);
-		//TODO make async test etc
-	}
-	
-	public void onMessage(String msg){
-		try {
-			Logger.i(TAG, "Received Message: " + msg);// TODO Remove
-			if (msg.startsWith(PROTOKOLL.REGISTER_COMMAND_BEGIN)) {
-				try {
-					String listener = msg.replace(
-							PROTOKOLL.REGISTER_COMMAND_BEGIN, "")
-							.trim();
-					onRegisterMessage(listener);
-				} catch (Exception e) {
-					Logger.e(
-							TAG,
-							"Failed to parse listener from register command",
-							e);
-					send(PROTOKOLL.ERROR + "-"
-							+ "Failed to register listener. ["
-							+ msg + "]");
-				}
 
-			} else if (msg
-					.startsWith(PROTOKOLL.UNREGISTER_COMMAND_BEGIN)) {
-				try {
-					String listener = msg.replace(
-							PROTOKOLL.UNREGISTER_COMMAND_BEGIN, "")
-							.trim();
-					onUnregisterMessage(listener);
-				} catch (Exception e) {
-					Logger.e(
-							TAG,
-							"Failed to parse listener from unregister command",
-							e);
-					send(PROTOKOLL.ERROR + "-"
-							+ "Failed to unregister listener. ["
-							+ msg + "]");
-				}
-			} else if (msg
-					.startsWith(PROTOKOLL.ACTION_COMMAND_BEGIN)) {
-				try {
-					String s = msg.replace(
-							PROTOKOLL.ACTION_COMMAND_BEGIN, "");
-					String action = s.substring(0, s.indexOf('-'));
-					String params = s.substring(s.indexOf('-')+1);
-					onActionMessage(action, params);
-				} catch (Exception e) {
-					Logger.e(TAG,
-							"Failed processing action command", e);
-					send(PROTOKOLL.ERROR + "-"
-							+ "Failed processing action command. ["
-							+ msg + "]");
-				}
-			} else if (msg.startsWith(PROTOKOLL.CONNECT)) {
-
-				onConnectMessage();
-			} else if (msg.startsWith(PROTOKOLL.LOGIN)) {
-				String params = msg.substring(PROTOKOLL.LOGIN
-						.length() + 1);
-				onLoginMessage(params);
-
-			}
-
-			else if (msg.startsWith(PROTOKOLL.DISCONNECT)) {
-				onDisconnectMessage();
-			} else {
-				send(PROTOKOLL.UNKNOWN + " [" + msg + "]");
-			}
-		} catch (Exception e) {
-			Logger.e(TAG, "Failed to process message", e);
-			send(PROTOKOLL.ERROR + "-"
-					+ "Failed to process message. [" + msg + "]");
-		}
-
-	
-	}
-	
 	private void onActionMessage(String action, String params) {
 
 		// Check is user object is available and so if the user is authentified
@@ -245,6 +154,66 @@ public class WebSocketHandler implements ActionResultListener {
 		Logger.i(TAG, "Sucessfully logged in user " + username);
 	}
 
+	public void onMessage(String msg) {
+		try {
+			Logger.i(TAG, "Received Message: " + msg);// TODO Remove
+			if (msg.startsWith(PROTOKOLL.REGISTER_COMMAND_BEGIN)) {
+				try {
+					String listener = msg.replace(
+							PROTOKOLL.REGISTER_COMMAND_BEGIN, "").trim();
+					onRegisterMessage(listener);
+				} catch (Exception e) {
+					Logger.e(TAG,
+							"Failed to parse listener from register command", e);
+					send(PROTOKOLL.ERROR + "-"
+							+ "Failed to register listener. [" + msg + "]");
+				}
+
+			} else if (msg.startsWith(PROTOKOLL.UNREGISTER_COMMAND_BEGIN)) {
+				try {
+					String listener = msg.replace(
+							PROTOKOLL.UNREGISTER_COMMAND_BEGIN, "").trim();
+					onUnregisterMessage(listener);
+				} catch (Exception e) {
+					Logger.e(TAG,
+							"Failed to parse listener from unregister command",
+							e);
+					send(PROTOKOLL.ERROR + "-"
+							+ "Failed to unregister listener. [" + msg + "]");
+				}
+			} else if (msg.startsWith(PROTOKOLL.ACTION_COMMAND_BEGIN)) {
+				try {
+					String s = msg.replace(PROTOKOLL.ACTION_COMMAND_BEGIN, "");
+					String action = s.substring(0, s.indexOf('-'));
+					String params = s.substring(s.indexOf('-') + 1);
+					onActionMessage(action, params);
+				} catch (Exception e) {
+					Logger.e(TAG, "Failed processing action command", e);
+					send(PROTOKOLL.ERROR + "-"
+							+ "Failed processing action command. [" + msg + "]");
+				}
+			} else if (msg.startsWith(PROTOKOLL.CONNECT)) {
+
+				onConnectMessage();
+			} else if (msg.startsWith(PROTOKOLL.LOGIN)) {
+				String params = msg.substring(PROTOKOLL.LOGIN.length() + 1);
+				onLoginMessage(params);
+
+			}
+
+			else if (msg.startsWith(PROTOKOLL.DISCONNECT)) {
+				onDisconnectMessage();
+			} else {
+				send(PROTOKOLL.UNKNOWN + " [" + msg + "]");
+			}
+		} catch (Exception e) {
+			Logger.e(TAG, "Failed to process message", e);
+			send(PROTOKOLL.ERROR + "-" + "Failed to process message. [" + msg
+					+ "]");
+		}
+
+	}
+
 	/**
 	 * Handles the register listener message
 	 * 
@@ -334,5 +303,20 @@ public class WebSocketHandler implements ActionResultListener {
 		}
 		Logger.i(TAG, "Removed " + (listenercount - listeners.size())
 				+ " listeners");
+	}
+
+	private void send(String msg) {
+		if (msg == null || remove) {
+			return;
+		}
+
+		socket.send(msg);
+		// TODO make async test etc
+	}
+
+	public void tick() {
+		for (StandardListener l : listeners) {
+			send(l.tick(false));
+		}
 	}
 }

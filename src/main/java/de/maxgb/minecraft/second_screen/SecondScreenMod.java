@@ -22,7 +22,6 @@ import de.maxgb.minecraft.second_screen.world.ObservingRegistry;
 @Mod(modid = Constants.MOD_ID, name = Constants.NAME, version = Constants.VERSION, dependencies = "required-after:FML")
 public class SecondScreenMod {
 
-	public static SocketListener socketListener;
 	public static WebSocketListener webSocketListener;
 	public static int port;
 	public static String hostname;
@@ -87,15 +86,16 @@ public class SecondScreenMod {
 
 	private void start() {
 		Logger.i(TAG, "Starting SecondScreenMod");
-		//socketListener = new SocketListener();
-		webSocketListener= new WebSocketListener();
+		// socketListener = new SocketListener();
+		webSocketListener = new WebSocketListener();
 		webSocketListener.start();
 	}
+
 	private void stop() {
 		Logger.i(TAG, "Stopping SecondScreenMod");
 		webSocketListener.stop();
-		//socketListener.stop();
-		//socketListener = null;
+		// socketListener.stop();
+		// socketListener = null;
 	}
 
 }

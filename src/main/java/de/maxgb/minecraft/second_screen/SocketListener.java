@@ -20,6 +20,14 @@ import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
 import de.maxgb.minecraft.second_screen.util.ForceUpdateEvent;
 import de.maxgb.minecraft.second_screen.util.Logger;
 
+/**
+ * Not used anymore
+ * 
+ * @author Max
+ * 
+ */
+
+@Deprecated
 public class SocketListener implements Runnable {
 
 	private int port;
@@ -70,6 +78,20 @@ public class SocketListener implements Runnable {
 				}
 			}
 			socketList.clear();
+		}
+	}
+
+	@SubscribeEvent
+	public void forceUpdate(ForceUpdateEvent e) {
+		Logger.i(TAG, "Forcing update for " + e.listener.toString());
+		synchronized (socketList) {
+			for (int i = 0; i < socketList.size(); i++) {
+				socketList.get(i).forceUpdate(e);
+				if (socketList.get(i).remove) {
+					socketList.remove(i);
+					i--;
+				}
+			}
 		}
 	}
 
@@ -144,20 +166,6 @@ public class SocketListener implements Runnable {
 		synchronized (socketList) {
 			for (int i = 0; i < socketList.size(); i++) {
 				socketList.get(i).tick();
-				if (socketList.get(i).remove) {
-					socketList.remove(i);
-					i--;
-				}
-			}
-		}
-	}
-	
-	@SubscribeEvent
-	public void forceUpdate(ForceUpdateEvent e){
-		Logger.i(TAG, "Forcing update for "+e.listener.toString());
-		synchronized (socketList) {
-			for (int i = 0; i < socketList.size(); i++) {
-				socketList.get(i).forceUpdate(e);
 				if (socketList.get(i).remove) {
 					socketList.remove(i);
 					i--;

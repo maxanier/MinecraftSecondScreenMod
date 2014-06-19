@@ -65,7 +65,10 @@ public class RedstoneControlAction implements IAction {
 					result.put("allowed", true);
 
 					listener.onActionResult(PROTOKOLL.A_RED_CONTROL, result);
-					FMLCommonHandler.instance().bus().post(new ForceUpdateEvent(WorldInfoListener.class));
+					FMLCommonHandler
+							.instance()
+							.bus()
+							.post(new ForceUpdateEvent(WorldInfoListener.class));
 					return;
 				} else {
 					Logger.w(TAG,
@@ -76,12 +79,11 @@ public class RedstoneControlAction implements IAction {
 							"Block connected with this label is not a lever");
 
 					listener.onActionResult(PROTOKOLL.A_RED_CONTROL, result);
-					
+
 					return;
 				}
 			}
 		}
-		
 
 	}
 

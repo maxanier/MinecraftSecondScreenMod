@@ -20,11 +20,14 @@ public abstract class StandardListener {
 
 	/**
 	 * Is called every tick
-	 * @param force Whether to force an update or to only update if its time this tick
+	 * 
+	 * @param force
+	 *            Whether to force an update or to only update if its time this
+	 *            tick
 	 * @return Message which should be sent, null if none
 	 */
 	public String tick(boolean force) {
-		if (tick < 1||force) {
+		if (tick < 1 || force) {
 			tick = everyTick;
 			String newMessage = update();
 			if (newMessage == null) {

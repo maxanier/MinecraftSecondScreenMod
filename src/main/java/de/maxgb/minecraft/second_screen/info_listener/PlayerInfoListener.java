@@ -36,22 +36,20 @@ public class PlayerInfoListener extends StandardListener {
 			response.put("health", player.getHealth());
 			response.put("foodlevel", player.getFoodStats().getFoodLevel());
 			response.put("eplevel", player.experienceLevel);
-			response.put("posx", (int)player.posX);
-			response.put("posy", (int)player.posY);
-			response.put("posz", (int)player.posZ);
+			response.put("posx", (int) player.posX);
+			response.put("posy", (int) player.posY);
+			response.put("posz", (int) player.posZ);
 			response.put("ping", player.ping);
-			
-			JSONArray potions=new JSONArray();
-			Collection<PotionEffect> pot=player.getActivePotionEffects();
-			for(PotionEffect i :pot){
-				JSONArray p=new JSONArray();
+
+			JSONArray potions = new JSONArray();
+			Collection<PotionEffect> pot = player.getActivePotionEffects();
+			for (PotionEffect i : pot) {
+				JSONArray p = new JSONArray();
 				p.put(i.getEffectName());
-				p.put(i.getDuration()/20);
+				p.put(i.getDuration() / 20);
 				potions.put(p);
 			}
-			response.put("potions",potions );
-			
-			
+			response.put("potions", potions);
 
 			response.put("success", 1);
 		}

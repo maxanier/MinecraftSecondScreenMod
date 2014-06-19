@@ -7,32 +7,33 @@ import java.nio.channels.ByteChannel;
 
 import org.java_websocket.AbstractWrappedByteChannel;
 
-public abstract class AbstractClientProxyChannel extends AbstractWrappedByteChannel {
+public abstract class AbstractClientProxyChannel extends
+		AbstractWrappedByteChannel {
 	protected final ByteBuffer proxyHandshake;
-
 
 	/**
 	 * @param towrap
 	 *            The channel to the proxy server
 	 **/
-	public AbstractClientProxyChannel( ByteChannel towrap ) {
-		super( towrap );
+	public AbstractClientProxyChannel(ByteChannel towrap) {
+		super(towrap);
 		try {
-			proxyHandshake = ByteBuffer.wrap( buildHandShake().getBytes( "ASCII" ) );
-		} catch ( UnsupportedEncodingException e ) {
-			throw new RuntimeException( e );
-		}
-	}
-
-	@Override
-	public int write( ByteBuffer src ) throws IOException {
-		if( !proxyHandshake.hasRemaining() ) {
-			return super.write( src );
-		} else {
-			return super.write( proxyHandshake );
+			proxyHandshake = ByteBuffer
+					.wrap(buildHandShake().getBytes("ASCII"));
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
 		}
 	}
 
 	public abstract String buildHandShake();
+
+	@Override
+	public int write(ByteBuffer src) throws IOException {
+		if (!proxyHandshake.hasRemaining()) {
+			return super.write(src);
+		} else {
+			return super.write(proxyHandshake);
+		}
+	}
 
 }
