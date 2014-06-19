@@ -18,12 +18,22 @@ public class ClientVersion {
 				return true;
 			}
 		}
+		if(id.endsWith("universal")){
+			if(version<1){
+				return true;
+			}
+		}
 		return false;
 	}
 
 	public static boolean isUpdateNecessary(String id, int version) {
 		if (id.equals("ANDROID4")) {
 			if (version < 13) {
+				return true;
+			}
+		}
+		if(id.endsWith("universal")){
+			if(version<1){
 				return true;
 			}
 		}

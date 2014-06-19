@@ -104,6 +104,8 @@ public class WebSocketHandler implements ActionResultListener {
 	 */
 	private void onLoginMessage(String params) {
 		JSONObject data = new JSONObject(params);
+		
+		
 		if (!data.has("username")) {
 			Logger.w(TAG, "Login message is missing username.");
 			JSONObject result = new JSONObject();
