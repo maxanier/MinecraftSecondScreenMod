@@ -29,4 +29,4 @@ sourceSets
 
 archivesBaseName = "MinecraftSecondScreen"
 version = "1.7.2-0.2.7"
-minecraft.version = "1.7.2-10.12.0.1029"
+minecraft.version = "1.7.2-10.12.2.1126"
