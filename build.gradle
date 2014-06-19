@@ -13,7 +13,7 @@ buildscript {
     }
     dependencies
     {
-        classpath "net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT"
+        classpath "net.minecraftforge.gradle:ForgeGradle:1.1-SNAPSHOT"
     }
 }
 
@@ -28,5 +28,5 @@ sourceSets
 }
 
 archivesBaseName = "MinecraftSecondScreen"
-version = "1.7.2-0.9"
+version = "1.7.2-0.2.7"
 minecraft.version = "1.7.2-10.12.2.1126"
