@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
+import java.net.SocketOptions;
+import java.net.StandardSocketOptions;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ByteChannel;
@@ -27,6 +30,8 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.java_websocket.SocketChannelIOHelper;
 import org.java_websocket.WebSocket;
@@ -241,6 +246,7 @@ public abstract class WebSocketServer extends WebSocketAdapter implements
 		this.connections = connectionscontainer;
 
 		iqueue = new LinkedList<WebSocketImpl>();
+		
 
 		decoders = new ArrayList<WebSocketWorker>(decodercount);
 		buffers = new LinkedBlockingQueue<ByteBuffer>();
@@ -606,11 +612,18 @@ public abstract class WebSocketServer extends WebSocketAdapter implements
 		selectorthread.setName("WebsocketSelector" + selectorthread.getId());
 		try {
 			server = ServerSocketChannel.open();
+			server.setOption(StandardSocketOptions.SO_REUSEADDR,true);
+			
 			server.configureBlocking(false);
 			ServerSocket socket = server.socket();
 			socket.setReceiveBufferSize(WebSocketImpl.RCVBUF);
+			
+			
 			socket.bind(address);
+			
 			selector = Selector.open();
+			
+			
 			server.register(selector, server.validOps());
 		} catch (IOException ex) {
 			handleFatal(null, ex);
@@ -640,6 +653,7 @@ public abstract class WebSocketServer extends WebSocketAdapter implements
 							}
 
 							SocketChannel channel = server.accept();
+							
 							channel.configureBlocking(false);
 							WebSocketImpl w = wsf.createWebSocket(this, drafts,
 									channel.socket());
@@ -729,9 +743,14 @@ public abstract class WebSocketServer extends WebSocketAdapter implements
 				}
 			}
 			if (server != null) {
+				
 				try {
+					
+					selector.close();
 					server.close();
+					
 				} catch (IOException e) {
+					
 					onError(null, e);
 				}
 			}
