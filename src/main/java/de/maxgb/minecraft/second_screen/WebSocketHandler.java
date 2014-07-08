@@ -38,6 +38,7 @@ public class WebSocketHandler implements ActionResultListener {
 
 	public void close() {
 		socket.close();
+		
 		remove = true;
 
 	}

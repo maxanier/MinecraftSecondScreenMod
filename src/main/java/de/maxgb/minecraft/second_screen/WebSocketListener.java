@@ -23,7 +23,7 @@ public class WebSocketListener {
 
 		public MSSWebSocketServer(InetSocketAddress address) {
 			super(address);
-			// TODO Auto-generated constructor stub
+		
 		}
 
 		@Override
@@ -51,6 +51,7 @@ public class WebSocketListener {
 
 			SecondScreenMod.error = ex.getMessage();
 			SecondScreenMod.connected = false;
+			
 
 		}
 
@@ -151,6 +152,7 @@ public class WebSocketListener {
 		closeAll();
 		try {
 			socketServer.stop();
+			
 		} catch (InterruptedException e) {
 
 			e.printStackTrace();
