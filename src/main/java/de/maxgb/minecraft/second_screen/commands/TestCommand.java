@@ -3,6 +3,7 @@ package de.maxgb.minecraft.second_screen.commands;
 import java.util.ArrayList;
 import java.util.List;
 
+import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.nodes.INode;
 
 import net.minecraft.block.Block;
@@ -76,18 +77,15 @@ public class TestCommand extends BaseCommand {
 			sendMessage(var1, "You have to look at a block");
 			return;
 		}
-		Block b = player.worldObj.getBlock(p.blockX, p.blockY, p.blockZ);
-		if(b!=null){
-		if(b instanceof INode){
-			sendMessage(var1,"Node");
-		}
-			sendMessage(var1, "You are looking at: " + p.blockX + ","
-					+ p.blockY + "," + p.blockZ + " " + b.getLocalizedName()+":"+b.getClass().getSimpleName()+":"+b.getClass().getInterfaces().toString());
-		}
+		
 		TileEntity tile = player.worldObj.getTileEntity(p.blockX, p.blockY, p.blockZ);
 		if(tile!=null){
 			if(tile instanceof INode){
 				sendMessage(var1,"NodeTile");
+				
+				for(Aspect a:((INode) tile).getAspects().getAspects()){
+					sendMessage(var1,"Node contains "+((INode) tile).getAspects().getAmount(a)+" of "+a.getLocalizedDescription());
+				}
 			}
 		}
 		
