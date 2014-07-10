@@ -32,7 +32,6 @@ public class ObservingType {
 	}
 
 	public static JSONObject infoTh_Node(WorldServer world, ObservedBlock b) {
-		Logger.i("Update", "Checking node");
 		JSONObject in= new JSONObject();
 		TileEntity node=world.getTileEntity(b.x,b.y,b.z);
 		
