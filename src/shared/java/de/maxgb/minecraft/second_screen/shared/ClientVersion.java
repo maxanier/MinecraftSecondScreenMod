@@ -14,7 +14,7 @@ public class ClientVersion {
 
 	public static boolean isUpdateAvailable(String id, int version) {
 		if (id.endsWith("ANDROID4")) {
-			if (version < 14) {
+			if (version < 19) {
 				return true;
 			}
 		}
@@ -28,7 +28,7 @@ public class ClientVersion {
 
 	public static boolean isUpdateNecessary(String id, int version) {
 		if (id.equals("ANDROID4")) {
-			if (version < 13) {
+			if (version < 18) {
 				return true;
 			}
 		}

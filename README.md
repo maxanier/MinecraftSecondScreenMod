@@ -8,8 +8,8 @@ More informations can be found here: http://maxgb.de/minecraftsecondscreen
 
 Author: maxanier
 
-Uses the Java-Websocket implementation by TooTallNate/Nathan Rajlich https://github.com/TooTallNate/Java-WebSocket
-and the JSON-java by douglascrockford/Douglas Crockford https://github.com/douglascrockford/JSON-java
+Uses the Java-Websocket implementation by TooTallNate/Nathan Rajlich https://github.com/TooTallNate/Java-WebSocket, the JSON-java by douglascrockford/Douglas Crockford https://github.com/douglascrockford/JSON-java
+and the Thaumcraft api https://github.com/Azanor/thaumcraft-api.
 
 Everything else here is published under the Licence LGPL v3.
 Feel free to make pull request or suggestions what could be improved.

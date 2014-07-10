@@ -1,27 +1,19 @@
 package de.maxgb.minecraft.second_screen.commands;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockLever;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.nodes.INode;
 import de.maxgb.minecraft.second_screen.util.Helper;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.world.ObservingManager;
 import de.maxgb.minecraft.second_screen.world.ObservingType;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MovingObjectPosition;
 
-public class RegisterRedstoneInfoCommand implements MssCommand.MssSubCommand {
-
-	private static final String TAG = "RegisterRedstoneCommand";
-
+public class RegisterObserverCommand implements MssCommand.MssSubCommand{
 	
-
-	public RegisterRedstoneInfoCommand() {
-
-	}
+	private final String TAG="RegisterObserverCommand";
 
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender var1) {
@@ -33,17 +25,18 @@ public class RegisterRedstoneInfoCommand implements MssCommand.MssSubCommand {
 
 	@Override
 	public String getCommandName() {
-		return "redinfo";
+		return "observer";
 	}
 
 	@Override
 	public String getCommandUsage(ICommandSender var1) {
-		return "redinfo add <label> or redinfo remove <label>";
+		return "observer add <label> or observer remove <label>";
 	}
 
 	@Override
 	public void processCommand(ICommandSender var1, String[] var2) {
-
+		
+	
 		if (var2 == null || var2.length < 2) {
 			sendMessage(var1, "Invalid arguments. Usage: "
 					+ getCommandUsage(var1));
@@ -66,29 +59,37 @@ public class RegisterRedstoneInfoCommand implements MssCommand.MssSubCommand {
 				sendMessage(var1, "You have to look at a block");
 				return;
 			}
+			/*
 			Block b = player.worldObj.getBlock(p.blockX, p.blockY, p.blockZ);
+			
 			sendMessage(var1, "You are looking at: " + p.blockX + ","
 					+ p.blockY + "," + p.blockZ + " " + b.getLocalizedName());
-			if (b instanceof BlockLever) {
-				Logger.i(TAG, "Registering lever");
-			} else if (!b.isNormalCube()) {
-				Logger.w(TAG, "Block is not a normal cube");
-				sendMessage(var1,
-						"You can only register solid blocks or levers");
-				return;
+			*/
+			
+			TileEntity tile = player.worldObj.getTileEntity(p.blockX, p.blockY, p.blockZ);
+			if(tile!=null){
+				if(tile instanceof INode){
+					Logger.i(TAG, "Found a Node");
+					
+					for(Aspect a:((INode) tile).getAspects().getAspects()){
+						sendMessage(var1,"Node contains "+((INode) tile).getAspects().getAmount(a)+" of "+a.getLocalizedDescription());
+					}
+					
+					if (ObservingManager.observeBlock(var2[1], p.blockX, p.blockY,
+							p.blockZ, player.worldObj.provider.dimensionId,ObservingType.NODE,"")) {
+						sendMessage(var1, "Successfully added block to observer list.");
+					} else {
+						sendMessage(
+								var1,
+								"Successfully added block to observer list, but overrode another block with the same label");
+					}
+					
+					return;
+				}
 			}
-
-			if (ObservingManager.observeBlock(var2[1], p.blockX, p.blockY,
-					p.blockZ, player.worldObj.provider.dimensionId,ObservingType.REDSTONE,"")) {
-				sendMessage(var1, "Successfully added block to observer list.");
-			} else {
-				sendMessage(
-						var1,
-						"Successfully added block to observer list, but overrode another block with the same label");
-			}
-			// var1.addChatMessage(new
-			// ChatComponentText(""+player.worldObj.isBlockIndirectlyGettingPowered(p.blockX,
-			// p.blockY, p.blockZ)));
+			
+			sendMessage(var1,"This block cannot be observed");
+		
 		} else if (var2[0].equals("remove")) {
 			if (ObservingManager.removeObservedBlock(var2[1])) {
 				sendMessage(var1,
@@ -101,11 +102,11 @@ public class RegisterRedstoneInfoCommand implements MssCommand.MssSubCommand {
 			sendMessage(var1, "Invalid arguments. Usage: "
 					+ getCommandUsage(var1));
 			return;
-
+	
 		}
-
+		
 	}
-
+	
 	private void sendMessage(ICommandSender var1, String msg) {
 		BaseCommand.sendMessage(var1, msg);
 	}

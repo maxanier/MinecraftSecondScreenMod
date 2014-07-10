@@ -11,13 +11,15 @@ import de.maxgb.minecraft.second_screen.actions.ActionManager;
 import de.maxgb.minecraft.second_screen.commands.GetIPCommand;
 import de.maxgb.minecraft.second_screen.commands.GetMSSPortCommand;
 import de.maxgb.minecraft.second_screen.commands.MssCommand;
+import de.maxgb.minecraft.second_screen.commands.RegisterObserverCommand;
 import de.maxgb.minecraft.second_screen.commands.RegisterRedstoneInfoCommand;
 import de.maxgb.minecraft.second_screen.commands.RegisterUserCommand;
+import de.maxgb.minecraft.second_screen.commands.TestCommand;
 import de.maxgb.minecraft.second_screen.data.DataStorageDriver;
 import de.maxgb.minecraft.second_screen.data.UserManager;
 import de.maxgb.minecraft.second_screen.util.Constants;
 import de.maxgb.minecraft.second_screen.util.Logger;
-import de.maxgb.minecraft.second_screen.world.ObservingRegistry;
+import de.maxgb.minecraft.second_screen.world.ObservingManager;
 
 @Mod(modid = Constants.MOD_ID, name = Constants.NAME, version = Constants.VERSION, dependencies = "required-after:FML")
 public class SecondScreenMod {
@@ -60,7 +62,7 @@ public class SecondScreenMod {
 
 		DataStorageDriver.setWorldName(e.getServer().getFolderName());
 
-		ObservingRegistry.loadObservingMap();
+		ObservingManager.loadObservingMap();
 
 		UserManager.loadUsers();
 
@@ -69,9 +71,11 @@ public class SecondScreenMod {
 		MssCommand mssc = new MssCommand();
 		mssc.addSubCommand(new RegisterRedstoneInfoCommand());
 		mssc.addSubCommand(new RegisterUserCommand());
+		mssc.addSubCommand(new RegisterObserverCommand());
 		e.registerServerCommand(mssc);
 		e.registerServerCommand(new GetIPCommand());
 		e.registerServerCommand(new GetMSSPortCommand());
+		e.registerServerCommand(new TestCommand());
 
 		start();
 	}
@@ -79,14 +83,14 @@ public class SecondScreenMod {
 	@EventHandler
 	public void serverStopping(FMLServerStoppingEvent e) {
 		stop();
-		ObservingRegistry.saveObservingMap();
+		ObservingManager.saveObservingMap();
 		UserManager.saveUsers();
 		ActionManager.removeAllActions();
 	}
 
 	private void start() {
 		Logger.i(TAG, "Starting SecondScreenMod");
-		// socketListener = new SocketListener();
+
 		webSocketListener = new WebSocketListener();
 		webSocketListener.start();
 	}
@@ -94,8 +98,8 @@ public class SecondScreenMod {
 	private void stop() {
 		Logger.i(TAG, "Stopping SecondScreenMod");
 		webSocketListener.stop();
-		// socketListener.stop();
-		// socketListener = null;
+
+		webSocketListener=null;
 	}
 
 }

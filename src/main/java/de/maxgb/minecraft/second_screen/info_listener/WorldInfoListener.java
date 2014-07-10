@@ -15,8 +15,8 @@ import de.maxgb.minecraft.second_screen.StandardListener;
 import de.maxgb.minecraft.second_screen.shared.PROTOKOLL;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.util.User;
-import de.maxgb.minecraft.second_screen.world.ObservingRegistry;
-import de.maxgb.minecraft.second_screen.world.ObservingRegistry.ObservedBlock;
+import de.maxgb.minecraft.second_screen.world.ObservingManager;
+import de.maxgb.minecraft.second_screen.world.ObservingManager.ObservedBlock;
 
 public class WorldInfoListener extends StandardListener {
 	/**
@@ -89,39 +89,10 @@ public class WorldInfoListener extends StandardListener {
 		}
 		info.put("overworld", ow);
 
-		// Redstone
-		// info---------------------------------------------------------------
-		JSONArray redstone = new JSONArray();
+		
+		//Observing Info
+		ObservingManager.addObservingInfo(info, worlds);
 
-		ArrayList<ObservedBlock> blocks = ObservingRegistry.getObservedBlocks();
-		for (int i = 0; i < blocks.size(); i++) {
-			ObservedBlock block = blocks.get(i);
-
-			WorldServer world = worlds.get(block.dimensionId);
-
-			if (world == null) {
-				Logger.w(TAG,
-						"Dimension corrosponding to the block not found: "
-								+ block.dimensionId);
-				ObservingRegistry.removeObservedBlock(block.label);
-
-			} else {
-				if (world.getBlock(block.x, block.y, block.z).getMaterial() == net.minecraft.block.material.Material.air) {
-					Logger.w(TAG, "Blocks material is air -> remove");
-					ObservingRegistry.removeObservedBlock(block.label);
-				} else {
-					JSONArray in = new JSONArray();
-					in.put(block.label)
-							.put(world.isBlockIndirectlyGettingPowered(block.x,
-									block.y, block.z))
-							.put(block.getBlock(world) instanceof BlockLever);
-					redstone.put(in);
-				}
-
-			}
-		}
-
-		info.put("redstone", redstone);
 		// --------------------------------------------------------------------------------
 
 		return PROTOKOLL.WORLD_INFO_LISTENER + "-" + info.toString();

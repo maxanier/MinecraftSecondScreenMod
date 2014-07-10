@@ -13,8 +13,8 @@ import de.maxgb.minecraft.second_screen.shared.PROTOKOLL;
 import de.maxgb.minecraft.second_screen.util.ForceUpdateEvent;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.util.User;
-import de.maxgb.minecraft.second_screen.world.ObservingRegistry;
-import de.maxgb.minecraft.second_screen.world.ObservingRegistry.ObservedBlock;
+import de.maxgb.minecraft.second_screen.world.ObservingManager;
+import de.maxgb.minecraft.second_screen.world.ObservingManager.ObservedBlock;
 
 public class RedstoneControlAction implements IAction {
 
@@ -54,7 +54,7 @@ public class RedstoneControlAction implements IAction {
 		}
 		String label = param.getString("label");
 		boolean state = param.getBoolean("state");
-		for (ObservedBlock o : ObservingRegistry.getObservedBlocks()) {
+		for (ObservedBlock o : ObservingManager.getObservedBlocks()) {
 			if (o.label.equals(label)) {
 				World w = FMLCommonHandler.instance()
 						.getMinecraftServerInstance()
