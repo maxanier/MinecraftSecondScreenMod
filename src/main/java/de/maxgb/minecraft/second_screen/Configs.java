@@ -68,9 +68,9 @@ public class Configs {
 		prop.comment = "Whether the second screen user need to login with username and password, which can be set in game";
 		auth_required = prop.getBoolean(true);
 		
-		prop = config.get(Configuration.CATEGORY_GENERAL, "public_observer_admin_only", true);
+		prop = config.get(Configuration.CATEGORY_GENERAL, "public_observer_admin_only", false);
 		prop.comment="If true, only admins can create public block observations";
-		obs_publ_admin= prop.getBoolean(true);
+		obs_publ_admin= prop.getBoolean(false);
 
 		if (config.hasChanged()) {
 			config.save();
