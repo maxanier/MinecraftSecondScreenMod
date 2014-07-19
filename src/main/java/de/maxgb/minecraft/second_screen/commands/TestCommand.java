@@ -15,8 +15,8 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import de.maxgb.minecraft.second_screen.SecondScreenMod;
+import de.maxgb.minecraft.second_screen.world.ObservedBlock;
 import de.maxgb.minecraft.second_screen.world.ObservingManager;
-import de.maxgb.minecraft.second_screen.world.ObservingManager.ObservedBlock;
 
 public class TestCommand extends BaseCommand {
 
@@ -65,8 +65,8 @@ public class TestCommand extends BaseCommand {
 
 	@Override
 	public void processCommand(ICommandSender var1, String[] var2) {
-		for(ObservedBlock b:ObservingManager.getObservedBlocks()){
-			sendMessage(var1,b.label);
+		for(ObservedBlock b:ObservingManager.getObservedBlocks(var1.getCommandSenderName(),true)){
+			sendMessage(var1,b.getLabel());
 		}
 		
 		

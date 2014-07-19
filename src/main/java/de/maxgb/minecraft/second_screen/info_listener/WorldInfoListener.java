@@ -15,8 +15,8 @@ import de.maxgb.minecraft.second_screen.StandardListener;
 import de.maxgb.minecraft.second_screen.shared.PROTOKOLL;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.util.User;
+import de.maxgb.minecraft.second_screen.world.ObservedBlock;
 import de.maxgb.minecraft.second_screen.world.ObservingManager;
-import de.maxgb.minecraft.second_screen.world.ObservingManager.ObservedBlock;
 
 public class WorldInfoListener extends StandardListener {
 	/**
@@ -91,7 +91,7 @@ public class WorldInfoListener extends StandardListener {
 
 		
 		//Observing Info
-		ObservingManager.addObservingInfo(info, worlds);
+		ObservedBlock.addObservingInfo(info, worlds,user.username);
 
 		// --------------------------------------------------------------------------------
 

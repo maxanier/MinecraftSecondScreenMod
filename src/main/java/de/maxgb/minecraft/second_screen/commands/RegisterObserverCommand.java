@@ -4,6 +4,7 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.nodes.INode;
 import de.maxgb.minecraft.second_screen.util.Helper;
 import de.maxgb.minecraft.second_screen.util.Logger;
+import de.maxgb.minecraft.second_screen.world.ObservedBlock;
 import de.maxgb.minecraft.second_screen.world.ObservingManager;
 import de.maxgb.minecraft.second_screen.world.ObservingType;
 import net.minecraft.command.ICommandSender;
@@ -30,7 +31,7 @@ public class RegisterObserverCommand implements MssCommand.MssSubCommand{
 
 	@Override
 	public String getCommandUsage(ICommandSender var1) {
-		return "observer add <label> or observer remove <label>";
+		return "observer add <label> <private/public> or observer remove <label>";
 	}
 
 	@Override
@@ -59,6 +60,13 @@ public class RegisterObserverCommand implements MssCommand.MssSubCommand{
 				sendMessage(var1, "You have to look at a block");
 				return;
 			}
+			
+			boolean publ=false;
+			if(var2.length>=3){
+				if(var2[2].equals("public")){
+					publ=true;
+				}
+			}
 			/*
 			Block b = player.worldObj.getBlock(p.blockX, p.blockY, p.blockZ);
 			
@@ -75,8 +83,9 @@ public class RegisterObserverCommand implements MssCommand.MssSubCommand{
 						sendMessage(var1,"Node contains "+((INode) tile).getAspects().getAmount(a)+" of "+a.getLocalizedDescription());
 					}
 					
-					if (ObservingManager.observeBlock(var2[1], p.blockX, p.blockY,
-							p.blockZ, player.worldObj.provider.dimensionId,ObservingType.NODE,"")) {
+					
+					if (ObservingManager.observeBlock(var1.getCommandSenderName(),publ,new ObservedBlock(var2[1], p.blockX, p.blockY,
+							p.blockZ, player.worldObj.provider.dimensionId,ObservingType.NODE))) {
 						sendMessage(var1, "Successfully added block to observer list.");
 					} else {
 						sendMessage(
@@ -91,7 +100,7 @@ public class RegisterObserverCommand implements MssCommand.MssSubCommand{
 			sendMessage(var1,"This block cannot be observed");
 		
 		} else if (var2[0].equals("remove")) {
-			if (ObservingManager.removeObservedBlock(var2[1])) {
+			if (ObservingManager.removeObservedBlock(var1.getCommandSenderName(),var2[1])) {
 				sendMessage(var1,
 						"Successfully removed block from observer list");
 			} else {

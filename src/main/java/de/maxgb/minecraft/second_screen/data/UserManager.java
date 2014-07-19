@@ -8,6 +8,7 @@ import net.minecraftforge.common.config.Configuration;
 import cpw.mods.fml.common.FMLCommonHandler;
 import de.maxgb.minecraft.second_screen.Configs;
 import de.maxgb.minecraft.second_screen.util.Constants;
+import de.maxgb.minecraft.second_screen.util.Helper;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.util.User;
 
@@ -57,10 +58,7 @@ public class UserManager {
 		if (Configs.auth_required) {
 			for (User u : auth_users) {
 				if (u.username.equals(username)) {
-					if (FMLCommonHandler.instance()
-							.getMinecraftServerInstance()
-							.getConfigurationManager()
-							.isPlayerOpped(u.username)) {
+					if (Helper.isPlayerOpped(u.username)) {
 						u.setAllAllowed(true);
 					}
 					return u;

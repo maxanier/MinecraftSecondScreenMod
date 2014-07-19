@@ -13,8 +13,9 @@ import de.maxgb.minecraft.second_screen.shared.PROTOKOLL;
 import de.maxgb.minecraft.second_screen.util.ForceUpdateEvent;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.util.User;
+import de.maxgb.minecraft.second_screen.world.ObservedBlock;
 import de.maxgb.minecraft.second_screen.world.ObservingManager;
-import de.maxgb.minecraft.second_screen.world.ObservingManager.ObservedBlock;
+import de.maxgb.minecraft.second_screen.world.ObservingType;
 
 public class RedstoneControlAction implements IAction {
 
@@ -54,12 +55,10 @@ public class RedstoneControlAction implements IAction {
 		}
 		String label = param.getString("label");
 		boolean state = param.getBoolean("state");
-		for (ObservedBlock o : ObservingManager.getObservedBlocks()) {
-			if (o.label.equals(label)) {
-				World w = FMLCommonHandler.instance()
-						.getMinecraftServerInstance()
-						.worldServerForDimension(o.dimensionId);
-				if (setState(o, w, state)) {
+		for (ObservedBlock o : ObservingManager.getObservedBlocks(user.username,true)) {
+			if (o.getLabel().equals(label)) {
+				
+				if (ObservingType.setLeverState(o, state)) {
 					JSONObject result = new JSONObject();
 					result.put("success", 1);
 					result.put("allowed", true);
@@ -87,33 +86,5 @@ public class RedstoneControlAction implements IAction {
 
 	}
 
-	/**
-	 * Sets the state of a lever
-	 * 
-	 * @param b
-	 *            Block
-	 * @param w
-	 *            World
-	 * @param state
-	 *            State
-	 * @return Whether the block is a lever or not
-	 */
-	private boolean setState(ObservedBlock b, World w, boolean state) {
-		if (w.getBlock(b.x, b.y, b.z) instanceof BlockLever) {
-			int meta = w.getBlockMetadata(b.x, b.y, b.z);
-			if (state) {
-				meta = meta | 0x8;
-
-			} else {
-				meta = meta ^ 0x8;
-			}
-			w.setBlockMetadataWithNotify(b.x, b.y, b.z, meta, 3);
-			Logger.i(TAG, "Spawning particle");
-			w.spawnParticle("reddust", b.x, b.y + 1, b.z, 0.0D, 255.0D, 0.0D);
-
-			return true;
-		}
-		return false;
-	}
 
 }

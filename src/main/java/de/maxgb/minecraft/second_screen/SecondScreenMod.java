@@ -70,7 +70,7 @@ public class SecondScreenMod {
 
 		DataStorageDriver.setWorldName(e.getServer().getFolderName());
 
-		ObservingManager.loadObservingMap();
+		ObservingManager.loadObservingFile();
 
 		UserManager.loadUsers();
 
@@ -91,7 +91,7 @@ public class SecondScreenMod {
 	@EventHandler
 	public void serverStopping(FMLServerStoppingEvent e) {
 		stop();
-		ObservingManager.saveObservingMap();
+		ObservingManager.saveObservingFile();
 		UserManager.saveUsers();
 		ActionManager.removeAllActions();
 	}

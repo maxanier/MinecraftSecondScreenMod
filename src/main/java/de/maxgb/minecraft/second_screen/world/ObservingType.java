@@ -5,12 +5,13 @@ import java.util.Collection;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.nodes.INode;
 
 
 import de.maxgb.minecraft.second_screen.util.Logger;
-import de.maxgb.minecraft.second_screen.world.ObservingManager.ObservedBlock;
 
 import net.minecraft.block.BlockLever;
 import net.minecraft.tileentity.TileEntity;
@@ -48,5 +49,37 @@ public class ObservingType {
 			Logger.w("Th_Node Info","Observed Block is no node");
 			return null;
 		}
+	}
+	
+	/**
+	 * Sets the state of a lever
+	 * 
+	 * @param b
+	 *            Block
+	 * @param state
+	 *            State
+	 * @return Whether the block is a lever or not
+	 */
+	public static boolean setLeverState(ObservedBlock b,boolean state){
+		if(b.type==REDSTONE){
+			World w = FMLCommonHandler.instance()
+					.getMinecraftServerInstance()
+					.worldServerForDimension(b.dimensionId);
+			
+			if (w.getBlock(b.x, b.y, b.z) instanceof BlockLever) {
+				int meta = w.getBlockMetadata(b.x, b.y, b.z);
+				if (state) {
+					meta = meta | 0x8;
+	
+				} else {
+					meta = meta ^ 0x8;
+				}
+				w.setBlockMetadataWithNotify(b.x, b.y, b.z, meta, 3);
+				w.spawnParticle("reddust", b.x, b.y + 1, b.z, 0.0D, 255.0D, 0.0D);
+	
+				return true;
+			}
+		}
+		return false;
 	}
 }

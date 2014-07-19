@@ -1,5 +1,6 @@
 package de.maxgb.minecraft.second_screen.util;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.MathHelper;
@@ -48,5 +49,12 @@ public class Helper {
 		return player.worldObj.rayTraceBlocks(var13, var23);
 		// return player.worldObj.rayTraceBlocks_do_do(var13, var23, false,
 		// !true);
+	}
+	
+	public static boolean isPlayerOpped(String username){
+		return FMLCommonHandler.instance()
+		.getMinecraftServerInstance()
+		.getConfigurationManager()
+		.isPlayerOpped(username);
 	}
 }

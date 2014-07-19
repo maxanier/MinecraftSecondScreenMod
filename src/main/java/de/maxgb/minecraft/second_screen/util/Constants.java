@@ -15,5 +15,7 @@ public class Constants {
 	public static final int FEATURE_VERSION = 4;
 
 	public static final String USER_SAVE_DIR = "mss-users";
+	
+	public static final String OBSERVER_FILE_NAME = "observer.json";
 
 }
