@@ -1,7 +1,6 @@
 package de.maxgb.minecraft.second_screen.world;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 
 import net.minecraft.block.Block;
@@ -12,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import de.maxgb.minecraft.second_screen.data.ObservingManager;
 import de.maxgb.minecraft.second_screen.util.Logger;
 
 public class ObservedBlock {

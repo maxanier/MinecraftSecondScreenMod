@@ -3,20 +3,14 @@ package de.maxgb.minecraft.second_screen.commands;
 import java.util.ArrayList;
 import java.util.List;
 
-import thaumcraft.api.aspects.Aspect;
-import thaumcraft.api.nodes.INode;
-
-import net.minecraft.block.Block;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
-import de.maxgb.minecraft.second_screen.SecondScreenMod;
+import de.maxgb.minecraft.second_screen.data.ObservingManager;
 import de.maxgb.minecraft.second_screen.world.ObservedBlock;
-import de.maxgb.minecraft.second_screen.world.ObservingManager;
 
 public class TestCommand extends BaseCommand {
 

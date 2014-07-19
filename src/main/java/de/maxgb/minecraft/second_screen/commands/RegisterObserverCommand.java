@@ -1,16 +1,16 @@
 package de.maxgb.minecraft.second_screen.commands;
 
-import thaumcraft.api.aspects.Aspect;
-import thaumcraft.api.nodes.INode;
-import de.maxgb.minecraft.second_screen.util.Helper;
-import de.maxgb.minecraft.second_screen.util.Logger;
-import de.maxgb.minecraft.second_screen.world.ObservedBlock;
-import de.maxgb.minecraft.second_screen.world.ObservingManager;
-import de.maxgb.minecraft.second_screen.world.ObservingType;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.nodes.INode;
+import de.maxgb.minecraft.second_screen.data.ObservingManager;
+import de.maxgb.minecraft.second_screen.util.Helper;
+import de.maxgb.minecraft.second_screen.util.Logger;
+import de.maxgb.minecraft.second_screen.world.ObservedBlock;
+import de.maxgb.minecraft.second_screen.world.ObservingType;
 
 public class RegisterObserverCommand implements MssCommand.MssSubCommand{
 	

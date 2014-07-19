@@ -1,20 +1,17 @@
 package de.maxgb.minecraft.second_screen.actions;
 
-import net.minecraft.block.BlockLever;
-import net.minecraft.world.World;
-
 import org.json.JSONObject;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import de.maxgb.minecraft.second_screen.actions.ActionManager.ActionResultListener;
 import de.maxgb.minecraft.second_screen.actions.ActionManager.IAction;
+import de.maxgb.minecraft.second_screen.data.ObservingManager;
 import de.maxgb.minecraft.second_screen.info_listener.WorldInfoListener;
 import de.maxgb.minecraft.second_screen.shared.PROTOKOLL;
 import de.maxgb.minecraft.second_screen.util.ForceUpdateEvent;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.util.User;
 import de.maxgb.minecraft.second_screen.world.ObservedBlock;
-import de.maxgb.minecraft.second_screen.world.ObservingManager;
 import de.maxgb.minecraft.second_screen.world.ObservingType;
 
 public class RedstoneControlAction implements IAction {

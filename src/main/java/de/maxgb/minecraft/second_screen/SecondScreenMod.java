@@ -18,10 +18,10 @@ import de.maxgb.minecraft.second_screen.commands.RegisterRedstoneInfoCommand;
 import de.maxgb.minecraft.second_screen.commands.RegisterUserCommand;
 import de.maxgb.minecraft.second_screen.commands.TestCommand;
 import de.maxgb.minecraft.second_screen.data.DataStorageDriver;
+import de.maxgb.minecraft.second_screen.data.ObservingManager;
 import de.maxgb.minecraft.second_screen.data.UserManager;
 import de.maxgb.minecraft.second_screen.util.Constants;
 import de.maxgb.minecraft.second_screen.util.Logger;
-import de.maxgb.minecraft.second_screen.world.ObservingManager;
 
 @Mod(modid = Constants.MOD_ID, name = Constants.NAME, version = Constants.VERSION, dependencies = "required-after:FML")
 public class SecondScreenMod {

@@ -1,7 +1,6 @@
-package de.maxgb.minecraft.second_screen.world;
+package de.maxgb.minecraft.second_screen.data;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,15 +8,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockLever;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.WorldServer;
 import de.maxgb.minecraft.second_screen.Configs;
-import de.maxgb.minecraft.second_screen.data.DataStorageDriver;
 import de.maxgb.minecraft.second_screen.util.Constants;
 import de.maxgb.minecraft.second_screen.util.Helper;
 import de.maxgb.minecraft.second_screen.util.Logger;
+import de.maxgb.minecraft.second_screen.world.ObservedBlock;
 
 public class ObservingManager {
 	

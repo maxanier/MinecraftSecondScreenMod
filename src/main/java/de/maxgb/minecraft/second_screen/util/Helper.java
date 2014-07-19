@@ -1,11 +1,11 @@
 package de.maxgb.minecraft.second_screen.util;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
+import cpw.mods.fml.common.FMLCommonHandler;
 
 public class Helper {
 	

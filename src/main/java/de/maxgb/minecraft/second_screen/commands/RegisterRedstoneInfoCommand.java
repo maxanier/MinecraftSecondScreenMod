@@ -4,14 +4,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockLever;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import de.maxgb.minecraft.second_screen.data.ObservingManager;
 import de.maxgb.minecraft.second_screen.util.Helper;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.world.ObservedBlock;
-import de.maxgb.minecraft.second_screen.world.ObservingManager;
 import de.maxgb.minecraft.second_screen.world.ObservingType;
 
 public class RegisterRedstoneInfoCommand implements MssCommand.MssSubCommand {

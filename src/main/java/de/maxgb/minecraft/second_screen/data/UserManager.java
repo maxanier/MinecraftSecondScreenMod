@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import net.minecraftforge.common.config.Configuration;
-import cpw.mods.fml.common.FMLCommonHandler;
 import de.maxgb.minecraft.second_screen.Configs;
 import de.maxgb.minecraft.second_screen.util.Constants;
 import de.maxgb.minecraft.second_screen.util.Helper;

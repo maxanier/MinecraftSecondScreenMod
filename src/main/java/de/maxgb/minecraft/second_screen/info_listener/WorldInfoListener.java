@@ -1,13 +1,10 @@
 package de.maxgb.minecraft.second_screen.info_listener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
-import net.minecraft.block.BlockLever;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.WorldInfo;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import de.maxgb.minecraft.second_screen.Configs;
@@ -16,7 +13,6 @@ import de.maxgb.minecraft.second_screen.shared.PROTOKOLL;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.util.User;
 import de.maxgb.minecraft.second_screen.world.ObservedBlock;
-import de.maxgb.minecraft.second_screen.world.ObservingManager;
 
 public class WorldInfoListener extends StandardListener {
 	/**

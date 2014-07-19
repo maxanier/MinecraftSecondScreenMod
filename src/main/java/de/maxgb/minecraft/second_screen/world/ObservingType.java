@@ -1,22 +1,17 @@
 package de.maxgb.minecraft.second_screen.world;
 
-import java.util.Collection;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import cpw.mods.fml.common.FMLCommonHandler;
-
-import thaumcraft.api.aspects.Aspect;
-import thaumcraft.api.nodes.INode;
-
-
-import de.maxgb.minecraft.second_screen.util.Logger;
-
 import net.minecraft.block.BlockLever;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.nodes.INode;
+import cpw.mods.fml.common.FMLCommonHandler;
+import de.maxgb.minecraft.second_screen.util.Logger;
 
 public class ObservingType {
 	public final static int REDSTONE=1;
