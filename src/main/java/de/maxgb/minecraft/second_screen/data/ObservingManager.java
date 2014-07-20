@@ -73,14 +73,21 @@ public class ObservingManager {
 		
 		JSONObject observers = new JSONObject();
 		
-		for(Map.Entry<String, HashMap<String,ObservedBlock>> e : map.entrySet()){
-			
-			JSONArray blocks=new JSONArray();
-			for(ObservedBlock b : e.getValue().values()){
-				blocks.put(b.toJSON());
+		try {
+			for(Map.Entry<String, HashMap<String,ObservedBlock>> e : map.entrySet()){
+				
+				JSONArray blocks=new JSONArray();
+				for(ObservedBlock b : e.getValue().values()){
+					blocks.put(b.toJSON());
+				}
+				
+				observers.put(e.getKey(), blocks);
 			}
-			
-			observers.put(e.getKey(), blocks);
+		} catch (JSONException e) {
+			Logger.e(TAG,"JsonException while saving",e);
+		}
+		catch(NullPointerException e){
+			Logger.e(TAG, "Nullpointer while saving",e);
 		}
 		
 		data.put("observers", observers);
