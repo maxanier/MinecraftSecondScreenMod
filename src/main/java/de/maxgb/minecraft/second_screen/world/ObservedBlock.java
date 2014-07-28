@@ -106,6 +106,7 @@ public class ObservedBlock {
 		
 		JSONArray redstone=new JSONArray();
 		JSONArray th_node=new JSONArray();
+		JSONObject inventory=new JSONObject();
 		
 		ArrayList<ObservedBlock> blocks = ObservingManager.getObservedBlocks(username,true);
 		for (int i = 0; i < blocks.size(); i++) {
@@ -133,6 +134,13 @@ public class ObservedBlock {
 						if(in!=null){
 							th_node.put(in);
 						}
+						break;
+					case ObservingType.INVENTORY:
+						JSONArray inv=ObservingType.infoInventory(world, block);
+						if(inv!=null){
+							inventory.put(block.label,inv);
+						}
+						break;
 					}
 				}
 			}
@@ -140,6 +148,6 @@ public class ObservedBlock {
 		
 		parent.put("redstone", redstone);
 		parent.put("th_node", th_node);
-		
+		parent.put("inv", inventory);
 	}
 }

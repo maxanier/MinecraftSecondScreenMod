@@ -2,6 +2,7 @@ package de.maxgb.minecraft.second_screen.commands;
 
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
 import thaumcraft.api.aspects.Aspect;
@@ -94,6 +95,22 @@ public class RegisterObserverCommand implements MssCommand.MssSubCommand{
 					}
 					
 					return;
+				}
+				if(tile instanceof IInventory){
+					Logger.i(TAG, "Found a Inventory");
+					
+					if (ObservingManager.observeBlock(var1.getCommandSenderName(),publ,new ObservedBlock(var2[1], p.blockX, p.blockY,
+							p.blockZ, player.worldObj.provider.dimensionId,ObservingType.INVENTORY))) {
+						sendMessage(var1, "Successfully added block to observer list.");
+					} else {
+						sendMessage(
+								var1,
+								"Successfully added block to observer list, but overrode another block with the same label");
+					}
+					
+					return;
+					
+					
 				}
 			}
 			

@@ -1,6 +1,9 @@
 package de.maxgb.minecraft.second_screen.world;
 
 import net.minecraft.block.BlockLever;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -16,6 +19,7 @@ import de.maxgb.minecraft.second_screen.util.Logger;
 public class ObservingType {
 	public final static int REDSTONE=1;
 	public final static int NODE=2;
+	public final static int INVENTORY=3;
 	
 	public static JSONArray infoRedstone(World world,ObservedBlock block){
 		JSONArray in = new JSONArray();
@@ -44,6 +48,19 @@ public class ObservingType {
 			Logger.w("Th_Node Info","Observed Block is no node");
 			return null;
 		}
+	}
+	
+	public static JSONArray infoInventory(WorldServer world, ObservedBlock b){
+		JSONArray inv=new JSONArray();
+		IInventory chest = (IInventory) world.getTileEntity(b.x, b.y, b.z);
+		for(int i=0;i<chest.getSizeInventory();i++){
+			ItemStack s=chest.getStackInSlot(i);
+			if(s!=null){
+				inv.put(new JSONArray().put(s.getDisplayName()).put(s.stackSize));
+			}
+		}
+		return inv;
+		
 	}
 	
 	/**
