@@ -90,7 +90,7 @@ public class WorldInfoListener extends StandardListener {
 		ObservedBlock.addObservingInfo(info, worlds,user.username);
 
 		// --------------------------------------------------------------------------------
-
+		//return PROTOKOLL.WORLD_INFO_LISTENER + "-" + "{\"overworld\":{\"time\":\"17 h 31 min \",\"name\":\"New World\",\"timetillrain\":\"09 h 01 min \",\"rain\":false},\"th_node\":[{\"aspects\":{\"Perditio\":11,\"Ordo\":12,\"Ignis\":17},\"label\":\"nod\"},{\"aspects\":{\"Ignis\":9},\"label\":\"node\"},{\"aspects\":{\"Terra\":22,\"Ignis\":31},\"label\":\"nodes\"},{\"aspects\":{\"Ignis\":9},\"label\":\"node\"}],\"redstone\":[[\"label\",true,false],[\"lever\",true,true]]}";
 		return PROTOKOLL.WORLD_INFO_LISTENER + "-" + info.toString();
 	}
 
