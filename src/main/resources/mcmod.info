@@ -3,8 +3,8 @@
   "modid": "maxanier_secondscreenmod",
   "name": "Second Screen Mod",
   "description": "Allows you to show your android device as second screen, which displays serveral informations",
-  "version": "0.9.4",
-  "mcversion": "1.7.2",
+  "version": "${mod_version}",
+  "mcversion": "${minecraft_version}",
   "url": "http://maxgb.de/minecraftsecondscreen",
   "updateUrl": "",
   "authors": [
