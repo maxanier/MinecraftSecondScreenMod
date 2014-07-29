@@ -1,13 +1,10 @@
 package de.maxgb.minecraft.second_screen.info_listener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
-import net.minecraft.block.BlockLever;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.WorldInfo;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import de.maxgb.minecraft.second_screen.Configs;
@@ -15,8 +12,7 @@ import de.maxgb.minecraft.second_screen.StandardListener;
 import de.maxgb.minecraft.second_screen.shared.PROTOKOLL;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.util.User;
-import de.maxgb.minecraft.second_screen.world.ObservingManager;
-import de.maxgb.minecraft.second_screen.world.ObservingManager.ObservedBlock;
+import de.maxgb.minecraft.second_screen.world.ObservedBlock;
 
 public class WorldInfoListener extends StandardListener {
 	/**
@@ -91,10 +87,10 @@ public class WorldInfoListener extends StandardListener {
 
 		
 		//Observing Info
-		ObservingManager.addObservingInfo(info, worlds);
+		ObservedBlock.addObservingInfo(info, worlds,user.username);
 
 		// --------------------------------------------------------------------------------
-
+		//return PROTOKOLL.WORLD_INFO_LISTENER + "-" + "{\"overworld\":{\"time\":\"17 h 31 min \",\"name\":\"New World\",\"timetillrain\":\"09 h 01 min \",\"rain\":false},\"th_node\":[{\"aspects\":{\"Perditio\":11,\"Ordo\":12,\"Ignis\":17},\"label\":\"nod\"},{\"aspects\":{\"Ignis\":9},\"label\":\"node\"},{\"aspects\":{\"Terra\":22,\"Ignis\":31},\"label\":\"nodes\"},{\"aspects\":{\"Ignis\":9},\"label\":\"node\"}],\"redstone\":[[\"label\",true,false],[\"lever\",true,true]]}";
 		return PROTOKOLL.WORLD_INFO_LISTENER + "-" + info.toString();
 	}
 

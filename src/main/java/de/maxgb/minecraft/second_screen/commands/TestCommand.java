@@ -3,20 +3,14 @@ package de.maxgb.minecraft.second_screen.commands;
 import java.util.ArrayList;
 import java.util.List;
 
-import thaumcraft.api.aspects.Aspect;
-import thaumcraft.api.nodes.INode;
-
-import net.minecraft.block.Block;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
-import de.maxgb.minecraft.second_screen.SecondScreenMod;
-import de.maxgb.minecraft.second_screen.world.ObservingManager;
-import de.maxgb.minecraft.second_screen.world.ObservingManager.ObservedBlock;
+import de.maxgb.minecraft.second_screen.data.ObservingManager;
+import de.maxgb.minecraft.second_screen.world.ObservedBlock;
 
 public class TestCommand extends BaseCommand {
 
@@ -65,8 +59,8 @@ public class TestCommand extends BaseCommand {
 
 	@Override
 	public void processCommand(ICommandSender var1, String[] var2) {
-		for(ObservedBlock b:ObservingManager.getObservedBlocks()){
-			sendMessage(var1,b.label);
+		for(ObservedBlock b:ObservingManager.getObservedBlocks(var1.getCommandSenderName(),true)){
+			sendMessage(var1,b.getLabel());
 		}
 		
 		

@@ -5,6 +5,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
+import cpw.mods.fml.common.FMLCommonHandler;
 
 public class Helper {
 	
@@ -48,5 +49,12 @@ public class Helper {
 		return player.worldObj.rayTraceBlocks(var13, var23);
 		// return player.worldObj.rayTraceBlocks_do_do(var13, var23, false,
 		// !true);
+	}
+	
+	public static boolean isPlayerOpped(String username){
+		return FMLCommonHandler.instance()
+		.getMinecraftServerInstance()
+		.getConfigurationManager()
+		.isPlayerOpped(username);
 	}
 }

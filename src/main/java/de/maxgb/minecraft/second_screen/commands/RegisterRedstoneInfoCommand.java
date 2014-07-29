@@ -4,13 +4,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockLever;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import de.maxgb.minecraft.second_screen.data.ObservingManager;
 import de.maxgb.minecraft.second_screen.util.Helper;
 import de.maxgb.minecraft.second_screen.util.Logger;
-import de.maxgb.minecraft.second_screen.world.ObservingManager;
+import de.maxgb.minecraft.second_screen.world.ObservedBlock;
 import de.maxgb.minecraft.second_screen.world.ObservingType;
 
 public class RegisterRedstoneInfoCommand implements MssCommand.MssSubCommand {
@@ -52,6 +50,8 @@ public class RegisterRedstoneInfoCommand implements MssCommand.MssSubCommand {
 
 		if (var2[0].equals("add")) {
 
+			
+			//Get player
 			EntityPlayer player;
 
 			if (var1 instanceof EntityPlayer) {
@@ -60,15 +60,28 @@ public class RegisterRedstoneInfoCommand implements MssCommand.MssSubCommand {
 				sendMessage(var1, "Player only command");
 				return;
 			}
-
+			
+			//If the block should be observed publicly
+			boolean publ=false;
+			if(var2.length>=3){
+				if(var2[2].equals("public")){
+					publ=true;
+				}
+			}
+			
+			//Get Block
 			MovingObjectPosition p = Helper.getPlayerLookingSpot(player, true);
 			if (p == null) {
 				sendMessage(var1, "You have to look at a block");
 				return;
 			}
 			Block b = player.worldObj.getBlock(p.blockX, p.blockY, p.blockZ);
+			
 			sendMessage(var1, "You are looking at: " + p.blockX + ","
 					+ p.blockY + "," + p.blockZ + " " + b.getLocalizedName());
+			
+			
+			
 			if (b instanceof BlockLever) {
 				Logger.i(TAG, "Registering lever");
 			} else if (!b.isNormalCube()) {
@@ -78,8 +91,8 @@ public class RegisterRedstoneInfoCommand implements MssCommand.MssSubCommand {
 				return;
 			}
 
-			if (ObservingManager.observeBlock(var2[1], p.blockX, p.blockY,
-					p.blockZ, player.worldObj.provider.dimensionId,ObservingType.REDSTONE,"")) {
+			if (ObservingManager.observeBlock(var1.getCommandSenderName(),publ,new ObservedBlock(var2[1], p.blockX, p.blockY,
+					p.blockZ, player.worldObj.provider.dimensionId,ObservingType.REDSTONE))) {
 				sendMessage(var1, "Successfully added block to observer list.");
 			} else {
 				sendMessage(
@@ -90,7 +103,7 @@ public class RegisterRedstoneInfoCommand implements MssCommand.MssSubCommand {
 			// ChatComponentText(""+player.worldObj.isBlockIndirectlyGettingPowered(p.blockX,
 			// p.blockY, p.blockZ)));
 		} else if (var2[0].equals("remove")) {
-			if (ObservingManager.removeObservedBlock(var2[1])) {
+			if (ObservingManager.removeObservedBlock(var1.getCommandSenderName(),var2[1])) {
 				sendMessage(var1,
 						"Successfully removed block from observer list");
 			} else {

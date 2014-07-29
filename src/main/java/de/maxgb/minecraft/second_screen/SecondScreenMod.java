@@ -4,6 +4,8 @@ import net.minecraftforge.common.config.Configuration;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLInterModComms;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
@@ -16,10 +18,10 @@ import de.maxgb.minecraft.second_screen.commands.RegisterRedstoneInfoCommand;
 import de.maxgb.minecraft.second_screen.commands.RegisterUserCommand;
 import de.maxgb.minecraft.second_screen.commands.TestCommand;
 import de.maxgb.minecraft.second_screen.data.DataStorageDriver;
+import de.maxgb.minecraft.second_screen.data.ObservingManager;
 import de.maxgb.minecraft.second_screen.data.UserManager;
 import de.maxgb.minecraft.second_screen.util.Constants;
 import de.maxgb.minecraft.second_screen.util.Logger;
-import de.maxgb.minecraft.second_screen.world.ObservingManager;
 
 @Mod(modid = Constants.MOD_ID, name = Constants.NAME, version = Constants.VERSION, dependencies = "required-after:FML")
 public class SecondScreenMod {
@@ -51,7 +53,13 @@ public class SecondScreenMod {
 				event.getSuggestedConfigurationFile());
 
 		Configs.load(config);
+		FMLInterModComms.sendRuntimeMessage(Constants.MOD_ID, "VersionChecker", "addVersionCheck", Constants.UPDATE_FILE_LINK);
 
+	}
+	
+	@EventHandler
+	public void postInit(FMLPostInitializationEvent event){
+		
 	}
 
 	@EventHandler
@@ -62,7 +70,7 @@ public class SecondScreenMod {
 
 		DataStorageDriver.setWorldName(e.getServer().getFolderName());
 
-		ObservingManager.loadObservingMap();
+		ObservingManager.loadObservingFile();
 
 		UserManager.loadUsers();
 
@@ -83,7 +91,7 @@ public class SecondScreenMod {
 	@EventHandler
 	public void serverStopping(FMLServerStoppingEvent e) {
 		stop();
-		ObservingManager.saveObservingMap();
+		ObservingManager.saveObservingFile();
 		UserManager.saveUsers();
 		ActionManager.removeAllActions();
 	}
