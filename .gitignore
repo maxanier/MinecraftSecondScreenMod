@@ -3,3 +3,5 @@ build/
 .project
 .gradle/
 bin/
+autoupload.jar
+uploadbuilds.bat
