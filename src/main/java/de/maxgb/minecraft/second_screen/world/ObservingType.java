@@ -1,7 +1,6 @@
 package de.maxgb.minecraft.second_screen.world;
 
 import net.minecraft.block.BlockLever;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -17,52 +16,49 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import de.maxgb.minecraft.second_screen.util.Logger;
 
 public class ObservingType {
-	public final static int REDSTONE=1;
-	public final static int NODE=2;
-	public final static int INVENTORY=3;
-	
-	public static JSONArray infoRedstone(World world,ObservedBlock block){
-		JSONArray in = new JSONArray();
-		in.put(block.label)
-				.put(world.isBlockIndirectlyGettingPowered(block.x,
-						block.y, block.z))
-				.put(block.getBlock(world) instanceof BlockLever);
-		return in;
-		
-	}
+	public final static int REDSTONE = 1;
+	public final static int NODE = 2;
+	public final static int INVENTORY = 3;
 
-	public static JSONObject infoTh_Node(WorldServer world, ObservedBlock b) {
-		JSONObject in= new JSONObject();
-		TileEntity node=world.getTileEntity(b.x,b.y,b.z);
-		
-		if(node!=null&&node instanceof INode){
-			in.put("label", b.label);
-			JSONObject aspects=new JSONObject();
-			for(Aspect a:((INode) node).getAspects().getAspects()){
-				aspects.put(a.getName(), ((INode)node).getAspects().getAmount(a));
-			}
-			in.put("aspects", aspects);
-			return in;
-		}
-		else{
-			Logger.w("Th_Node Info","Observed Block is no node");
-			return null;
-		}
-	}
-	
-	public static JSONArray infoInventory(WorldServer world, ObservedBlock b){
-		JSONArray inv=new JSONArray();
+	public static JSONArray infoInventory(WorldServer world, ObservedBlock b) {
+		JSONArray inv = new JSONArray();
 		IInventory chest = (IInventory) world.getTileEntity(b.x, b.y, b.z);
-		for(int i=0;i<chest.getSizeInventory();i++){
-			ItemStack s=chest.getStackInSlot(i);
-			if(s!=null){
+		for (int i = 0; i < chest.getSizeInventory(); i++) {
+			ItemStack s = chest.getStackInSlot(i);
+			if (s != null) {
 				inv.put(new JSONArray().put(s.getDisplayName()).put(s.stackSize));
 			}
 		}
 		return inv;
-		
+
 	}
-	
+
+	public static JSONArray infoRedstone(World world, ObservedBlock block) {
+		JSONArray in = new JSONArray();
+		in.put(block.label).put(world.isBlockIndirectlyGettingPowered(block.x, block.y, block.z))
+				.put(block.getBlock(world) instanceof BlockLever);
+		return in;
+
+	}
+
+	public static JSONObject infoTh_Node(WorldServer world, ObservedBlock b) {
+		JSONObject in = new JSONObject();
+		TileEntity node = world.getTileEntity(b.x, b.y, b.z);
+
+		if (node != null && node instanceof INode) {
+			in.put("label", b.label);
+			JSONObject aspects = new JSONObject();
+			for (Aspect a : ((INode) node).getAspects().getAspects()) {
+				aspects.put(a.getName(), ((INode) node).getAspects().getAmount(a));
+			}
+			in.put("aspects", aspects);
+			return in;
+		} else {
+			Logger.w("Th_Node Info", "Observed Block is no node");
+			return null;
+		}
+	}
+
 	/**
 	 * Sets the state of a lever
 	 * 
@@ -72,23 +68,21 @@ public class ObservingType {
 	 *            State
 	 * @return Whether the block is a lever or not
 	 */
-	public static boolean setLeverState(ObservedBlock b,boolean state){
-		if(b.type==REDSTONE){
-			World w = FMLCommonHandler.instance()
-					.getMinecraftServerInstance()
-					.worldServerForDimension(b.dimensionId);
-			
+	public static boolean setLeverState(ObservedBlock b, boolean state) {
+		if (b.type == REDSTONE) {
+			World w = FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(b.dimensionId);
+
 			if (w.getBlock(b.x, b.y, b.z) instanceof BlockLever) {
 				int meta = w.getBlockMetadata(b.x, b.y, b.z);
 				if (state) {
 					meta = meta | 0x8;
-	
+
 				} else {
 					meta = meta ^ 0x8;
 				}
 				w.setBlockMetadataWithNotify(b.x, b.y, b.z, meta, 3);
 				w.spawnParticle("reddust", b.x, b.y + 1, b.z, 0.0D, 255.0D, 0.0D);
-	
+
 				return true;
 			}
 		}

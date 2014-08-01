@@ -19,8 +19,7 @@ public class ChatMessageAction implements IAction {
 	private static final String PERMISSION = "send_chat_message";
 
 	@Override
-	public void doAction(JSONObject param, User user,
-			ActionResultListener listener) {
+	public void doAction(JSONObject param, User user, ActionResultListener listener) {
 		if (!param.has("msg")) {
 			Logger.w(TAG, "Params did not include message");
 			JSONObject result = new JSONObject();
@@ -31,8 +30,7 @@ public class ChatMessageAction implements IAction {
 			return;
 		}
 		if (!user.isAllowedTo(PERMISSION, true)) {
-			Logger.w(TAG, "User " + user.username
-					+ " is not allowed to execute this command");
+			Logger.w(TAG, "User " + user.username + " is not allowed to execute this command");
 			JSONObject result = new JSONObject();
 			result.put("success", 0);
 			result.put("allowed", false);
@@ -41,14 +39,11 @@ public class ChatMessageAction implements IAction {
 			return;
 		}
 		String msg = param.getString("msg");
-		MinecraftServer server = FMLCommonHandler.instance()
-				.getMinecraftServerInstance();
+		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 
-		server.getConfigurationManager().sendChatMsg(
-				new ChatComponentText("[MSS] <" + user.username + "> " + msg));
+		server.getConfigurationManager().sendChatMsg(new ChatComponentText("[MSS] <" + user.username + "> " + msg));
 
-		FMLCommonHandler.instance().bus()
-				.post(new RemoteChatMessageEvent(user.username, msg));
+		FMLCommonHandler.instance().bus().post(new RemoteChatMessageEvent(user.username, msg));
 
 		JSONObject result = new JSONObject();
 		result.put("success", 1);

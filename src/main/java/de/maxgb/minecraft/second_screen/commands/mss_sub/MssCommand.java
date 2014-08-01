@@ -3,10 +3,10 @@ package de.maxgb.minecraft.second_screen.commands.mss_sub;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.command.ICommandSender;
 import de.maxgb.minecraft.second_screen.commands.BaseCommand;
 
-import net.minecraft.command.ICommandSender;
-
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class MssCommand extends BaseCommand {
 	protected interface MssSubCommand {
 		public boolean canCommandSenderUseCommand(ICommandSender var1);
@@ -63,10 +63,10 @@ public class MssCommand extends BaseCommand {
 
 	@Override
 	public String getCommandUsage(ICommandSender var1) {
-		sendMessage(var1,"Actions:");
+		sendMessage(var1, "Actions:");
 		for (MssSubCommand c : commands) {
-			sendMessage(var1,c.getCommandUsage(var1));
-			//usage += c.getCommandUsage(var1) + " OR ";
+			sendMessage(var1, c.getCommandUsage(var1));
+			// usage += c.getCommandUsage(var1) + " OR ";
 		}
 
 		return "/mss <action> <params>";
@@ -101,8 +101,7 @@ public class MssCommand extends BaseCommand {
 				return;
 			}
 		}
-		BaseCommand.sendMessage(var1, "Action not found. Usage: "
-				+ getCommandUsage(var1));
+		BaseCommand.sendMessage(var1, "Action not found. Usage: " + getCommandUsage(var1));
 
 	}
 

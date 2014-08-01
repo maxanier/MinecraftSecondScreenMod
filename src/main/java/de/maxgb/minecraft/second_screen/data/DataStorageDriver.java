@@ -13,12 +13,10 @@ import net.minecraftforge.common.DimensionManager;
 import de.maxgb.minecraft.second_screen.util.Logger;
 
 public class DataStorageDriver {
-	private static String worldName;
 	private final static String TAG = "DataStorageDriver";
 
 	public static File getSaveDir() {
-		return new File(DimensionManager.getCurrentSaveRootDirectory(),
-				"secondscreen");
+		return new File(DimensionManager.getCurrentSaveRootDirectory(), "secondscreen");
 	}
 
 	private static ArrayList<String> readFromFile(File file) {
@@ -43,8 +41,7 @@ public class DataStorageDriver {
 			Logger.w(TAG, "File: " + file.getAbsolutePath() + " not found");
 			return null;
 		} catch (IOException e) {
-			Logger.e(TAG,
-					"Failed to read from file: " + file.getAbsolutePath(), e);
+			Logger.e(TAG, "Failed to read from file: " + file.getAbsolutePath(), e);
 			return null;
 		}
 	}
@@ -56,9 +53,6 @@ public class DataStorageDriver {
 
 	}
 
-	public static void setWorldName(String n) {
-		worldName = n;
-	}
 
 	private static void writeToFile(File file, ArrayList<String> lines) {
 		try {
@@ -76,8 +70,7 @@ public class DataStorageDriver {
 
 		} catch (IOException e) {
 			e.printStackTrace();
-			Logger.e(TAG, "Failed writing the String Array to the file: "
-					+ file.getAbsolutePath(), e);
+			Logger.e(TAG, "Failed writing the String Array to the file: " + file.getAbsolutePath(), e);
 		}
 	}
 

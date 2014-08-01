@@ -30,8 +30,7 @@ public class ActionManager {
 		 *            Listener which should get the action result
 		 * @return
 		 */
-		public void doAction(JSONObject param, User user,
-				ActionResultListener listener);
+		public void doAction(JSONObject param, User user, ActionResultListener listener);
 	}
 
 	private static HashMap<String, IAction> actions;
@@ -49,8 +48,8 @@ public class ActionManager {
 	 *            Listener to receive the action result
 	 * @return whether the action was found or not
 	 */
-	public static boolean doAction(String command, final JSONObject params,
-			final User user, final ActionResultListener listener) {
+	public static boolean doAction(String command, final JSONObject params, final User user,
+			final ActionResultListener listener) {
 		if (!actions.containsKey(command)) {
 			Logger.w(TAG, "No action fitting: " + command + " found");
 			return false;

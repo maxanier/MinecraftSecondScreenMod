@@ -23,25 +23,21 @@ public class WebSocketListener {
 
 		public MSSWebSocketServer(InetSocketAddress address) {
 			super(address);
-		
+
 		}
 
 		@Override
-		public void onClose(WebSocket conn, int code, String reason,
-				boolean remote) {
+		public void onClose(WebSocket conn, int code, String reason, boolean remote) {
 
 			WebSocketHandler h = handlers.get(conn.getRemoteSocketAddress());
 			if (h != null) {
 				synchronized (handlers) {
 					h.close();
 					handlers.remove(conn.getRemoteSocketAddress());
-					Logger.i(TAG, "Closed Handler/Connection for "
-							+ conn.getRemoteSocketAddress().toString());
+					Logger.i(TAG, "Closed Handler/Connection for " + conn.getRemoteSocketAddress().toString());
 				}
 			} else {
-				Logger.i(TAG, "Handler for "
-						+ conn.getRemoteSocketAddress().toString()
-						+ " was already removed");
+				Logger.i(TAG, "Handler for " + conn.getRemoteSocketAddress().toString() + " was already removed");
 			}
 		}
 
@@ -51,23 +47,19 @@ public class WebSocketListener {
 
 			SecondScreenMod.error = ex.getMessage();
 			SecondScreenMod.connected = false;
-			
 
 		}
 
 		@Override
 		public void onMessage(WebSocket conn, String message) {
 			synchronized (handlers) {
-				Logger.i(TAG, "Received msg for "
-						+ conn.getRemoteSocketAddress().toString() + ": "
-						+ message);// TODO remove
-				WebSocketHandler h = handlers
-						.get(conn.getRemoteSocketAddress());
+				Logger.i(TAG, "Received msg for " + conn.getRemoteSocketAddress().toString() + ": " + message);// TODO
+																												// remove
+				WebSocketHandler h = handlers.get(conn.getRemoteSocketAddress());
 				if (h != null) {
 					h.onMessage(message);
 				} else {
-					Logger.w(TAG, "Could not find handler for "
-							+ conn.getRemoteSocketAddress().toString());
+					Logger.w(TAG, "Could not find handler for " + conn.getRemoteSocketAddress().toString());
 					// onOpen(conn,null);//??
 				}
 			}
@@ -76,18 +68,19 @@ public class WebSocketListener {
 
 		@Override
 		public void onOpen(WebSocket conn, ClientHandshake handshake) {
-			Logger.i(TAG, "New connection: "
-					+ conn.getRemoteSocketAddress().toString());
-			handlers.put(conn.getRemoteSocketAddress(), new WebSocketHandler(
-					conn));
+			Logger.i(TAG, "New connection: " + conn.getRemoteSocketAddress().toString());
+			handlers.put(conn.getRemoteSocketAddress(), new WebSocketHandler(conn));
 
 		}
 
 	}
+
 	private final static String TAG = "WebSocketListener";
+
 	public static int getNewHandlerID() {
 		return ++handlerCount;
 	}
+
 	private HashMap<InetSocketAddress, WebSocketHandler> handlers;
 	private MSSWebSocketServer socketServer;
 
@@ -135,8 +128,7 @@ public class WebSocketListener {
 	public void start() {
 
 		socketServer = create();
-		Logger.i(TAG, "Starting WebSocketListener on "
-				+ socketServer.getAddress().toString());
+		Logger.i(TAG, "Starting WebSocketListener on " + socketServer.getAddress().toString());
 
 		if (socketServer != null) {
 			serverThread = new Thread(socketServer);
@@ -152,7 +144,7 @@ public class WebSocketListener {
 		closeAll();
 		try {
 			socketServer.stop();
-			
+
 		} catch (InterruptedException e) {
 
 			e.printStackTrace();

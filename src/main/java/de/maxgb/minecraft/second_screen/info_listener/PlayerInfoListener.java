@@ -15,6 +15,7 @@ import de.maxgb.minecraft.second_screen.util.User;
 
 public class PlayerInfoListener extends StandardListener {
 
+	@SuppressWarnings("unused")
 	private final String TAG = "PlayerInfoListener";
 
 	public PlayerInfoListener(User user) {
@@ -30,8 +31,7 @@ public class PlayerInfoListener extends StandardListener {
 		EntityPlayerMP player = user.getPlayer(server);
 
 		if (player == null) {
-			response.put("success", 0).put("error",
-					"User " + user.username + " not online");
+			response.put("success", 0).put("error", "User " + user.username + " not online");
 		} else {
 			response.put("health", player.getHealth());
 			response.put("foodlevel", player.getFoodStats().getFoodLevel());

@@ -74,8 +74,7 @@ public class UserManager {
 	}
 
 	private static File getUsersDir() {
-		File dir = new File(DataStorageDriver.getSaveDir(),
-				Constants.USER_SAVE_DIR);
+		File dir = new File(DataStorageDriver.getSaveDir(), Constants.USER_SAVE_DIR);
 		dir.mkdirs();
 		return dir;
 	}

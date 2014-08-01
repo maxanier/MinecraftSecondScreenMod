@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.command.ICommandSender;
 import de.maxgb.minecraft.second_screen.SecondScreenMod;
 
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class GetMSSPortCommand extends BaseCommand {
 
 	private List aliase;
@@ -58,16 +59,13 @@ public class GetMSSPortCommand extends BaseCommand {
 	@Override
 	public void processCommand(ICommandSender var1, String[] var2) {
 		if (SecondScreenMod.connected) {
-			sendMessage(var1, "Minecraft Second Screen Port: "
-					+ SecondScreenMod.port);
+			sendMessage(var1, "Minecraft Second Screen Port: " + SecondScreenMod.port);
 		} else {
 			if (SecondScreenMod.error == null) {
 				SecondScreenMod.error = "Unknown";
 			}
-			sendMessage(var1, "Minecraft Second Screen Port: "
-					+ SecondScreenMod.port
-					+ ". But the mod isnt running. Error: "
-					+ SecondScreenMod.error);
+			sendMessage(var1, "Minecraft Second Screen Port: " + SecondScreenMod.port
+					+ ". But the mod isnt running. Error: " + SecondScreenMod.error);
 		}
 
 	}

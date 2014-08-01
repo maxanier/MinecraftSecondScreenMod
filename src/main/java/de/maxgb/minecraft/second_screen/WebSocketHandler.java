@@ -38,7 +38,7 @@ public class WebSocketHandler implements ActionResultListener {
 
 	public void close() {
 		socket.close();
-		
+
 		remove = true;
 
 	}
@@ -56,8 +56,7 @@ public class WebSocketHandler implements ActionResultListener {
 		// Check is user object is available and so if the user is authentified
 		if (user == null) {
 
-			send(PROTOKOLL.ERROR + "-" + "Login required. ["
-					+ PROTOKOLL.ACTION_COMMAND_BEGIN + action + "-" + params
+			send(PROTOKOLL.ERROR + "-" + "Login required. [" + PROTOKOLL.ACTION_COMMAND_BEGIN + action + "-" + params
 					+ "]");
 			Logger.w(TAG, "Cannot execute action before login. ");
 			return;
@@ -65,8 +64,7 @@ public class WebSocketHandler implements ActionResultListener {
 
 		JSONObject p = new JSONObject(params);
 		if (!ActionManager.doAction(action, p, user, this)) {
-			send(PROTOKOLL.ERROR + "-" + "Action not found. ["
-					+ PROTOKOLL.ACTION_COMMAND_BEGIN + action + "-" + params
+			send(PROTOKOLL.ERROR + "-" + "Action not found. [" + PROTOKOLL.ACTION_COMMAND_BEGIN + action + "-" + params
 					+ "]");
 		}
 	}
@@ -105,8 +103,7 @@ public class WebSocketHandler implements ActionResultListener {
 	 */
 	private void onLoginMessage(String params) {
 		JSONObject data = new JSONObject(params);
-		
-		
+
 		if (!data.has("username")) {
 			Logger.w(TAG, "Login message is missing username.");
 			JSONObject result = new JSONObject();
@@ -118,9 +115,7 @@ public class WebSocketHandler implements ActionResultListener {
 
 		if (Configs.auth_required) {
 			if (!data.has("password")) {
-				Logger.w(
-						TAG,
-						"Login message is missing password. It is set to required in the config options");
+				Logger.w(TAG, "Login message is missing password. It is set to required in the config options");
 				JSONObject result = new JSONObject();
 				result.put("success", 0);
 				result.put("error", "Password required");
@@ -128,8 +123,7 @@ public class WebSocketHandler implements ActionResultListener {
 
 				return;
 			} else if (!UserManager.auth(username, data.getInt("password"))) {
-				Logger.w(TAG,
-						"Authentification failed. Username or password is wrong");
+				Logger.w(TAG, "Authentification failed. Username or password is wrong");
 				JSONObject result = new JSONObject();
 				result.put("success", 0);
 				result.put("error", "Username or password wrong");
@@ -146,8 +140,7 @@ public class WebSocketHandler implements ActionResultListener {
 			int v = data.getInt("clientversion");
 			Logger.i(TAG, "Clientinfo: " + id + " Version: " + v);
 			result.put("clientupdate", ClientVersion.isUpdateAvailable(id, v));
-			result.put("clientupdatenecessary",
-					ClientVersion.isUpdateNecessary(id, v));
+			result.put("clientupdatenecessary", ClientVersion.isUpdateNecessary(id, v));
 			user.setClient(new ClientVersion.ClientInfo(id, v));
 		} else {
 			Logger.w(TAG, "Login message is missing client information.");
@@ -162,27 +155,20 @@ public class WebSocketHandler implements ActionResultListener {
 			Logger.i(TAG, "Received Message: " + msg);// TODO Remove
 			if (msg.startsWith(PROTOKOLL.REGISTER_COMMAND_BEGIN)) {
 				try {
-					String listener = msg.replace(
-							PROTOKOLL.REGISTER_COMMAND_BEGIN, "").trim();
+					String listener = msg.replace(PROTOKOLL.REGISTER_COMMAND_BEGIN, "").trim();
 					onRegisterMessage(listener);
 				} catch (Exception e) {
-					Logger.e(TAG,
-							"Failed to parse listener from register command", e);
-					send(PROTOKOLL.ERROR + "-"
-							+ "Failed to register listener. [" + msg + "]");
+					Logger.e(TAG, "Failed to parse listener from register command", e);
+					send(PROTOKOLL.ERROR + "-" + "Failed to register listener. [" + msg + "]");
 				}
 
 			} else if (msg.startsWith(PROTOKOLL.UNREGISTER_COMMAND_BEGIN)) {
 				try {
-					String listener = msg.replace(
-							PROTOKOLL.UNREGISTER_COMMAND_BEGIN, "").trim();
+					String listener = msg.replace(PROTOKOLL.UNREGISTER_COMMAND_BEGIN, "").trim();
 					onUnregisterMessage(listener);
 				} catch (Exception e) {
-					Logger.e(TAG,
-							"Failed to parse listener from unregister command",
-							e);
-					send(PROTOKOLL.ERROR + "-"
-							+ "Failed to unregister listener. [" + msg + "]");
+					Logger.e(TAG, "Failed to parse listener from unregister command", e);
+					send(PROTOKOLL.ERROR + "-" + "Failed to unregister listener. [" + msg + "]");
 				}
 			} else if (msg.startsWith(PROTOKOLL.ACTION_COMMAND_BEGIN)) {
 				try {
@@ -192,8 +178,7 @@ public class WebSocketHandler implements ActionResultListener {
 					onActionMessage(action, params);
 				} catch (Exception e) {
 					Logger.e(TAG, "Failed processing action command", e);
-					send(PROTOKOLL.ERROR + "-"
-							+ "Failed processing action command. [" + msg + "]");
+					send(PROTOKOLL.ERROR + "-" + "Failed processing action command. [" + msg + "]");
 				}
 			} else if (msg.startsWith(PROTOKOLL.CONNECT)) {
 
@@ -211,8 +196,7 @@ public class WebSocketHandler implements ActionResultListener {
 			}
 		} catch (Exception e) {
 			Logger.e(TAG, "Failed to process message", e);
-			send(PROTOKOLL.ERROR + "-" + "Failed to process message. [" + msg
-					+ "]");
+			send(PROTOKOLL.ERROR + "-" + "Failed to process message. [" + msg + "]");
 		}
 
 	}
@@ -229,8 +213,7 @@ public class WebSocketHandler implements ActionResultListener {
 		// Check is user object is available and so if the user is authentified
 		if (user == null) {
 
-			send(PROTOKOLL.ERROR + "-" + "Login required. ["
-					+ PROTOKOLL.REGISTER_COMMAND_BEGIN + l + "]");
+			send(PROTOKOLL.ERROR + "-" + "Login required. [" + PROTOKOLL.REGISTER_COMMAND_BEGIN + l + "]");
 			Logger.w(TAG, "Cannot register a listener before login.");
 			return;
 		}
@@ -304,8 +287,7 @@ public class WebSocketHandler implements ActionResultListener {
 			listeners = new ArrayList<StandardListener>();
 			System.gc();
 		}
-		Logger.i(TAG, "Removed " + (listenercount - listeners.size())
-				+ " listeners");
+		Logger.i(TAG, "Removed " + (listenercount - listeners.size()) + " listeners");
 	}
 
 	private void send(String msg) {

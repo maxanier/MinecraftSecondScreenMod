@@ -12,6 +12,5 @@ public abstract class BaseCommand implements ICommand {
 		}
 
 	}
-	
 
 }

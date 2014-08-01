@@ -18,11 +18,8 @@ public class User {
 	private static final String perm_category = "permissions";
 
 	public static User readFromConfig(Configuration config) {
-		String name = config
-				.get(Configuration.CATEGORY_GENERAL, "username", "")
-				.getString();
-		int pass = config.get(Configuration.CATEGORY_GENERAL, "password", 0)
-				.getInt();
+		String name = config.get(Configuration.CATEGORY_GENERAL, "username", "").getString();
+		int pass = config.get(Configuration.CATEGORY_GENERAL, "password", 0).getInt();
 		if (pass == 0) {
 			return null;
 		}
@@ -65,10 +62,9 @@ public class User {
 			Logger.w(TAG, "Server null, cant find user");
 			return null;
 		}
-		for(Object p : s.getConfigurationManager().playerEntityList){
-			if(((EntityPlayerMP)p).getDisplayName().equals(username))
-			{
-				return (EntityPlayerMP)p;
+		for (Object p : s.getConfigurationManager().playerEntityList) {
+			if (((EntityPlayerMP) p).getDisplayName().equals(username)) {
+				return (EntityPlayerMP) p;
 			}
 		}
 		return null;
@@ -96,13 +92,10 @@ public class User {
 	}
 
 	public boolean saveToConfig(Configuration config) {
-		config.get(Configuration.CATEGORY_GENERAL, "username", username).set(
-				username);
-		config.get(Configuration.CATEGORY_GENERAL, "password", password).set(
-				password);
+		config.get(Configuration.CATEGORY_GENERAL, "username", username).set(username);
+		config.get(Configuration.CATEGORY_GENERAL, "password", password).set(password);
 		for (Entry<String, Boolean> e : perm.entrySet()) {
-			config.get(perm_category, e.getKey(), e.getValue()).set(
-					e.getValue());
+			config.get(perm_category, e.getKey(), e.getValue()).set(e.getValue());
 		}
 		if (config.hasChanged()) {
 			config.save();

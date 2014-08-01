@@ -6,10 +6,12 @@ import java.util.List;
 import net.minecraft.command.ICommandSender;
 import de.maxgb.minecraft.second_screen.SecondScreenMod;
 
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class GetIPCommand extends BaseCommand {
 
 	private List aliases;
 
+	
 	public GetIPCommand() {
 		this.aliases = new ArrayList();
 		this.aliases.add("getIP");
@@ -63,8 +65,7 @@ public class GetIPCommand extends BaseCommand {
 			if (SecondScreenMod.error == null) {
 				SecondScreenMod.error = "Unknown";
 			}
-			sendMessage(var1, "IP: " + SecondScreenMod.hostname
-					+ ". But the mod isnt running. Error: "
+			sendMessage(var1, "IP: " + SecondScreenMod.hostname + ". But the mod isnt running. Error: "
 					+ SecondScreenMod.error);
 		}
 

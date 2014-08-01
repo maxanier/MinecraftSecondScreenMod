@@ -54,6 +54,7 @@ public class PlayerInventoryListener extends StandardListener {
 	 * 
 	 * } }
 	 */
+	@SuppressWarnings("unused")
 	private final String TAG = "PlayerInventoryListener";
 
 	public PlayerInventoryListener(User user) {
@@ -68,8 +69,7 @@ public class PlayerInventoryListener extends StandardListener {
 		EntityPlayerMP player = user.getPlayer(server);
 
 		if (player == null) {
-			response.put("success", 0).put("error",
-					"User " + user.username + " not online");
+			response.put("success", 0).put("error", "User " + user.username + " not online");
 		} else {
 			JSONArray items = new JSONArray();
 

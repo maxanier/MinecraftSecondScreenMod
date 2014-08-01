@@ -23,9 +23,9 @@ public class WorldInfoListener extends StandardListener {
 	 */
 	public static String parseTime(int timeInTicks) {
 		String time = "";
-		//int weeks = timeInTicks / (168000);
+		// int weeks = timeInTicks / (168000);
 		int remainder = timeInTicks % (168000);
-		//int days = remainder / 24000;
+		// int days = remainder / 24000;
 		remainder = timeInTicks % 24000;
 		int hours = remainder / 1000;
 		remainder = timeInTicks % 1000;
@@ -85,12 +85,12 @@ public class WorldInfoListener extends StandardListener {
 		}
 		info.put("overworld", ow);
 
-		
-		//Observing Info
-		ObservedBlock.addObservingInfo(info, worlds,user.username);
+		// Observing Info
+		ObservedBlock.addObservingInfo(info, worlds, user.username);
 
 		// --------------------------------------------------------------------------------
-		//return PROTOKOLL.WORLD_INFO_LISTENER + "-" + "{\"overworld\":{\"time\":\"17 h 31 min \",\"name\":\"New World\",\"timetillrain\":\"09 h 01 min \",\"rain\":false},\"th_node\":[{\"aspects\":{\"Perditio\":11,\"Ordo\":12,\"Ignis\":17},\"label\":\"nod\"},{\"aspects\":{\"Ignis\":9},\"label\":\"node\"},{\"aspects\":{\"Terra\":22,\"Ignis\":31},\"label\":\"nodes\"},{\"aspects\":{\"Ignis\":9},\"label\":\"node\"}],\"redstone\":[[\"label\",true,false],[\"lever\",true,true]]}";
+		// return PROTOKOLL.WORLD_INFO_LISTENER + "-" +
+		// "{\"overworld\":{\"time\":\"17 h 31 min \",\"name\":\"New World\",\"timetillrain\":\"09 h 01 min \",\"rain\":false},\"th_node\":[{\"aspects\":{\"Perditio\":11,\"Ordo\":12,\"Ignis\":17},\"label\":\"nod\"},{\"aspects\":{\"Ignis\":9},\"label\":\"node\"},{\"aspects\":{\"Terra\":22,\"Ignis\":31},\"label\":\"nodes\"},{\"aspects\":{\"Ignis\":9},\"label\":\"node\"}],\"redstone\":[[\"label\",true,false],[\"lever\",true,true]]}";
 		return PROTOKOLL.WORLD_INFO_LISTENER + "-" + info.toString();
 	}
 
