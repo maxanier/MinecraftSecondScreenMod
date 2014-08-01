@@ -5,8 +5,9 @@ import java.io.PrintStream;
 
 import org.apache.logging.log4j.Level;
 
+import cpw.mods.fml.common.FMLLog;
+
 public class Logger {
-	private static org.apache.logging.log4j.Logger log;
 
 	public static void d(String tag, String msg) {
 		log(Level.DEBUG, "[" + tag + "]" + msg);
@@ -32,13 +33,9 @@ public class Logger {
 		log(Level.INFO, "[" + tag + "]" + msg);
 	}
 
-	public static void init(org.apache.logging.log4j.Logger logger) {
-		log = logger;
-
-	}
 
 	private static void log(Level level, String msg) {
-		log.log(level, msg);
+		FMLLog.log(Constants.MOD_ID, level, msg);
 	}
 
 	public static void w(String tag, String msg) {

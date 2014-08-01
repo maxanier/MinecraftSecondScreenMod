@@ -52,8 +52,6 @@ public class SecondScreenMod {
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 
-		Logger.init(event.getModLog());
-
 		Configs.init(event.getSuggestedConfigurationFile());
 
 		FMLInterModComms.sendRuntimeMessage(Constants.MOD_ID, "VersionChecker", "addVersionCheck",
