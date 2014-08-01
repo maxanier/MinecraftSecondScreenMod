@@ -65,7 +65,13 @@ public class User {
 			Logger.w(TAG, "Server null, cant find user");
 			return null;
 		}
-		return s.getConfigurationManager().getPlayerForUsername(username);
+		for(Object p : s.getConfigurationManager().playerEntityList){
+			if(((EntityPlayerMP)p).getDisplayName().equals(username))
+			{
+				return (EntityPlayerMP)p;
+			}
+		}
+		return null;
 	}
 
 	/**

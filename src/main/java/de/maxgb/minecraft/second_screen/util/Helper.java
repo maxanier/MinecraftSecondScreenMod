@@ -1,7 +1,10 @@
 package de.maxgb.minecraft.second_screen.util;
 
+import com.mojang.authlib.GameProfile;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
@@ -16,45 +19,52 @@ public class Helper {
 	 * @param restricts
 	 *            Keeps distance to players block reach distance
 	 * @return The position as a MovingObjectPosition, null if not existent cf:
-	 *         https
-	 *         ://github.com/ForgeEssentials/ForgeEssentialsMain/blob/master
-	 *         /src/main/java/com/forgeessentials/util/FunctionHelper.java
+	 *         https://github.com/bspkrs/bspkrsCore/blob/master/src/main/java/bspkrs/util/CommonUtils.java
 	 */
-	public static MovingObjectPosition getPlayerLookingSpot(
-			EntityPlayer player, boolean restrict) {
-		float var4 = 1.0F;
-		float var5 = player.prevRotationPitch
-				+ (player.rotationPitch - player.prevRotationPitch) * var4;
-		float var6 = player.prevRotationYaw
-				+ (player.rotationYaw - player.prevRotationYaw) * var4;
-		double var7 = player.prevPosX + (player.posX - player.prevPosX) * var4;
-		double var9 = player.prevPosY + (player.posY - player.prevPosY) * var4
-				+ 1.62D - player.yOffset;
-		double var11 = player.prevPosZ + (player.posZ - player.prevPosZ) * var4;
-		Vec3 var13 = player.worldObj.getWorldVec3Pool().getVecFromPool(var7,
-				var9, var11);
-		float var14 = MathHelper.cos(-var6 * 0.017453292F - (float) Math.PI);
-		float var15 = MathHelper.sin(-var6 * 0.017453292F - (float) Math.PI);
-		float var16 = -MathHelper.cos(-var5 * 0.017453292F);
-		float var17 = MathHelper.sin(-var5 * 0.017453292F);
-		float var18 = var15 * var16;
-		float var20 = var14 * var16;
-		double var21 = 500D;
-		if (player instanceof EntityPlayerMP && restrict) {
-			var21 = ((EntityPlayerMP) player).theItemInWorldManager
-					.getBlockReachDistance();
+    public static MovingObjectPosition getPlayerLookingSpot(EntityPlayer player, boolean restrict)
+    {
+        float scale = 1.0F;
+        float pitch = player.prevRotationPitch + (player.rotationPitch - player.prevRotationPitch) * scale;
+        float yaw = player.prevRotationYaw + (player.rotationYaw - player.prevRotationYaw) * scale;
+        double x = player.prevPosX + (player.posX - player.prevPosX) * scale;
+        double y = player.prevPosY + (player.posY - player.prevPosY) * scale + 1.62D - player.yOffset;
+        double z = player.prevPosZ + (player.posZ - player.prevPosZ) * scale;
+        Vec3 vector1 = Vec3.createVectorHelper(x, y, z);
+        float cosYaw = MathHelper.cos(-yaw * 0.017453292F - (float) Math.PI);
+        float sinYaw = MathHelper.sin(-yaw * 0.017453292F - (float) Math.PI);
+        float cosPitch = -MathHelper.cos(-pitch * 0.017453292F);
+        float sinPitch = MathHelper.sin(-pitch * 0.017453292F);
+        float pitchAdjustedSinYaw = sinYaw * cosPitch;
+        float pitchAdjustedCosYaw = cosYaw * cosPitch;
+        double distance = 500D;
+        if (player instanceof EntityPlayerMP && restrict)
+        {
+            distance = ((EntityPlayerMP) player).theItemInWorldManager.getBlockReachDistance();
+        }
+        Vec3 vector2 = vector1.addVector(pitchAdjustedSinYaw * distance, sinPitch * distance, pitchAdjustedCosYaw * distance);
+        return player.worldObj.rayTraceBlocks(vector1, vector2);
+    }
+	
+    /**
+     * Returns if the user with the given username is opped on this server. Only usable when online
+     * @param username
+     * @return
+     */
+	public static boolean isPlayerOpped(String username){
+		GameProfile p = getGameProfile(username);
+		if(p==null){
+			Logger.w("Helper.isPlayerOpped","User: "+username+ " is not online");
+			return false;
 		}
-		Vec3 var23 = var13.addVector(var18 * var21, var17 * var21, var20
-				* var21);
-		return player.worldObj.rayTraceBlocks(var13, var23);
-		// return player.worldObj.rayTraceBlocks_do_do(var13, var23, false,
-		// !true);
+		return MinecraftServer.getServer().getConfigurationManager().func_152596_g(p);
 	}
 	
-	public static boolean isPlayerOpped(String username){
-		return FMLCommonHandler.instance()
-		.getMinecraftServerInstance()
-		.getConfigurationManager()
-		.isPlayerOpped(username);
+	/**
+	 * Returns the GameProfile for the given username
+	 * @param username
+	 * @return GameProfile, null if it does not exist
+	 */
+	public static GameProfile getGameProfile(String username){
+		return MinecraftServer.getServer().func_152358_ax().func_152655_a(username);
 	}
 }
