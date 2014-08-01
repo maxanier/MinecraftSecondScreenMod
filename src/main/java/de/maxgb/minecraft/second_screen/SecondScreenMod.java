@@ -1,6 +1,8 @@
 package de.maxgb.minecraft.second_screen;
 
 import net.minecraftforge.common.config.Configuration;
+import cpw.mods.fml.client.event.ConfigChangedEvent;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -9,6 +11,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import de.maxgb.minecraft.second_screen.actions.ActionManager;
 import de.maxgb.minecraft.second_screen.commands.GetIPCommand;
 import de.maxgb.minecraft.second_screen.commands.GetMSSPortCommand;
@@ -23,7 +26,7 @@ import de.maxgb.minecraft.second_screen.data.UserManager;
 import de.maxgb.minecraft.second_screen.util.Constants;
 import de.maxgb.minecraft.second_screen.util.Logger;
 
-@Mod(modid = Constants.MOD_ID, name = Constants.NAME, version = Constants.VERSION, dependencies = "required-after:FML")
+@Mod(modid = Constants.MOD_ID, name = Constants.NAME, version = Constants.VERSION, dependencies = "required-after:FML", guiFactory=Constants.GUI_FACTORY_CLASS)
 public class SecondScreenMod {
 
 	public static WebSocketListener webSocketListener;
@@ -41,7 +44,7 @@ public class SecondScreenMod {
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
-
+		FMLCommonHandler.instance().bus().register(new Configs());
 	}
 
 	@EventHandler
@@ -49,7 +52,7 @@ public class SecondScreenMod {
 
 		Logger.init(event.getModLog());
 
-		Configs.load(event.getSuggestedConfigurationFile());
+		Configs.init(event.getSuggestedConfigurationFile());
 		
 		FMLInterModComms.sendRuntimeMessage(Constants.MOD_ID, "VersionChecker", "addVersionCheck", Constants.UPDATE_FILE_LINK);
 
@@ -107,5 +110,7 @@ public class SecondScreenMod {
 
 		webSocketListener=null;
 	}
+	
+
 
 }

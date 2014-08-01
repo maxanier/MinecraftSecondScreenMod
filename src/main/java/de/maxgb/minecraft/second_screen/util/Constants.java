@@ -17,5 +17,7 @@ public class Constants {
 	public static final String USER_SAVE_DIR = "mss-users";
 	
 	public static final String OBSERVER_FILE_NAME = "observer.json";
+	
+	public static final String GUI_FACTORY_CLASS="de.maxgb.minecraft.second_screen.client.gui.ModGuiFactory";
 
 }
