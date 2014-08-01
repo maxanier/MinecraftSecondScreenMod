@@ -14,12 +14,13 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import de.maxgb.minecraft.second_screen.util.Helper;
 
 @SuppressWarnings({ "rawtypes" })
-public class TestCommand extends BaseCommand {
+public class ListInterfacesCommand extends BaseCommand {
 
 	private List aliases;
 
-	public TestCommand() {
+	public ListInterfacesCommand() {
 		this.aliases = new ArrayList();
+		aliases.add("liint");
 	}
 
 	@Override
@@ -46,12 +47,12 @@ public class TestCommand extends BaseCommand {
 
 	@Override
 	public String getCommandName() {
-		return "msstest";
+		return "listinterfaces";
 	}
 
 	@Override
 	public String getCommandUsage(ICommandSender var1) {
-		return "msstest";
+		return "listinterfaces";
 	}
 
 	@Override

@@ -12,6 +12,7 @@ import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import de.maxgb.minecraft.second_screen.actions.ActionManager;
 import de.maxgb.minecraft.second_screen.commands.GetIPCommand;
 import de.maxgb.minecraft.second_screen.commands.GetMSSPortCommand;
+import de.maxgb.minecraft.second_screen.commands.ListInterfacesCommand;
 import de.maxgb.minecraft.second_screen.commands.TestCommand;
 import de.maxgb.minecraft.second_screen.commands.mss_sub.MssCommand;
 import de.maxgb.minecraft.second_screen.commands.mss_sub.RegisterObserverCommand;
@@ -80,6 +81,7 @@ public class SecondScreenMod {
 		e.registerServerCommand(new GetIPCommand());
 		e.registerServerCommand(new GetMSSPortCommand());
 		e.registerServerCommand(new TestCommand());
+		e.registerServerCommand(new ListInterfacesCommand());
 
 		start();
 	}
