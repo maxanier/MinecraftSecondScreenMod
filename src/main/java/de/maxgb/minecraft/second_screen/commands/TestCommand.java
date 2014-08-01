@@ -3,6 +3,8 @@ package de.maxgb.minecraft.second_screen.commands;
 import java.util.ArrayList;
 import java.util.List;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -59,9 +61,8 @@ public class TestCommand extends BaseCommand {
 
 	@Override
 	public void processCommand(ICommandSender var1, String[] var2) {
-		for(ObservedBlock b:ObservingManager.getObservedBlocks(var1.getCommandSenderName(),true)){
-			sendMessage(var1,b.getLabel());
-		}
+		sendMessage(var1,FMLCommonHandler.instance()
+		.getMinecraftServerInstance().getConfigurationManager().func_152603_m().toString());
 		
 		
 		
