@@ -86,7 +86,7 @@ public class RegisterRedstoneInfoCommand implements MssCommand.MssSubCommand {
 			}
 
 			if (ObservingManager.observeBlock(var1.getCommandSenderName(), publ, new ObservedBlock(var2[1], p.blockX,
-					p.blockY, p.blockZ, player.worldObj.provider.dimensionId, ObservingType.REDSTONE))) {
+					p.blockY, p.blockZ, player.worldObj.provider.dimensionId, ObservingType.REDSTONE,-1))) {
 				sendMessage(var1, "Successfully added block to observer list.");
 			} else {
 				sendMessage(var1,

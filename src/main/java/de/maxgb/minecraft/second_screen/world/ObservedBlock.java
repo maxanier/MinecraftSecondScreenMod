@@ -32,6 +32,7 @@ public class ObservedBlock {
 		JSONArray redstone = new JSONArray();
 		JSONArray th_node = new JSONArray();
 		JSONObject inventory = new JSONObject();
+		JSONArray rf_es = new JSONArray();
 
 		ArrayList<ObservedBlock> blocks = ObservingManager.getObservedBlocks(username, true);
 		for (int i = 0; i < blocks.size(); i++) {
@@ -57,11 +58,26 @@ public class ObservedBlock {
 						if (in != null) {
 							th_node.put(in);
 						}
+						else{
+							ObservingManager.removeObservedBlock(username, block.label);
+						}
 						break;
 					case ObservingType.INVENTORY:
 						JSONArray inv = ObservingType.infoInventory(world, block);
 						if (inv != null) {
 							inventory.put(block.label, inv);
+						}
+						else{
+							ObservingManager.removeObservedBlock(username, block.label);
+						}
+						break;
+					case ObservingType.RF_ENERGY_STORAGE:
+						JSONArray es = ObservingType.infoRF_Energy_Storage(world, block);
+						if(es!=null){
+							rf_es.put(es);
+						}
+						else{
+							ObservingManager.removeObservedBlock(username, block.label);
 						}
 						break;
 					}
@@ -69,9 +85,14 @@ public class ObservedBlock {
 			}
 		}
 
-		parent.put("redstone", redstone);
-		parent.put("th_node", th_node);
-		parent.put("inv", inventory);
+		if(redstone.length()>0)
+			parent.put("redstone", redstone);
+		if(th_node.length()>0)
+			parent.put("th_node", th_node);
+		if(inventory.length()>0)
+			parent.put("inv", inventory);
+		if(rf_es.length()>0)
+			parent.put("rf_es",rf_es);
 	}
 
 	/**
@@ -92,6 +113,13 @@ public class ObservedBlock {
 			b.dimensionId = coord.getInt(3);
 
 			b.type = json.getInt("type");
+			
+			if(json.has("side")){
+				b.side=json.getInt("side");
+			}
+			else{
+				b.side=-1;
+			}
 
 			return b;
 		} catch (JSONException e) {
@@ -103,7 +131,7 @@ public class ObservedBlock {
 
 	protected String label;
 
-	protected int x, y, z, dimensionId;
+	protected int x, y, z, dimensionId,side;
 
 	protected int type;
 
@@ -111,13 +139,14 @@ public class ObservedBlock {
 
 	}
 
-	public ObservedBlock(String label, int x, int y, int z, int dimensionId, int type) {
+	public ObservedBlock(String label, int x, int y, int z, int dimensionId, int type,int side) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 		this.label = label;
 		this.dimensionId = dimensionId;
 		this.type = type;
+		this.side=side;
 	}
 
 	/**
@@ -151,6 +180,7 @@ public class ObservedBlock {
 		coord.put(dimensionId);
 
 		json.put("coord", coord);
+		json.put("side", side);
 
 		json.put("type", type);
 
