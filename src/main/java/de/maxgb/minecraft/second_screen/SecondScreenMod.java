@@ -12,11 +12,11 @@ import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import de.maxgb.minecraft.second_screen.actions.ActionManager;
 import de.maxgb.minecraft.second_screen.commands.GetIPCommand;
 import de.maxgb.minecraft.second_screen.commands.GetMSSPortCommand;
-import de.maxgb.minecraft.second_screen.commands.MssCommand;
-import de.maxgb.minecraft.second_screen.commands.RegisterObserverCommand;
-import de.maxgb.minecraft.second_screen.commands.RegisterRedstoneInfoCommand;
-import de.maxgb.minecraft.second_screen.commands.RegisterUserCommand;
 import de.maxgb.minecraft.second_screen.commands.TestCommand;
+import de.maxgb.minecraft.second_screen.commands.mss_sub.MssCommand;
+import de.maxgb.minecraft.second_screen.commands.mss_sub.RegisterObserverCommand;
+import de.maxgb.minecraft.second_screen.commands.mss_sub.RegisterRedstoneInfoCommand;
+import de.maxgb.minecraft.second_screen.commands.mss_sub.RegisterUserCommand;
 import de.maxgb.minecraft.second_screen.data.DataStorageDriver;
 import de.maxgb.minecraft.second_screen.data.ObservingManager;
 import de.maxgb.minecraft.second_screen.data.UserManager;
@@ -49,10 +49,8 @@ public class SecondScreenMod {
 
 		Logger.init(event.getModLog());
 
-		Configuration config = new Configuration(
-				event.getSuggestedConfigurationFile());
-
-		Configs.load(config);
+		Configs.load(event.getSuggestedConfigurationFile());
+		
 		FMLInterModComms.sendRuntimeMessage(Constants.MOD_ID, "VersionChecker", "addVersionCheck", Constants.UPDATE_FILE_LINK);
 
 	}

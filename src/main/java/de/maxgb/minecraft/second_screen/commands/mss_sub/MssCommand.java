@@ -1,7 +1,9 @@
-package de.maxgb.minecraft.second_screen.commands;
+package de.maxgb.minecraft.second_screen.commands.mss_sub;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.maxgb.minecraft.second_screen.commands.BaseCommand;
 
 import net.minecraft.command.ICommandSender;
 

@@ -1,10 +1,12 @@
-package de.maxgb.minecraft.second_screen.commands;
+package de.maxgb.minecraft.second_screen.commands.mss_sub;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLever;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MovingObjectPosition;
+import de.maxgb.minecraft.second_screen.commands.BaseCommand;
+import de.maxgb.minecraft.second_screen.commands.mss_sub.MssCommand.MssSubCommand;
 import de.maxgb.minecraft.second_screen.data.ObservingManager;
 import de.maxgb.minecraft.second_screen.util.Helper;
 import de.maxgb.minecraft.second_screen.util.Logger;
