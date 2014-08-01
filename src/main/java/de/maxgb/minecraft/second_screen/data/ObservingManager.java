@@ -61,6 +61,9 @@ public class ObservingManager {
 		} catch (JSONException e) {
 			Logger.e(TAG, "Failed to parse observer json file",e);
 		}
+		catch (NullPointerException e){
+			Logger.e(TAG, "Failed to parse observer json file",e);
+		}
 		
 		
 	}
