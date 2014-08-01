@@ -61,39 +61,7 @@ public class TestCommand extends BaseCommand {
 
 	@Override
 	public void processCommand(ICommandSender var1, String[] var2) {
-		EntityPlayer player;
-
-		if (var1 instanceof EntityPlayer) {
-			player = (EntityPlayer) var1;
-		} else {
-			sendMessage(var1, "Player only command");
-			return;
-		}
-
-		MovingObjectPosition p = Helper.getPlayerLookingSpot(player, true);
-		if (p == null) {
-			sendMessage(var1, "You have to look at a block");
-			return;
-		}
-
-		boolean publ = false;
-		if (var2.length >= 3) {
-			if (var2[2].equals("public")) {
-				publ = true;
-			}
-		}
-
-		Block block = player.worldObj.getBlock(p.blockX, p.blockY, p.blockZ);
-		TileEntity tile = player.worldObj.getTileEntity(p.blockX, p.blockY, p.blockZ);
 		
-		sendMessage(var1,block.getClass().getName());
-		for(Class c : ClassUtils.getAllInterfaces(block.getClass())){
-			sendMessage(var1,c.getName());
-		}
-		sendMessage(var1,tile.getClass().getName());
-		for(Class c : ClassUtils.getAllInterfaces(tile.getClass())){
-			sendMessage(var1,c.getName());
-		}
 
 	}
 

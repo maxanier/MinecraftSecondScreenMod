@@ -87,13 +87,17 @@ public class ListInterfacesCommand extends BaseCommand {
 		Block block = player.worldObj.getBlock(p.blockX, p.blockY, p.blockZ);
 		TileEntity tile = player.worldObj.getTileEntity(p.blockX, p.blockY, p.blockZ);
 		
-		sendMessage(var1,block.getClass().getName());
-		for(Class c : ClassUtils.getAllInterfaces(block.getClass())){
-			sendMessage(var1,c.getName());
+		if(block!=null){
+			sendMessage(var1,block.getClass().getName());
+			for(Class c : ClassUtils.getAllInterfaces(block.getClass())){
+				sendMessage(var1,c.getName());
+			}
 		}
-		sendMessage(var1,tile.getClass().getName());
-		for(Class c : ClassUtils.getAllInterfaces(tile.getClass())){
-			sendMessage(var1,c.getName());
+		if(tile!=null){
+			sendMessage(var1,tile.getClass().getName());
+			for(Class c : ClassUtils.getAllInterfaces(tile.getClass())){
+				sendMessage(var1,c.getName());
+			}
 		}
 
 	}
