@@ -77,12 +77,6 @@ public class ListInterfacesCommand extends BaseCommand {
 			return;
 		}
 
-		boolean publ = false;
-		if (var2.length >= 3) {
-			if (var2[2].equals("public")) {
-				publ = true;
-			}
-		}
 
 		Block block = player.worldObj.getBlock(p.blockX, p.blockY, p.blockZ);
 		TileEntity tile = player.worldObj.getTileEntity(p.blockX, p.blockY, p.blockZ);
