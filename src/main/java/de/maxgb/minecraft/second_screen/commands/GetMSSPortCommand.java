@@ -63,14 +63,12 @@ public class GetMSSPortCommand extends BaseCommand {
 
 	@Override
 	public void processCommand(ICommandSender var1, String[] var2) {
-		if (SecondScreenMod.connected) {
-			sendMessage(var1, "Minecraft Second Screen Port: " + SecondScreenMod.port);
+		if (SecondScreenMod.instance.webSocketListener.isRunning()) {
+			sendMessage(var1, "Minecraft Second Screen Port: " + SecondScreenMod.instance.port);
 		} else {
-			if (SecondScreenMod.error == null) {
-				SecondScreenMod.error = "Unknown";
-			}
-			sendMessage(var1, "Minecraft Second Screen Port: " + SecondScreenMod.port
-					+ ". But the mod isnt running. Error: " + SecondScreenMod.error);
+
+			sendMessage(var1, "Minecraft Second Screen Port: " + SecondScreenMod.instance.port
+					+ ". But the mod isnt running. Error: " + SecondScreenMod.instance.webSocketListener.getError());
 		}
 
 	}

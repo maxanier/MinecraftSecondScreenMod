@@ -64,14 +64,12 @@ public class GetIPCommand extends BaseCommand {
 
 	@Override
 	public void processCommand(ICommandSender var1, String[] var2) {
-		if (SecondScreenMod.connected) {
-			sendMessage(var1, "IP: " + SecondScreenMod.hostname);
+		if (SecondScreenMod.instance.webSocketListener.isRunning()) {
+			sendMessage(var1, "IP: " + SecondScreenMod.instance.hostname);
 		} else {
-			if (SecondScreenMod.error == null) {
-				SecondScreenMod.error = "Unknown";
-			}
-			sendMessage(var1, "IP: " + SecondScreenMod.hostname + ". But the mod isnt running. Error: "
-					+ SecondScreenMod.error);
+			
+			sendMessage(var1, "IP: " + SecondScreenMod.instance.hostname + ". But the mod isnt running. Error: "
+					+ SecondScreenMod.instance.webSocketListener.getError());
 		}
 
 	}

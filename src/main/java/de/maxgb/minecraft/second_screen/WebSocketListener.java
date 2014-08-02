@@ -51,8 +51,8 @@ public class WebSocketListener {
 		public void onError(WebSocket conn, Exception ex) {
 			Logger.e(TAG, "Received Error", ex);
 
-			SecondScreenMod.error = ex.getMessage();
-			SecondScreenMod.connected = false;
+			error = ex.getMessage();
+			running = false;
 
 		}
 
@@ -91,6 +91,9 @@ public class WebSocketListener {
 	private MSSWebSocketServer socketServer;
 
 	private Thread serverThread;
+	
+	private boolean running;
+	private String error="Unknown";
 
 	private static int handlerCount = 0;
 
@@ -110,8 +113,8 @@ public class WebSocketListener {
 	}
 
 	private MSSWebSocketServer create() {
-		int port = SecondScreenMod.port;
-		String hostname = SecondScreenMod.hostname;
+		int port = SecondScreenMod.instance.port;
+		String hostname = SecondScreenMod.instance.hostname;
 
 		if (port == 0) {
 
@@ -138,12 +141,23 @@ public class WebSocketListener {
 
 		if (socketServer != null) {
 			serverThread = new Thread(socketServer);
-			SecondScreenMod.connected = true;
+			running = true;
 			serverThread.start();
 
 		} else {
 			Logger.e(TAG, "Socket server null");
 		}
+	}
+	
+	public boolean isRunning(){
+		return running;
+	}
+	
+	public String getError(){
+		if(running){
+			return "";
+		}
+		return error;
 	}
 
 	public void stop() {
