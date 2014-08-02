@@ -7,8 +7,8 @@ import net.minecraft.util.MovingObjectPosition;
 import de.maxgb.minecraft.second_screen.commands.BaseCommand;
 import de.maxgb.minecraft.second_screen.data.ObservingManager;
 import de.maxgb.minecraft.second_screen.util.Helper;
-import de.maxgb.minecraft.second_screen.world.ObservedBlock;
-import de.maxgb.minecraft.second_screen.world.RedstoneObserver;
+import de.maxgb.minecraft.second_screen.world_observer.ObservedBlock;
+import de.maxgb.minecraft.second_screen.world_observer.RedstoneObserver;
 
 public class RegisterRedstoneInfoCommand implements MssCommand.MssSubCommand {
 

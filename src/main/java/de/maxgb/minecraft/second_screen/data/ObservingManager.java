@@ -12,7 +12,7 @@ import de.maxgb.minecraft.second_screen.Configs;
 import de.maxgb.minecraft.second_screen.util.Constants;
 import de.maxgb.minecraft.second_screen.util.Helper;
 import de.maxgb.minecraft.second_screen.util.Logger;
-import de.maxgb.minecraft.second_screen.world.ObservedBlock;
+import de.maxgb.minecraft.second_screen.world_observer.ObservedBlock;
 
 public class ObservingManager {
 

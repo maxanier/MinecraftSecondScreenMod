@@ -11,8 +11,8 @@ import de.maxgb.minecraft.second_screen.shared.PROTOKOLL;
 import de.maxgb.minecraft.second_screen.util.ForceUpdateEvent;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.util.User;
-import de.maxgb.minecraft.second_screen.world.ObservedBlock;
-import de.maxgb.minecraft.second_screen.world.RedstoneObserver;
+import de.maxgb.minecraft.second_screen.world_observer.ObservedBlock;
+import de.maxgb.minecraft.second_screen.world_observer.RedstoneObserver;
 
 public class RedstoneControlAction implements IAction {
 

@@ -1,4 +1,4 @@
-package de.maxgb.minecraft.second_screen.world;
+package de.maxgb.minecraft.second_screen.world_observer;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLever;
