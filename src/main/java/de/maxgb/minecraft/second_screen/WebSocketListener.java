@@ -16,6 +16,12 @@ import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
 import de.maxgb.minecraft.second_screen.util.ForceUpdateEvent;
 import de.maxgb.minecraft.second_screen.util.Logger;
 
+/**
+ * Manages the websocket and all handlers.
+ * All communication runs through this class
+ * @author Max
+ *
+ */
 public class WebSocketListener {
 
 	private class MSSWebSocketServer extends WebSocketServer {

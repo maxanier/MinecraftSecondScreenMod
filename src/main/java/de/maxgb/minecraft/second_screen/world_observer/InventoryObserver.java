@@ -11,6 +11,22 @@ import org.json.JSONObject;
 
 import de.maxgb.minecraft.second_screen.util.Logger;
 
+//@formatter:off
+/*JSONStructure:
+ * <"inv":JSONObject>
+ * 	which contains for each block:
+ * 	<label:JSONArray>
+ * 		which contains JSONArrays with
+ * 			<0=displayname:String>
+ * 			<1=stacksize:int>
+ */
+//@formatter:on
+
+/**
+ * Observer which is designed to observe any inventory which implements IInventory
+ * @author Max
+ *
+ */
 public class InventoryObserver implements ObservedBlock.ObservingType {
 
 	private final int ID = 3;

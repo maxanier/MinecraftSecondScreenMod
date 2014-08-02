@@ -4,6 +4,11 @@ import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 
+/**
+ * Basic command on which all other commands should depend on
+ * @author Max
+ *
+ */
 public abstract class BaseCommand implements ICommand {
 	public static void sendMessage(ICommandSender target, String message) {
 		String[] lines = message.split("\\n");

@@ -6,6 +6,11 @@ import java.util.List;
 import net.minecraft.command.ICommandSender;
 import de.maxgb.minecraft.second_screen.SecondScreenMod;
 
+/**
+ * Returns the IP the mod is running on or if not running the error message
+ * @author Max
+ *
+ */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class GetIPCommand extends BaseCommand {
 

@@ -14,6 +14,11 @@ import de.maxgb.minecraft.second_screen.util.User;
 import de.maxgb.minecraft.second_screen.world_observer.ObservedBlock;
 import de.maxgb.minecraft.second_screen.world_observer.RedstoneObserver;
 
+/**
+ * Action which can change levers ingame
+ * @author Max
+ *
+ */
 public class RedstoneControlAction implements IAction {
 
 	private static final String TAG = "RedstoneControlAction";

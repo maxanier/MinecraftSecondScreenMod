@@ -13,6 +13,11 @@ import de.maxgb.minecraft.second_screen.StandardListener;
 import de.maxgb.minecraft.second_screen.shared.PROTOKOLL;
 import de.maxgb.minecraft.second_screen.util.User;
 
+/**
+ * Listener which listens to player information like health or position
+ * @author Max
+ *
+ */
 public class PlayerInfoListener extends StandardListener {
 
 	@SuppressWarnings("unused")

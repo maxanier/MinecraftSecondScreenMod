@@ -6,6 +6,11 @@ import java.util.List;
 import net.minecraft.command.ICommandSender;
 import de.maxgb.minecraft.second_screen.commands.BaseCommand;
 
+/**
+ * Manages all commands which start with mss
+ * @author Max
+ *
+ */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class MssCommand extends BaseCommand {
 	protected interface MssSubCommand {
@@ -80,6 +85,7 @@ public class MssCommand extends BaseCommand {
 			BaseCommand.sendMessage(var1, "Usage: " + getCommandUsage(var1));
 			return;
 		}
+		//Tests for the corrosponding subcommand and calls it with the reduced amount of params
 		for (MssSubCommand c : commands) {
 			if (var2[0].equals(c.getCommandName())) {
 				String[] var;
@@ -103,6 +109,10 @@ public class MssCommand extends BaseCommand {
 
 	}
 
+	/**
+	 * Prints the available actions/subcommands to the command sender
+	 * @param var1
+	 */
 	private void sendActions(ICommandSender var1) {
 		sendMessage(var1, getCommandUsage(var1));
 		sendMessage(var1, "Actions:");

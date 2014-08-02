@@ -18,6 +18,11 @@ import de.maxgb.minecraft.second_screen.StandardListener;
 import de.maxgb.minecraft.second_screen.shared.PROTOKOLL;
 import de.maxgb.minecraft.second_screen.util.User;
 
+/**
+ * Listener which listens to chat messages and other chat related events
+ * @author Max
+ *
+ */
 public class ChatListener extends StandardListener {
 
 	public static class RemoteChatMessageEvent extends Event {

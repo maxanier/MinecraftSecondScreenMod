@@ -15,6 +15,11 @@ import de.maxgb.minecraft.second_screen.world_observer.ObservedBlock;
 import de.maxgb.minecraft.second_screen.world_observer.RedstoneObserver;
 import de.maxgb.minecraft.second_screen.world_observer.ObservedBlock.ObservingType;
 
+/**
+ * Command which is used to register Observer for blocks
+ * @author Max
+ *
+ */
 public class RegisterObserverCommand implements MssCommand.MssSubCommand {
 
 	private final String TAG = "RegisterObserverCommand";
@@ -63,12 +68,14 @@ public class RegisterObserverCommand implements MssCommand.MssSubCommand {
 			boolean publ = false;
 			ObservingType type = null;
 
+			//analysis of params
 			if (var2.length >= 3) {
 				ArrayList<String> params = new ArrayList<String>();
 				for (int i = 2; i < var2.length; i++) {
 					params.add(var2[i]);
 				}
 
+				//Checks if it should be a public observation
 				if (params.contains("public")) {
 					publ = true;
 					params.remove("public");
@@ -92,6 +99,7 @@ public class RegisterObserverCommand implements MssCommand.MssSubCommand {
 
 			}
 
+			//Gathers all possible ObservationTypes for this block, except there was one specified by the command
 			List<ObservingType> types = new ArrayList<ObservingType>();
 
 			if (type != null) {
@@ -113,6 +121,8 @@ public class RegisterObserverCommand implements MssCommand.MssSubCommand {
 				}
 			}
 
+			//If there is just one possiblity, add this block together with its type to obserer list
+			//Otherwise inform user
 			if (types.size() == 1) {
 				if (ObservingManager.observeBlock(var1.getCommandSenderName(), publ, new ObservedBlock(var2[1],
 						p.blockX, p.blockY, p.blockZ, player.worldObj.provider.dimensionId, types.get(0).getId(),

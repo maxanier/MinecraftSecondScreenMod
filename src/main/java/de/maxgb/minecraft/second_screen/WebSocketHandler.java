@@ -21,6 +21,11 @@ import de.maxgb.minecraft.second_screen.util.ForceUpdateEvent;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.util.User;
 
+/**
+ * Handles the communication with a specific client
+ * @author Max
+ *
+ */
 public class WebSocketHandler implements ActionResultListener {
 	private WebSocket socket;
 	public final InetSocketAddress address;

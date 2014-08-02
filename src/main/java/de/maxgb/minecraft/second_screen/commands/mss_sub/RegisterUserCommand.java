@@ -6,6 +6,14 @@ import de.maxgb.minecraft.second_screen.commands.BaseCommand;
 import de.maxgb.minecraft.second_screen.data.UserManager;
 import de.maxgb.minecraft.second_screen.util.Logger;
 
+/**
+ * Command to register a second screen user
+ * Only used if auth_required is enabled
+ * User can set a pass for his username
+ * Server or Rcon can set pass for any username
+ * @author Max
+ *
+ */
 public class RegisterUserCommand implements MssCommand.MssSubCommand {
 
 	private static final String TAG = "RegisterUserCommand";

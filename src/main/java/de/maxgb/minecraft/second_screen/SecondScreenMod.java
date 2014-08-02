@@ -55,6 +55,7 @@ public class SecondScreenMod {
 
 		Configs.init(event.getSuggestedConfigurationFile());
 
+		//Sends message to VersionChecker if installed
 		FMLInterModComms.sendRuntimeMessage(Constants.MOD_ID, "VersionChecker", "addVersionCheck",
 				Constants.UPDATE_FILE_LINK);
 
@@ -67,12 +68,16 @@ public class SecondScreenMod {
 		port = Configs.port;
 
 
+		//Loads observation files
 		ObservingManager.loadObservingFile();
 
+		//Load users
 		UserManager.loadUsers();
 
+		//Register actions
 		ActionManager.registerStandardActions();
 
+		//Register Commands
 		MssCommand mssc = new MssCommand();
 		mssc.addSubCommand(new RegisterRedstoneInfoCommand());
 		mssc.addSubCommand(new RegisterUserCommand());
@@ -94,6 +99,9 @@ public class SecondScreenMod {
 		ActionManager.removeAllActions();
 	}
 
+	/**
+	 * Creates and starts the websocket 
+	 */
 	private void start() {
 		Logger.i(TAG, "Starting SecondScreenMod");
 
@@ -101,6 +109,9 @@ public class SecondScreenMod {
 		webSocketListener.start();
 	}
 
+	/**
+	 * Stops the websocket
+	 */
 	private void stop() {
 		Logger.i(TAG, "Stopping SecondScreenMod");
 		webSocketListener.stop();

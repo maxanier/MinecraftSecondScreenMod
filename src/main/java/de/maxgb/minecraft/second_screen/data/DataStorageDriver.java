@@ -12,6 +12,11 @@ import java.util.ArrayList;
 import net.minecraftforge.common.DimensionManager;
 import de.maxgb.minecraft.second_screen.util.Logger;
 
+/**
+ * Class which should manage all file related operations
+ * @author Max
+ *
+ */
 public class DataStorageDriver {
 	private final static String TAG = "DataStorageDriver";
 
@@ -19,6 +24,11 @@ public class DataStorageDriver {
 		return new File(DimensionManager.getCurrentSaveRootDirectory(), "secondscreen");
 	}
 
+	/**
+	 * Reads lines from given file
+	 * @param file
+	 * @return lines, null if exception
+	 */
 	private static ArrayList<String> readFromFile(File file) {
 
 		if (!file.exists()) {
@@ -46,6 +56,11 @@ public class DataStorageDriver {
 		}
 	}
 
+	/**
+	 * Reads from a file in the world folder
+	 * @param filename
+	 * @return lines of file, null if error
+	 */
 	public static ArrayList<String> readFromWorldFile(String filename) {
 		File f = new File(getSaveDir(), filename);
 
@@ -74,6 +89,11 @@ public class DataStorageDriver {
 		}
 	}
 
+	/**
+	 * Writes to a file in the world folder
+	 * @param filename
+	 * @param lines
+	 */
 	public static void writeToWorldFile(String filename, ArrayList<String> lines) {
 		File f = new File(getSaveDir(), filename);
 		writeToFile(f, lines);

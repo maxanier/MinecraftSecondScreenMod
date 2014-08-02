@@ -10,6 +10,11 @@ import cpw.mods.fml.client.config.IConfigElement;
 import de.maxgb.minecraft.second_screen.Configs;
 import de.maxgb.minecraft.second_screen.util.Constants;
 
+/**
+ * Gui for the modconfigs menu added by forge
+ * @author Max
+ *
+ */
 public class ModConfigGui extends GuiConfig {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

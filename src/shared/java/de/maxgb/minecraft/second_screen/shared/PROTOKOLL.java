@@ -1,5 +1,10 @@
 package de.maxgb.minecraft.second_screen.shared;
 
+/**
+ * Protokoll constant class for the communication
+ * @author Max
+ *
+ */
 public class PROTOKOLL {
 
 	// Listener managment commands

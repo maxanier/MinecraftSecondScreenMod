@@ -13,6 +13,12 @@ import net.minecraft.util.MovingObjectPosition;
 import cpw.mods.fml.common.FMLCommonHandler;
 import de.maxgb.minecraft.second_screen.util.Helper;
 
+/**
+ * Command for development purpose
+ * Returns all classes and interfaces the looked at block extends/implements
+ * @author Max
+ *
+ */
 @SuppressWarnings({ "rawtypes" })
 public class ListInterfacesCommand extends BaseCommand {
 

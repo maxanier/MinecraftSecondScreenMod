@@ -9,6 +9,11 @@ import net.minecraft.util.Vec3;
 
 import com.mojang.authlib.GameProfile;
 
+/**
+ * Helper class
+ * @author Max
+ *
+ */
 public class Helper {
 
 	/**

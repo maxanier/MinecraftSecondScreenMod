@@ -28,6 +28,10 @@ public class Configs {
 	public static Configuration config;
 	private static String TAG = "Configs";
 
+	/**
+	 * Creates a Configuration from the given config file and loads configs afterwards
+	 * @param configFile
+	 */
 	public static void init(File configFile) {
 		if (config == null) {
 			config = new Configuration(configFile);
@@ -37,6 +41,10 @@ public class Configs {
 
 	}
 
+	/**
+	 * Loads/refreshes the configuration and adds comments if there aren't any
+	 * {@link #init(File) init} has to be called once before using this
+	 */
 	public static void loadConfiguration() {
 
 		// Categegories

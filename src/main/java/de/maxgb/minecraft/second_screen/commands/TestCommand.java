@@ -13,6 +13,11 @@ import net.minecraft.util.MovingObjectPosition;
 import cpw.mods.fml.common.FMLCommonHandler;
 import de.maxgb.minecraft.second_screen.util.Helper;
 
+/**
+ * Test command for developent purpose
+ * @author Max
+ *
+ */
 @SuppressWarnings({ "rawtypes" })
 public class TestCommand extends BaseCommand {
 

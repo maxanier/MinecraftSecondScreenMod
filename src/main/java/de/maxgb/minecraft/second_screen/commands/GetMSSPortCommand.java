@@ -6,6 +6,11 @@ import java.util.List;
 import net.minecraft.command.ICommandSender;
 import de.maxgb.minecraft.second_screen.SecondScreenMod;
 
+/**
+ * Returns the port the mod listens to
+ * @author Max
+ *
+ */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class GetMSSPortCommand extends BaseCommand {
 

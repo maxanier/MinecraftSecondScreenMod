@@ -7,6 +7,11 @@ import de.maxgb.minecraft.second_screen.StandardListener;
 import de.maxgb.minecraft.second_screen.shared.PROTOKOLL;
 import de.maxgb.minecraft.second_screen.util.User;
 
+/**
+ * Listener which listens to server informations like online players
+ * @author Max
+ *
+ */
 public class ServerInfoListener extends StandardListener {
 
 	public ServerInfoListener(User user) {

@@ -12,6 +12,23 @@ import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyStorage;
 import de.maxgb.minecraft.second_screen.util.Logger;
 
+//@formatter:off
+/*
+ * JSONStructure:
+ * <"rf_es":JSONArray>
+ * 	contains one JSONArray for each block
+ * 	Array contains:
+ * 		<0=label:String>
+ * 		<1=energystored:int>
+ * 		<2=maxenergystored:int>
+ */
+//@formatter:on
+
+/**
+ * Observer class which is designed to observe redstone flux energy storage container which implement IEnergyStorage or IEngeryHandler
+ * @author Max
+ *
+ */
 public class RFEnergyStorageObserver implements ObservedBlock.ObservingType {
 
 	private final int ID = 4;

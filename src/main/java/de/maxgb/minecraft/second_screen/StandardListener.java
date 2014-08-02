@@ -4,6 +4,11 @@ import net.minecraft.server.MinecraftServer;
 import cpw.mods.fml.common.FMLCommonHandler;
 import de.maxgb.minecraft.second_screen.util.User;
 
+/**
+ * Abstract class which all Listeners have to extend
+ * @author Max
+ *
+ */
 public abstract class StandardListener {
 
 	protected User user;

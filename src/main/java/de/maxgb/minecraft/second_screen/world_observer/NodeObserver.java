@@ -11,6 +11,23 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.nodes.INode;
 import de.maxgb.minecraft.second_screen.util.Logger;
 
+//@formatter:off
+/* JSONStructure:
+ * <"th_node":JSONArray>
+ * which contains one JSONObject for each block
+ * JSONObject contains:
+ * 	<"label":String>
+ * 	<"aspects":JSONObject>
+ * 		which contains multiple
+ * 		<aspectname:aspectamount(int)
+ */
+//@formatter:on
+
+/**
+ * Observer class which is designed to observe Thaumcraft Nodes which implement INode
+ * @author Max
+ *
+ */
 public class NodeObserver implements ObservedBlock.ObservingType {
 
 	private final int ID = 2;

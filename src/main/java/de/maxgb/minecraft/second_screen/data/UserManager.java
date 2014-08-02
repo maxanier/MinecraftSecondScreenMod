@@ -11,6 +11,11 @@ import de.maxgb.minecraft.second_screen.util.Helper;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.util.User;
 
+/**
+ * Manages the second screen users
+ * @author Max
+ *
+ */
 public class UserManager {
 	private static final String TAG = "UserManager";
 	private static ArrayList<User> auth_users = new ArrayList<User>();

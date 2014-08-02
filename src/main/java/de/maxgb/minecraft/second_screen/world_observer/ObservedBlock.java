@@ -19,6 +19,11 @@ import de.maxgb.minecraft.second_screen.util.Logger;
 
 public class ObservedBlock {
 
+	/**
+	 * Interface for observingtypes e.g. InventoryObserver or FluidTankObserver
+	 * @author Max
+	 *
+	 */
 	public static interface ObservingType {
 		/**
 		 * Adds the informations about the given block to the next update
@@ -153,6 +158,9 @@ public class ObservedBlock {
 
 	}
 
+	/**
+	 * @return A list of all available ObservingTypes
+	 */
 	public static List<ObservingType> getObservingTypes() {
 		if (observingTypes == null) {
 			observingTypes = new ArrayList<ObservingType>();
@@ -176,6 +184,16 @@ public class ObservedBlock {
 
 	}
 
+	/**
+	 * Creates a ObservedBlock
+	 * @param label Name/Label
+	 * @param x X-Coord
+	 * @param y Y-Coord
+	 * @param z Z-Coord
+	 * @param dimensionId Worlddimension id
+	 * @param type ObservingType given by the corrosponding observer class
+	 * @param side Side it was registered from
+	 */
 	public ObservedBlock(String label, int x, int y, int z, int dimensionId, int type, int side) {
 		this.x = x;
 		this.y = y;

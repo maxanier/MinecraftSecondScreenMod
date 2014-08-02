@@ -14,6 +14,12 @@ import de.maxgb.minecraft.second_screen.util.Helper;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.world_observer.ObservedBlock;
 
+/**
+ * Manages all observed blocks
+ * Saves and loads them and makes sure that every player gets his private and the public block infos
+ * @author Max
+ *
+ */
 public class ObservingManager {
 
 	private static final String TAG = "ObservingManager";
@@ -90,7 +96,7 @@ public class ObservingManager {
 	 * @param username
 	 *            player who create the observation
 	 * @param publ
-	 *            if everyone should see this
+	 *            if everyone should see this, the method test if this is allowed
 	 * @param block
 	 *            block to add
 	 * @return false if an old observation was overriden

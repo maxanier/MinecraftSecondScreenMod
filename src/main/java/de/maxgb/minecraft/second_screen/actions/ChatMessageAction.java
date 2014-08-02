@@ -13,6 +13,11 @@ import de.maxgb.minecraft.second_screen.shared.PROTOKOLL;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.util.User;
 
+/**
+ * Action which can show a chat message ingame
+ * @author Max
+ *
+ */
 public class ChatMessageAction implements IAction {
 
 	private static final String TAG = "ChatMessage";
