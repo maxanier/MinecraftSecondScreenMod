@@ -129,16 +129,23 @@ public class ObservingManager {
 	 * @return if block was removed
 	 */
 	public static boolean removeObservedBlock(String username, String label) {
-		if (map.get(username) != null) {
-			if (map.get(username).remove(label) != null) {
-				return true;
+		try {
+			if (map.get(username) != null) {
+				if (map.get(username).remove(label) != null) {
+					return true;
+				}
 			}
+		} catch (NullPointerException e) {
 		}
 
-		if (!Configs.obs_publ_admin || Helper.isPlayerOpped(username)) {
-			if (map.get(PUBLIC_USER).remove(label) != null) {
-				return true;
+		try {
+			if (!Configs.obs_publ_admin || Helper.isPlayerOpped(username)) {
+				if (map.get(PUBLIC_USER).remove(label) != null) {
+					return true;
+				}
 			}
+		} catch (NullPointerException e) {
+
 		}
 
 		return false;

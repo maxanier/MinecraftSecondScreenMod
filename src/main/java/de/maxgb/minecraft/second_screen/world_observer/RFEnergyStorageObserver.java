@@ -48,7 +48,7 @@ public class RFEnergyStorageObserver implements ObservedBlock.ObservingType {
 
 	@Override
 	public boolean canObserve(Block block, TileEntity tile) {
-		if (tile != null && tile instanceof IEnergyHandler || tile instanceof IEnergyStorage) {
+		if (tile != null && (tile instanceof IEnergyHandler || tile instanceof IEnergyStorage)) {
 
 			return true;
 		}
