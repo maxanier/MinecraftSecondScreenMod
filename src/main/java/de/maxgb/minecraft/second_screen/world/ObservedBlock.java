@@ -2,9 +2,12 @@ package de.maxgb.minecraft.second_screen.world;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
 import org.json.JSONArray;
@@ -16,7 +19,61 @@ import de.maxgb.minecraft.second_screen.util.Logger;
 
 public class ObservedBlock {
 
+	public static interface ObservingType {
+		/**
+		 * Adds the informations about the given block to the next update
+		 * 
+		 * @param block
+		 * @param world
+		 *            World the block is in
+		 * @return false if the block should be removed from the list
+		 */
+		public boolean addInfoForBlock(World world, ObservedBlock block);
+
+		/**
+		 * Tests if this block/tile can be observed by this observer type
+		 * 
+		 * @param block
+		 * @param tile
+		 *            tile can be null
+		 * @return
+		 */
+		public boolean canObserve(Block block, TileEntity tile);
+
+		/**
+		 * Adds all information collected by
+		 * {@link #addInfoForBlock(ObservedBlock) addInfoForBlock} method. Does
+		 * not change anything if nothing to add
+		 * 
+		 * @param parent
+		 *            JSONObject the info shall be added to
+		 */
+		public void finishInfoCreation(JSONObject parent);
+
+		/**
+		 * 
+		 * @return ID for this type
+		 */
+		public int getId();
+
+		/**
+		 * 
+		 * @return A string which can be used to indentify this type in commands
+		 *         etc
+		 */
+		public String getIdentifier();
+
+		/**
+		 * 
+		 * @return A short string which can be used to indentify this type in
+		 *         commands etc
+		 */
+		public String getShortIndentifier();
+	}
+
 	private final static String TAG = "ObservedBlock";
+
+	private static List<ObservingType> observingTypes;
 
 	/**
 	 * Collects the data from all observed blocks, seperates them by types and
@@ -28,11 +85,6 @@ public class ObservedBlock {
 	 *            Minecraftworlds which contain the blocks
 	 */
 	public static void addObservingInfo(JSONObject parent, HashMap<Integer, WorldServer> worlds, String username) {
-
-		JSONArray redstone = new JSONArray();
-		JSONArray th_node = new JSONArray();
-		JSONObject inventory = new JSONObject();
-		JSONArray rf_es = new JSONArray();
 
 		ArrayList<ObservedBlock> blocks = ObservingManager.getObservedBlocks(username, true);
 		for (int i = 0; i < blocks.size(); i++) {
@@ -49,50 +101,23 @@ public class ObservedBlock {
 					Logger.w(TAG, "Blocks material is air -> remove");
 					ObservingManager.removeObservedBlock(username, block.label);
 				} else {
-					switch (block.type) {
-					case ObservingType.REDSTONE:
-						redstone.put(ObservingType.infoRedstone(world, block));
-						break;
-					case ObservingType.NODE:
-						JSONObject in = ObservingType.infoTh_Node(world, block);
-						if (in != null) {
-							th_node.put(in);
+					for (ObservingType t : getObservingTypes()) {
+						if (t.getId() == block.type) {
+							if (!t.addInfoForBlock(world, block)) {
+								ObservingManager.removeObservedBlock(username, block.label);
+							}
+							break;
 						}
-						else{
-							ObservingManager.removeObservedBlock(username, block.label);
-						}
-						break;
-					case ObservingType.INVENTORY:
-						JSONArray inv = ObservingType.infoInventory(world, block);
-						if (inv != null) {
-							inventory.put(block.label, inv);
-						}
-						else{
-							ObservingManager.removeObservedBlock(username, block.label);
-						}
-						break;
-					case ObservingType.RF_ENERGY_STORAGE:
-						JSONArray es = ObservingType.infoRF_Energy_Storage(world, block);
-						if(es!=null){
-							rf_es.put(es);
-						}
-						else{
-							ObservingManager.removeObservedBlock(username, block.label);
-						}
-						break;
+
 					}
 				}
 			}
 		}
 
-		if(redstone.length()>0)
-			parent.put("redstone", redstone);
-		if(th_node.length()>0)
-			parent.put("th_node", th_node);
-		if(inventory.length()>0)
-			parent.put("inv", inventory);
-		if(rf_es.length()>0)
-			parent.put("rf_es",rf_es);
+		for (ObservingType t : getObservingTypes()) {
+			t.finishInfoCreation(parent);
+		}
+
 	}
 
 	/**
@@ -113,12 +138,11 @@ public class ObservedBlock {
 			b.dimensionId = coord.getInt(3);
 
 			b.type = json.getInt("type");
-			
-			if(json.has("side")){
-				b.side=json.getInt("side");
-			}
-			else{
-				b.side=-1;
+
+			if (json.has("side")) {
+				b.side = json.getInt("side");
+			} else {
+				b.side = -1;
 			}
 
 			return b;
@@ -129,9 +153,21 @@ public class ObservedBlock {
 
 	}
 
+	public static List<ObservingType> getObservingTypes() {
+		if (observingTypes == null) {
+			observingTypes = new ArrayList<ObservingType>();
+			observingTypes.add(new RedstoneObserver());
+			observingTypes.add(new InventoryObserver());
+			observingTypes.add(new NodeObserver());
+			observingTypes.add(new RFEnergyStorageObserver());
+		}
+
+		return observingTypes;
+	}
+
 	protected String label;
 
-	protected int x, y, z, dimensionId,side;
+	protected int x, y, z, dimensionId, side;
 
 	protected int type;
 
@@ -139,14 +175,14 @@ public class ObservedBlock {
 
 	}
 
-	public ObservedBlock(String label, int x, int y, int z, int dimensionId, int type,int side) {
+	public ObservedBlock(String label, int x, int y, int z, int dimensionId, int type, int side) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 		this.label = label;
 		this.dimensionId = dimensionId;
 		this.type = type;
-		this.side=side;
+		this.side = side;
 	}
 
 	/**

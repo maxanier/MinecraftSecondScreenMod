@@ -52,7 +52,7 @@ public class ListInterfacesCommand extends BaseCommand {
 
 	@Override
 	public String getCommandUsage(ICommandSender var1) {
-		return "listinterfaces";
+		return "/listinterfaces";
 	}
 
 	@Override

@@ -22,22 +22,26 @@ public class RegisterUserCommand implements MssCommand.MssSubCommand {
 	}
 
 	@Override
-	public String getCommandUsage(ICommandSender var1) {
+	public void sendCommandUsage(ICommandSender var1) {
 		if (var1.getCommandSenderName().equals("Rcon") || var1.getCommandSenderName().equals("Server")) {
-			return "register <username> <password>";
+			sendMessage(var1, "register <username> <password>");
 		}
-		return "register <password>";
+		else{
+			sendMessage(var1,"register <password>");
+		}
 	}
 
 	@Override
 	public void processCommand(ICommandSender var1, String[] var2) {
 		if (var2 == null || var2.length == 0) {
-			BaseCommand.sendMessage(var1, "Missing arguments. Usage: " + getCommandUsage(var1));
+			sendMessage(var1, "Missing arguments. Usage:");
+			sendCommandUsage(var1);
 			return;
 		}
 		if (var1 instanceof EntityPlayer) {
 			if (var2.length != 1) {
-				BaseCommand.sendMessage(var1, "Wrong arguments. Usage: " + getCommandUsage(var1));
+				sendMessage(var1, "Wrong arguments. Usage:");
+				sendCommandUsage(var1);
 				return;
 			}
 
@@ -50,7 +54,8 @@ public class RegisterUserCommand implements MssCommand.MssSubCommand {
 
 		} else if (var1.getCommandSenderName().equals("Rcon") || var1.getCommandSenderName().equals("Server")) {
 			if (var2.length != 2) {
-				BaseCommand.sendMessage(var1, "Wrong arguments. Usage: " + getCommandUsage(var1));
+				sendMessage(var1, "Wrong arguments. Usage:");
+				sendCommandUsage(var1);
 				return;
 			}
 			int hash = var2[1].hashCode();
@@ -63,6 +68,10 @@ public class RegisterUserCommand implements MssCommand.MssSubCommand {
 			Logger.w(TAG, var1.getCommandSenderName() + " tried to add a user, but what is he?");
 		}
 
+	}
+	
+	private void sendMessage(ICommandSender var1,String msg){
+		BaseCommand.sendMessage(var1, msg);
 	}
 
 }

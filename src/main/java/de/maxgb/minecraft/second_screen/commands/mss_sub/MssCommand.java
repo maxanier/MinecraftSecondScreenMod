@@ -13,9 +13,9 @@ public class MssCommand extends BaseCommand {
 
 		public String getCommandName();
 
-		public String getCommandUsage(ICommandSender var1);
-
 		public void processCommand(ICommandSender var1, String[] var2);
+
+		public void sendCommandUsage(ICommandSender var1);
 	}
 
 	private List aliases;
@@ -63,11 +63,6 @@ public class MssCommand extends BaseCommand {
 
 	@Override
 	public String getCommandUsage(ICommandSender var1) {
-		sendMessage(var1, "Actions:");
-		for (MssSubCommand c : commands) {
-			sendMessage(var1, c.getCommandUsage(var1));
-			// usage += c.getCommandUsage(var1) + " OR ";
-		}
 
 		return "/mss <action> <params>";
 
@@ -101,8 +96,19 @@ public class MssCommand extends BaseCommand {
 				return;
 			}
 		}
-		BaseCommand.sendMessage(var1, "Action not found. Usage: " + getCommandUsage(var1));
+		if (!var2[0].equals("help")) {
+			BaseCommand.sendMessage(var1, "Action not found.");
+		}
+		sendActions(var1);
 
+	}
+
+	private void sendActions(ICommandSender var1) {
+		sendMessage(var1, getCommandUsage(var1));
+		sendMessage(var1, "Actions:");
+		for (MssSubCommand c : commands) {
+			c.sendCommandUsage(var1);
+		}
 	}
 
 }

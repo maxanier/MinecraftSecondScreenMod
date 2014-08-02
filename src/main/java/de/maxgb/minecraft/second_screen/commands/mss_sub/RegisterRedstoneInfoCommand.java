@@ -1,16 +1,14 @@
 package de.maxgb.minecraft.second_screen.commands.mss_sub;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockLever;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MovingObjectPosition;
 import de.maxgb.minecraft.second_screen.commands.BaseCommand;
 import de.maxgb.minecraft.second_screen.data.ObservingManager;
 import de.maxgb.minecraft.second_screen.util.Helper;
-import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.world.ObservedBlock;
-import de.maxgb.minecraft.second_screen.world.ObservingType;
+import de.maxgb.minecraft.second_screen.world.RedstoneObserver;
 
 public class RegisterRedstoneInfoCommand implements MssCommand.MssSubCommand {
 
@@ -34,15 +32,11 @@ public class RegisterRedstoneInfoCommand implements MssCommand.MssSubCommand {
 	}
 
 	@Override
-	public String getCommandUsage(ICommandSender var1) {
-		return "redinfo add <label> or redinfo remove <label>";
-	}
-
-	@Override
 	public void processCommand(ICommandSender var1, String[] var2) {
 
 		if (var2 == null || var2.length < 2) {
-			sendMessage(var1, "Invalid arguments. Usage: " + getCommandUsage(var1));
+			sendMessage(var1, "Invalid arguments. Usage:");
+			sendCommandUsage(var1);
 			return;
 		}
 
@@ -77,16 +71,12 @@ public class RegisterRedstoneInfoCommand implements MssCommand.MssSubCommand {
 			sendMessage(var1,
 					"You are looking at: " + p.blockX + "," + p.blockY + "," + p.blockZ + " " + b.getLocalizedName());
 
-			if (b instanceof BlockLever) {
-				Logger.i(TAG, "Registering lever");
-			} else if (!b.isNormalCube()) {
-				Logger.w(TAG, "Block is not a normal cube");
-				sendMessage(var1, "You can only register solid blocks or levers");
-				return;
+			if (!RedstoneObserver.canObserve(b)) {
+				sendMessage(var1, "You can only observe solid blocks and levers");
 			}
 
 			if (ObservingManager.observeBlock(var1.getCommandSenderName(), publ, new ObservedBlock(var2[1], p.blockX,
-					p.blockY, p.blockZ, player.worldObj.provider.dimensionId, ObservingType.REDSTONE,-1))) {
+					p.blockY, p.blockZ, player.worldObj.provider.dimensionId, RedstoneObserver.ID, -1))) {
 				sendMessage(var1, "Successfully added block to observer list.");
 			} else {
 				sendMessage(var1,
@@ -102,11 +92,18 @@ public class RegisterRedstoneInfoCommand implements MssCommand.MssSubCommand {
 				sendMessage(var1, "Failed to remove block from observer list. There is no block with this label");
 			}
 		} else {
-			sendMessage(var1, "Invalid arguments. Usage: " + getCommandUsage(var1));
+			sendMessage(var1, "Invalid arguments. Usage:");
+			sendCommandUsage(var1);
 			return;
 
 		}
 
+	}
+
+	@Override
+	public void sendCommandUsage(ICommandSender var1) {
+		sendMessage(var1, "redinfo add <label>");
+		sendMessage(var1, "redinfo remove <label>");
 	}
 
 	private void sendMessage(ICommandSender var1, String msg) {

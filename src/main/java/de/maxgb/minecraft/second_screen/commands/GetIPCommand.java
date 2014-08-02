@@ -49,7 +49,7 @@ public class GetIPCommand extends BaseCommand {
 
 	@Override
 	public String getCommandUsage(ICommandSender var1) {
-		return "getIP";
+		return "/getIP";
 	}
 
 	@Override

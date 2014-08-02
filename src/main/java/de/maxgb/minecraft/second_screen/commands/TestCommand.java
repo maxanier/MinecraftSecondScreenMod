@@ -51,7 +51,7 @@ public class TestCommand extends BaseCommand {
 
 	@Override
 	public String getCommandUsage(ICommandSender var1) {
-		return "msstest";
+		return "/msstest";
 	}
 
 	@Override

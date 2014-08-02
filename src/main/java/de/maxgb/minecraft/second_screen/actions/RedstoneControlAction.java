@@ -12,7 +12,7 @@ import de.maxgb.minecraft.second_screen.util.ForceUpdateEvent;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.util.User;
 import de.maxgb.minecraft.second_screen.world.ObservedBlock;
-import de.maxgb.minecraft.second_screen.world.ObservingType;
+import de.maxgb.minecraft.second_screen.world.RedstoneObserver;
 
 public class RedstoneControlAction implements IAction {
 
@@ -53,7 +53,7 @@ public class RedstoneControlAction implements IAction {
 		for (ObservedBlock o : ObservingManager.getObservedBlocks(user.username, true)) {
 			if (o.getLabel().equals(label)) {
 
-				if (ObservingType.setLeverState(o, state)) {
+				if (RedstoneObserver.setLeverState(o, state)) {
 					JSONObject result = new JSONObject();
 					result.put("success", 1);
 					result.put("allowed", true);
