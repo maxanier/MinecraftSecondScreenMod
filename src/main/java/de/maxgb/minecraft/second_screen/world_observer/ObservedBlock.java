@@ -158,6 +158,7 @@ public class ObservedBlock {
 			observingTypes = new ArrayList<ObservingType>();
 			observingTypes.add(new RedstoneObserver());
 			observingTypes.add(new InventoryObserver());
+			observingTypes.add(new FluidTankObserver());
 			observingTypes.add(new NodeObserver());
 			observingTypes.add(new RFEnergyStorageObserver());
 		}
