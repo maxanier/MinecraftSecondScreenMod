@@ -12,6 +12,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
 import de.maxgb.minecraft.second_screen.actions.ActionManager;
 import de.maxgb.minecraft.second_screen.commands.GetIPCommand;
 import de.maxgb.minecraft.second_screen.commands.GetMSSPortCommand;
@@ -32,6 +33,7 @@ public class SecondScreenMod {
 	public WebSocketListener webSocketListener;
 	public int port;
 	public String hostname;
+	public String latestOnlinePlayer="None since last restart";
 	
 	@Mod.Instance(Constants.MOD_ID)
 	public static SecondScreenMod instance;
@@ -41,6 +43,7 @@ public class SecondScreenMod {
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		FMLCommonHandler.instance().bus().register(new Configs());
+		FMLCommonHandler.instance().bus().register(this);
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 
@@ -138,6 +141,11 @@ public class SecondScreenMod {
 			Logger.i(TAG, "Saving data");
 			saveData();
 		}
+	}
+	
+	@SubscribeEvent
+	public void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent e){
+		latestOnlinePlayer=e.player.getDisplayName();
 	}
 
 }
