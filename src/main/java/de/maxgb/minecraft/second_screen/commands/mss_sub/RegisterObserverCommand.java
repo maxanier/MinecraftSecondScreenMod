@@ -11,6 +11,7 @@ import net.minecraft.util.MovingObjectPosition;
 import de.maxgb.minecraft.second_screen.commands.BaseCommand;
 import de.maxgb.minecraft.second_screen.data.ObservingManager;
 import de.maxgb.minecraft.second_screen.util.Helper;
+import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.world_observer.ObservedBlock;
 import de.maxgb.minecraft.second_screen.world_observer.RedstoneObserver;
 import de.maxgb.minecraft.second_screen.world_observer.ObservedBlock.ObservingType;
@@ -40,13 +41,17 @@ public class RegisterObserverCommand implements MssCommand.MssSubCommand {
 	@Override
 	public void processCommand(ICommandSender var1, String[] var2) {
 
-		if (var2 == null || var2.length < 2 || var2.length > 4) {
-			sendMessage(var1, "Invalid arguments. Usage:");
-			sendCommandUsage(var1);
+		if (var2 == null || var2.length < 1) {
+			invalidArguments(var1);
 			return;
 		}
 
 		if (var2[0].equals("add")) {
+			
+			if(var2.length<2|| var2.length>4){
+				invalidArguments(var1);
+				return;
+			}
 
 			EntityPlayer player;
 
@@ -145,6 +150,12 @@ public class RegisterObserverCommand implements MssCommand.MssSubCommand {
 			}
 
 		} else if (var2[0].equals("remove")) {
+			
+			if(var2.length!=2){
+				invalidArguments(var1);
+				return;
+			}
+			
 			if (ObservingManager.removeObservedBlock(var1.getCommandSenderName(), var2[1])) {
 				sendMessage(var1, "Successfully removed block from observer list");
 			} else {
@@ -158,10 +169,7 @@ public class RegisterObserverCommand implements MssCommand.MssSubCommand {
 				}
 			}
 		} else {
-
-			sendMessage(var1, "Invalid arguments. Usage:");
-			sendCommandUsage(var1);
-			return;
+			invalidArguments(var1);
 		}
 
 	}
@@ -175,6 +183,12 @@ public class RegisterObserverCommand implements MssCommand.MssSubCommand {
 
 	private void sendMessage(ICommandSender var1, String msg) {
 		BaseCommand.sendMessage(var1, msg);
+	}
+	
+	private void invalidArguments(ICommandSender var1){
+		Logger.i(TAG, "Invalid arguments");
+		sendMessage(var1, "Invalid arguments. Usage:");
+		sendCommandUsage(var1);
 	}
 
 }
