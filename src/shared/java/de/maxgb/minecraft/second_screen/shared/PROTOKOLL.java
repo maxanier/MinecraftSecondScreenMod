@@ -32,6 +32,11 @@ public class PROTOKOLL {
 	 * "label"(String),"state"(Boolean)
 	 */
 	public static final String A_RED_CONTROL = "rc";
+	
+	/**
+	 * Asks for the latest chat messages. No params
+	 */
+	public static final String A_GET_CHAT = "gc";
 
 	// Connection
 

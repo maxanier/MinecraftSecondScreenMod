@@ -1,6 +1,8 @@
 package de.maxgb.minecraft.second_screen.actions;
 
 
+import net.minecraftforge.common.MinecraftForge;
+
 import org.json.JSONObject;
 
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -46,7 +48,7 @@ public class ChatMessageAction implements IAction {
 
 		Helper.sendChatMessage("[MSS] <" + user.username + "> " + msg);
 
-		FMLCommonHandler.instance().bus().post(new RemoteChatMessageEvent(user.username, msg));
+		MinecraftForge.EVENT_BUS.post(new RemoteChatMessageEvent(user.username, msg));
 
 		JSONObject result = new JSONObject();
 		result.put("success", 1);
