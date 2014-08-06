@@ -42,6 +42,9 @@ public class WebSocketHandler implements ActionResultListener {
 	}
 
 	public void close() {
+		for(StandardListener l:listeners){
+			l.onUnregister();
+		}
 		socket.close();
 
 		remove = true;
@@ -255,6 +258,7 @@ public class WebSocketHandler implements ActionResultListener {
 			for (int i = 0; i < listeners.size(); i++) {
 				StandardListener sl = listeners.get(i);
 				if (sl instanceof PlayerInfoListener) {
+					listeners.get(i).onUnregister();
 					listeners.remove(i);
 				}
 			}
@@ -264,6 +268,7 @@ public class WebSocketHandler implements ActionResultListener {
 			for (int i = 0; i < listeners.size(); i++) {
 				StandardListener sl = listeners.get(i);
 				if (sl instanceof PlayerInventoryListener) {
+					listeners.get(i).onUnregister();
 					listeners.remove(i);
 				}
 			}
@@ -271,12 +276,14 @@ public class WebSocketHandler implements ActionResultListener {
 		} else if (l.startsWith(PROTOKOLL.SERVER_INFO_LISTENER)) {
 			for (int i = 0; i < listeners.size(); i++) {
 				if (listeners.get(i) instanceof ServerInfoListener) {
+					listeners.get(i).onUnregister();
 					listeners.remove(i);
 				}
 			}
 		} else if (l.startsWith(PROTOKOLL.WORLD_INFO_LISTENER)) {
 			for (int i = 0; i < listeners.size(); i++) {
 				if (listeners.get(i) instanceof WorldInfoListener) {
+					listeners.get(i).onUnregister();
 					listeners.remove(i);
 				}
 			}
@@ -284,11 +291,15 @@ public class WebSocketHandler implements ActionResultListener {
 		} else if (l.startsWith(PROTOKOLL.CHAT_LISTENER)) {
 			for (int i = 0; i < listeners.size(); i++) {
 				if (listeners.get(i) instanceof ChatListener) {
+					listeners.get(i).onUnregister();
 					listeners.remove(i);
 					break;
 				}
 			}
 		} else if (l.startsWith(PROTOKOLL.ALL_LISTENERS)) {
+			for(StandardListener li:listeners){
+				li.onUnregister();
+			}
 			listeners = new ArrayList<StandardListener>();
 			System.gc();
 		}

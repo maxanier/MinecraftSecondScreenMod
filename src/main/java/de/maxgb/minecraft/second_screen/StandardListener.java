@@ -56,5 +56,13 @@ public abstract class StandardListener {
 	 *         the client listener
 	 */
 	public abstract String update();
+	
+	/**
+	 * Is called when the listener is removed.
+	 * There might be a few situations where this fails.
+	 */
+	public void onUnregister(){
+		
+	}
 
 }
