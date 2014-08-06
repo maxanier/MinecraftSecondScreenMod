@@ -2,6 +2,10 @@ package de.maxgb.minecraft.second_screen.info_listener;
 
 import java.util.Date;
 
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatStyle;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
@@ -16,6 +20,7 @@ import cpw.mods.fml.common.gameevent.PlayerEvent;
 import de.maxgb.minecraft.second_screen.Configs;
 import de.maxgb.minecraft.second_screen.StandardListener;
 import de.maxgb.minecraft.second_screen.shared.PROTOKOLL;
+import de.maxgb.minecraft.second_screen.util.Helper;
 import de.maxgb.minecraft.second_screen.util.User;
 
 /**
@@ -50,6 +55,8 @@ public class ChatListener extends StandardListener {
 		msg.put("time", getCurrentTimeString());
 		msg.put("msg", "Connected to chat");
 		buffer.put(msg);
+
+		Helper.sendChatMessage("[MSS] "+user.username+" connected to second screen chat", EnumChatFormatting.YELLOW);
 	}
 
 	@SubscribeEvent
@@ -130,6 +137,11 @@ public class ChatListener extends StandardListener {
 		buffer = new JSONArray();
 
 		return PROTOKOLL.CHAT_LISTENER + "-" + response.toString();
+	}
+	
+	@Override
+	public void onUnregister(){
+		Helper.sendChatMessage("[MSS] "+user.username+" disconnected from second screen chat", EnumChatFormatting.YELLOW);
 	}
 
 }
