@@ -1,5 +1,8 @@
 package de.maxgb.minecraft.second_screen.world_observer;
 
+import java.util.HashMap;
+import java.util.Map.Entry;
+
 import net.minecraft.block.Block;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -40,11 +43,22 @@ public class InventoryObserver implements ObservedBlock.ObservingType {
 		try {
 			JSONArray inv = new JSONArray();
 			IInventory chest = (IInventory) world.getTileEntity(block.x, block.y, block.z);
+			HashMap<String,Integer> items=new HashMap<String,Integer>();
 			for (int i = 0; i < chest.getSizeInventory(); i++) {
 				ItemStack s = chest.getStackInSlot(i);
 				if (s != null) {
-					inv.put(new JSONArray().put(s.getDisplayName()).put(s.stackSize));
+					String name=s.getDisplayName();
+					if(items.containsKey(name)){
+						items.put(name, items.get(name)+s.stackSize);
+					}
+					else{
+						items.put(name, s.stackSize);
+					}
+					
 				}
+			}
+			for(Entry e:items.entrySet()){
+				inv.put(new JSONArray().put(e.getKey()).put(e.getValue()));
 			}
 			info.put(block.label, inv);
 			return true;
