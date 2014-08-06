@@ -3,11 +3,17 @@ package de.maxgb.minecraft.second_screen.util;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatStyle;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 
 import com.mojang.authlib.GameProfile;
+
+import cpw.mods.fml.common.FMLCommonHandler;
 
 /**
  * Helper class
@@ -74,5 +80,41 @@ public class Helper {
 			return false;
 		}
 		return MinecraftServer.getServer().getConfigurationManager().func_152596_g(p);
+	}
+	
+	/**
+	 * Sends a chat message to server chat
+	 * @param msg Message
+	 */
+	public static void sendChatMessage(String msg){
+		sendChatMessage(msg,EnumChatFormatting.BLACK);
+	}
+	
+	/**
+	 * Sends a chat message to server chat
+	 * @param msg Message
+	 * @param color Color
+	 */
+	public static void sendChatMessage(String msg,EnumChatFormatting color){
+		sendChatMessage(msg,color,false,false,false);
+	}
+	
+	/**
+	 * Sends a chat message to server chat
+	 * @param msg
+	 * @param color
+	 * @param bold
+	 * @param underlined
+	 * @param italic
+	 */
+	public static void sendChatMessage(String msg,EnumChatFormatting color,boolean bold,boolean underlined,boolean italic){
+		IChatComponent com=new ChatComponentText(msg);
+		ChatStyle style=new ChatStyle().setColor(color);
+		style.setBold(bold);
+		style.setUnderlined(underlined);
+		style.setItalic(italic);
+		com.setChatStyle(style);
+		
+		MinecraftServer.getServer().getConfigurationManager().sendChatMsg(com);
 	}
 }

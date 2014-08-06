@@ -1,7 +1,5 @@
 package de.maxgb.minecraft.second_screen.actions;
 
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentText;
 
 import org.json.JSONObject;
 
@@ -10,6 +8,7 @@ import de.maxgb.minecraft.second_screen.actions.ActionManager.ActionResultListen
 import de.maxgb.minecraft.second_screen.actions.ActionManager.IAction;
 import de.maxgb.minecraft.second_screen.info_listener.ChatListener.RemoteChatMessageEvent;
 import de.maxgb.minecraft.second_screen.shared.PROTOKOLL;
+import de.maxgb.minecraft.second_screen.util.Helper;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.util.User;
 
@@ -44,9 +43,8 @@ public class ChatMessageAction implements IAction {
 			return;
 		}
 		String msg = param.getString("msg");
-		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 
-		server.getConfigurationManager().sendChatMsg(new ChatComponentText("[MSS] <" + user.username + "> " + msg));
+		Helper.sendChatMessage("[MSS] <" + user.username + "> " + msg);
 
 		FMLCommonHandler.instance().bus().post(new RemoteChatMessageEvent(user.username, msg));
 
