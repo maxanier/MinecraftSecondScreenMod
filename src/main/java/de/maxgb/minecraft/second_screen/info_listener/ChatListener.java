@@ -30,6 +30,10 @@ import de.maxgb.minecraft.second_screen.util.User;
  */
 public class ChatListener extends StandardListener {
 
+	/**
+	 * Is fired on MinecraftForge.Bus
+	 *
+	 */
 	public static class RemoteChatMessageEvent extends Event {
 		public final String username;
 		public final String msg;
@@ -52,7 +56,7 @@ public class ChatListener extends StandardListener {
 		JSONObject msg = new JSONObject();
 		msg.put("info", true);
 		msg.put("color", "orange");
-		msg.put("time", getCurrentTimeString());
+		msg.put("time", Helper.getCurrentTimeString());
 		msg.put("msg", "Connected to chat");
 		buffer.put(msg);
 
@@ -66,22 +70,10 @@ public class ChatListener extends StandardListener {
 		msg.put("sender", e.username);
 		msg.put("msg", e.message);
 
-		msg.put("time", getCurrentTimeString());
+		msg.put("time", Helper.getCurrentTimeString());
 		buffer.put(msg);
 	}
 
-	private String getCurrentTimeString() {
-		Date timeDate = new Date(System.currentTimeMillis());
-		String min = "" + timeDate.getMinutes();
-		if (min.length() < 2) {
-			min = "0" + min;
-		}
-		String h = "" + timeDate.getHours();
-		if (h.length() < 2) {
-			h = "0" + h;
-		}
-		return h + ":" + min;
-	}
 
 	@SubscribeEvent
 	public void mssChatMessage(RemoteChatMessageEvent e) {
@@ -89,8 +81,9 @@ public class ChatListener extends StandardListener {
 		msg.put("sender", "mss~" + e.username);
 		msg.put("msg", e.msg);
 
-		msg.put("time", getCurrentTimeString());
+		msg.put("time", Helper.getCurrentTimeString());
 		buffer.put(msg);
+		
 	}
 
 	@SubscribeEvent
@@ -98,7 +91,7 @@ public class ChatListener extends StandardListener {
 		JSONObject msg = new JSONObject();
 		msg.put("info", true);
 		msg.put("color", "orange");
-		msg.put("time", getCurrentTimeString());
+		msg.put("time", Helper.getCurrentTimeString());
 		msg.put("msg", e.entityPlayer.getDisplayName() + " died");
 		buffer.put(msg);
 	}
@@ -108,7 +101,7 @@ public class ChatListener extends StandardListener {
 		JSONObject msg = new JSONObject();
 		msg.put("info", true);
 		msg.put("color", "orange");
-		msg.put("time", getCurrentTimeString());
+		msg.put("time", Helper.getCurrentTimeString());
 		msg.put("msg", e.player.getDisplayName() + " joined");
 		buffer.put(msg);
 
@@ -119,7 +112,7 @@ public class ChatListener extends StandardListener {
 		JSONObject msg = new JSONObject();
 		msg.put("info", true);
 		msg.put("color", "orange");
-		msg.put("time", getCurrentTimeString());
+		msg.put("time", Helper.getCurrentTimeString());
 		msg.put("msg", e.player.getDisplayName() + " left");
 		msg.put("success", 1);
 		buffer.put(msg);

@@ -1,5 +1,7 @@
 package de.maxgb.minecraft.second_screen.util;
 
+import java.util.Date;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
@@ -87,7 +89,7 @@ public class Helper {
 	 * @param msg Message
 	 */
 	public static void sendChatMessage(String msg){
-		sendChatMessage(msg,EnumChatFormatting.BLACK);
+		sendChatMessage(msg,EnumChatFormatting.WHITE);
 	}
 	
 	/**
@@ -117,4 +119,18 @@ public class Helper {
 		
 		MinecraftServer.getServer().getConfigurationManager().sendChatMsg(com);
 	}
+	
+	public static String getCurrentTimeString() {
+		Date timeDate = new Date(System.currentTimeMillis());
+		String min = "" + timeDate.getMinutes();
+		if (min.length() < 2) {
+			min = "0" + min;
+		}
+		String h = "" + timeDate.getHours();
+		if (h.length() < 2) {
+			h = "0" + h;
+		}
+		return h + ":" + min;
+	}
+
 }
