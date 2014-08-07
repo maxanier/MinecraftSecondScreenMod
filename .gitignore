@@ -6,3 +6,4 @@ bin/
 autoupload.jar
 uploadbuilds.bat
 build.bat
+/bin
