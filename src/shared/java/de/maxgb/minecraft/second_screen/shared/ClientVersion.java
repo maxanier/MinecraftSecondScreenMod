@@ -1,5 +1,10 @@
 package de.maxgb.minecraft.second_screen.shared;
 
+/**
+ * Class which contains client version informations
+ * @author Max
+ *
+ */
 public class ClientVersion {
 
 	public static class ClientInfo {
@@ -12,6 +17,12 @@ public class ClientVersion {
 		}
 	}
 
+	/**
+	 * Returns if a update is available
+	 * @param id client app id
+	 * @param version client app version
+	 * @return
+	 */
 	public static boolean isUpdateAvailable(String id, int version) {
 		if (id.endsWith("ANDROID4")) {
 			if (version < 19) {
@@ -26,6 +37,12 @@ public class ClientVersion {
 		return false;
 	}
 
+	/**
+	 * Returns if a update is necessary
+	 * @param id client app id
+	 * @param version client app version
+	 * @return
+	 */
 	public static boolean isUpdateNecessary(String id, int version) {
 		if (id.equals("ANDROID4")) {
 			if (version < 18) {

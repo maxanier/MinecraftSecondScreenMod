@@ -1,6 +1,8 @@
 package de.maxgb.minecraft.second_screen;
 
-import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.WorldEvent;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -9,57 +11,56 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
 import de.maxgb.minecraft.second_screen.actions.ActionManager;
 import de.maxgb.minecraft.second_screen.commands.GetIPCommand;
 import de.maxgb.minecraft.second_screen.commands.GetMSSPortCommand;
-import de.maxgb.minecraft.second_screen.commands.MssCommand;
-import de.maxgb.minecraft.second_screen.commands.RegisterObserverCommand;
-import de.maxgb.minecraft.second_screen.commands.RegisterRedstoneInfoCommand;
-import de.maxgb.minecraft.second_screen.commands.RegisterUserCommand;
+import de.maxgb.minecraft.second_screen.commands.ListInterfacesCommand;
 import de.maxgb.minecraft.second_screen.commands.TestCommand;
-import de.maxgb.minecraft.second_screen.data.DataStorageDriver;
+import de.maxgb.minecraft.second_screen.commands.mss_sub.MssCommand;
+import de.maxgb.minecraft.second_screen.commands.mss_sub.RegisterObserverCommand;
+import de.maxgb.minecraft.second_screen.commands.mss_sub.RegisterRedstoneInfoCommand;
+import de.maxgb.minecraft.second_screen.commands.mss_sub.RegisterUserCommand;
 import de.maxgb.minecraft.second_screen.data.ObservingManager;
 import de.maxgb.minecraft.second_screen.data.UserManager;
 import de.maxgb.minecraft.second_screen.util.Constants;
 import de.maxgb.minecraft.second_screen.util.Logger;
 
-@Mod(modid = Constants.MOD_ID, name = Constants.NAME, version = Constants.VERSION, dependencies = "required-after:FML")
+@Mod(modid = Constants.MOD_ID, name = Constants.NAME, version = Constants.VERSION, dependencies = "required-after:FML", guiFactory = Constants.GUI_FACTORY_CLASS)
 public class SecondScreenMod {
 
-	public static WebSocketListener webSocketListener;
-	public static int port;
-	public static String hostname;
-	private static int id = 0;
-	public static boolean connected;
-	public static String error;
-
-	public static int id() {
-		return id++;
-	}
+	public WebSocketListener webSocketListener;
+	public int port;
+	public String hostname;
+	public String latestOnlinePlayer="None since last restart";
+	
+	@Mod.Instance(Constants.MOD_ID)
+	public static SecondScreenMod instance;
 
 	private final String TAG = "Main";
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
+		FMLCommonHandler.instance().bus().register(new Configs());
+		FMLCommonHandler.instance().bus().register(this);
+		MinecraftForge.EVENT_BUS.register(this);
+	}
+
+	@EventHandler
+	public void postInit(FMLPostInitializationEvent event) {
 
 	}
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 
-		Logger.init(event.getModLog());
+		Configs.init(event.getSuggestedConfigurationFile());
 
-		Configuration config = new Configuration(
-				event.getSuggestedConfigurationFile());
+		//Sends message to VersionChecker if installed
+		FMLInterModComms.sendRuntimeMessage(Constants.MOD_ID, "VersionChecker", "addVersionCheck",
+				Constants.UPDATE_FILE_LINK);
 
-		Configs.load(config);
-		FMLInterModComms.sendRuntimeMessage(Constants.MOD_ID, "VersionChecker", "addVersionCheck", Constants.UPDATE_FILE_LINK);
-
-	}
-	
-	@EventHandler
-	public void postInit(FMLPostInitializationEvent event){
-		
 	}
 
 	@EventHandler
@@ -68,14 +69,13 @@ public class SecondScreenMod {
 		hostname = Configs.hostname;
 		port = Configs.port;
 
-		DataStorageDriver.setWorldName(e.getServer().getFolderName());
 
-		ObservingManager.loadObservingFile();
+		loadData();
 
-		UserManager.loadUsers();
-
+		//Register actions
 		ActionManager.registerStandardActions();
 
+		//Register Commands
 		MssCommand mssc = new MssCommand();
 		mssc.addSubCommand(new RegisterRedstoneInfoCommand());
 		mssc.addSubCommand(new RegisterUserCommand());
@@ -84,6 +84,7 @@ public class SecondScreenMod {
 		e.registerServerCommand(new GetIPCommand());
 		e.registerServerCommand(new GetMSSPortCommand());
 		e.registerServerCommand(new TestCommand());
+		e.registerServerCommand(new ListInterfacesCommand());
 
 		start();
 	}
@@ -91,11 +92,13 @@ public class SecondScreenMod {
 	@EventHandler
 	public void serverStopping(FMLServerStoppingEvent e) {
 		stop();
-		ObservingManager.saveObservingFile();
-		UserManager.saveUsers();
+		saveData();
 		ActionManager.removeAllActions();
 	}
 
+	/**
+	 * Creates and starts the websocket 
+	 */
 	private void start() {
 		Logger.i(TAG, "Starting SecondScreenMod");
 
@@ -103,11 +106,46 @@ public class SecondScreenMod {
 		webSocketListener.start();
 	}
 
+	/**
+	 * Stops the websocket
+	 */
 	private void stop() {
 		Logger.i(TAG, "Stopping SecondScreenMod");
 		webSocketListener.stop();
 
-		webSocketListener=null;
+		webSocketListener = null;
+	}
+	
+	/**
+	 * Loads saved informations from files
+	 */
+	private void loadData(){
+		//Loads observation files
+		ObservingManager.loadObservingFile();
+
+		//Load users
+		UserManager.loadUsers();
+	}
+	
+	/**
+	 * Saves all informations to files
+	 */
+	private void saveData(){
+		ObservingManager.saveObservingFile();
+		UserManager.saveUsers();
+	}
+	
+	@SubscribeEvent
+	public void onWorldSave(WorldEvent.Save e){
+		if(e.world.provider.dimensionId==0){
+			Logger.i(TAG, "Saving data");
+			saveData();
+		}
+	}
+	
+	@SubscribeEvent
+	public void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent e){
+		latestOnlinePlayer=e.player.getDisplayName();
 	}
 
 }

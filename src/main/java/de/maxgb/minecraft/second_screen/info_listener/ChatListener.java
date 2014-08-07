@@ -2,6 +2,10 @@ package de.maxgb.minecraft.second_screen.info_listener;
 
 import java.util.Date;
 
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatStyle;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
@@ -16,10 +20,20 @@ import cpw.mods.fml.common.gameevent.PlayerEvent;
 import de.maxgb.minecraft.second_screen.Configs;
 import de.maxgb.minecraft.second_screen.StandardListener;
 import de.maxgb.minecraft.second_screen.shared.PROTOKOLL;
+import de.maxgb.minecraft.second_screen.util.Helper;
 import de.maxgb.minecraft.second_screen.util.User;
 
+/**
+ * Listener which listens to chat messages and other chat related events
+ * @author Max
+ *
+ */
 public class ChatListener extends StandardListener {
 
+	/**
+	 * Is fired on MinecraftForge.Bus
+	 *
+	 */
 	public static class RemoteChatMessageEvent extends Event {
 		public final String username;
 		public final String msg;
@@ -42,9 +56,11 @@ public class ChatListener extends StandardListener {
 		JSONObject msg = new JSONObject();
 		msg.put("info", true);
 		msg.put("color", "orange");
-		msg.put("time", getCurrentTimeString());
+		msg.put("time", Helper.getCurrentTimeString());
 		msg.put("msg", "Connected to chat");
 		buffer.put(msg);
+
+		Helper.sendChatMessage("[MSS] "+user.username+" connected to second screen chat", EnumChatFormatting.YELLOW);
 	}
 
 	@SubscribeEvent
@@ -54,22 +70,10 @@ public class ChatListener extends StandardListener {
 		msg.put("sender", e.username);
 		msg.put("msg", e.message);
 
-		msg.put("time", getCurrentTimeString());
+		msg.put("time", Helper.getCurrentTimeString());
 		buffer.put(msg);
 	}
 
-	private String getCurrentTimeString() {
-		Date timeDate = new Date(System.currentTimeMillis());
-		String min = "" + timeDate.getMinutes();
-		if (min.length() < 2) {
-			min = "0" + min;
-		}
-		String h = "" + timeDate.getHours();
-		if (h.length() < 2) {
-			h = "0" + h;
-		}
-		return h + ":" + min;
-	}
 
 	@SubscribeEvent
 	public void mssChatMessage(RemoteChatMessageEvent e) {
@@ -77,8 +81,9 @@ public class ChatListener extends StandardListener {
 		msg.put("sender", "mss~" + e.username);
 		msg.put("msg", e.msg);
 
-		msg.put("time", getCurrentTimeString());
+		msg.put("time", Helper.getCurrentTimeString());
 		buffer.put(msg);
+		
 	}
 
 	@SubscribeEvent
@@ -86,7 +91,7 @@ public class ChatListener extends StandardListener {
 		JSONObject msg = new JSONObject();
 		msg.put("info", true);
 		msg.put("color", "orange");
-		msg.put("time", getCurrentTimeString());
+		msg.put("time", Helper.getCurrentTimeString());
 		msg.put("msg", e.entityPlayer.getDisplayName() + " died");
 		buffer.put(msg);
 	}
@@ -96,7 +101,7 @@ public class ChatListener extends StandardListener {
 		JSONObject msg = new JSONObject();
 		msg.put("info", true);
 		msg.put("color", "orange");
-		msg.put("time", getCurrentTimeString());
+		msg.put("time", Helper.getCurrentTimeString());
 		msg.put("msg", e.player.getDisplayName() + " joined");
 		buffer.put(msg);
 
@@ -107,7 +112,7 @@ public class ChatListener extends StandardListener {
 		JSONObject msg = new JSONObject();
 		msg.put("info", true);
 		msg.put("color", "orange");
-		msg.put("time", getCurrentTimeString());
+		msg.put("time", Helper.getCurrentTimeString());
 		msg.put("msg", e.player.getDisplayName() + " left");
 		msg.put("success", 1);
 		buffer.put(msg);
@@ -125,6 +130,11 @@ public class ChatListener extends StandardListener {
 		buffer = new JSONArray();
 
 		return PROTOKOLL.CHAT_LISTENER + "-" + response.toString();
+	}
+	
+	@Override
+	public void onUnregister(){
+		Helper.sendChatMessage("[MSS] "+user.username+" disconnected from second screen chat", EnumChatFormatting.YELLOW);
 	}
 
 }

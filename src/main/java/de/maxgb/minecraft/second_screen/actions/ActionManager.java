@@ -8,6 +8,11 @@ import de.maxgb.minecraft.second_screen.shared.PROTOKOLL;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.util.User;
 
+/**
+ * Manages all possible actions
+ * @author Max
+ *
+ */
 public class ActionManager {
 
 	public interface ActionResultListener {
@@ -30,8 +35,7 @@ public class ActionManager {
 		 *            Listener which should get the action result
 		 * @return
 		 */
-		public void doAction(JSONObject param, User user,
-				ActionResultListener listener);
+		public void doAction(JSONObject param, User user, ActionResultListener listener);
 	}
 
 	private static HashMap<String, IAction> actions;
@@ -49,8 +53,8 @@ public class ActionManager {
 	 *            Listener to receive the action result
 	 * @return whether the action was found or not
 	 */
-	public static boolean doAction(String command, final JSONObject params,
-			final User user, final ActionResultListener listener) {
+	public static boolean doAction(String command, final JSONObject params, final User user,
+			final ActionResultListener listener) {
 		if (!actions.containsKey(command)) {
 			Logger.w(TAG, "No action fitting: " + command + " found");
 			return false;
@@ -91,6 +95,7 @@ public class ActionManager {
 	public static void registerStandardActions() {
 		registerAction(PROTOKOLL.A_CHAT_MSG, new ChatMessageAction());
 		registerAction(PROTOKOLL.A_RED_CONTROL, new RedstoneControlAction());
+		registerAction(PROTOKOLL.A_GET_CHAT, new GetLastChatAction());
 	}
 
 	public static void removeAllActions() {
