@@ -27,7 +27,6 @@ public class ServerInfoListener extends StandardListener {
 		info.put("motd", server.getMOTD());
 		info.put("maxplayer", server.getMaxPlayers());
 		info.put("usernames", server.getAllUsernames());
-		Logger.i("ServerInfo", ""+server.getAllUsernames().length);
 		if(server.getAllUsernames().length==0){
 			info.put("lastonline", SecondScreenMod.instance.latestOnlinePlayer);
 		}
