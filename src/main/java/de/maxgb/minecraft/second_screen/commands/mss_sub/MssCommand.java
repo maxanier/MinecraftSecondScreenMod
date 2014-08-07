@@ -1,19 +1,26 @@
-package de.maxgb.minecraft.second_screen.commands;
+package de.maxgb.minecraft.second_screen.commands.mss_sub;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.command.ICommandSender;
+import de.maxgb.minecraft.second_screen.commands.BaseCommand;
 
+/**
+ * Manages all commands which start with mss
+ * @author Max
+ *
+ */
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class MssCommand extends BaseCommand {
 	protected interface MssSubCommand {
 		public boolean canCommandSenderUseCommand(ICommandSender var1);
 
 		public String getCommandName();
 
-		public String getCommandUsage(ICommandSender var1);
-
 		public void processCommand(ICommandSender var1, String[] var2);
+
+		public void sendCommandUsage(ICommandSender var1);
 	}
 
 	private List aliases;
@@ -61,11 +68,6 @@ public class MssCommand extends BaseCommand {
 
 	@Override
 	public String getCommandUsage(ICommandSender var1) {
-		sendMessage(var1,"Actions:");
-		for (MssSubCommand c : commands) {
-			sendMessage(var1,c.getCommandUsage(var1));
-			//usage += c.getCommandUsage(var1) + " OR ";
-		}
 
 		return "/mss <action> <params>";
 
@@ -83,6 +85,7 @@ public class MssCommand extends BaseCommand {
 			BaseCommand.sendMessage(var1, "Usage: " + getCommandUsage(var1));
 			return;
 		}
+		//Tests for the corrosponding subcommand and calls it with the reduced amount of params
 		for (MssSubCommand c : commands) {
 			if (var2[0].equals(c.getCommandName())) {
 				String[] var;
@@ -99,9 +102,23 @@ public class MssCommand extends BaseCommand {
 				return;
 			}
 		}
-		BaseCommand.sendMessage(var1, "Action not found. Usage: "
-				+ getCommandUsage(var1));
+		if (!var2[0].equals("help")) {
+			BaseCommand.sendMessage(var1, "Action not found.");
+		}
+		sendActions(var1);
 
+	}
+
+	/**
+	 * Prints the available actions/subcommands to the command sender
+	 * @param var1
+	 */
+	private void sendActions(ICommandSender var1) {
+		sendMessage(var1, getCommandUsage(var1));
+		sendMessage(var1, "Actions:");
+		for (MssSubCommand c : commands) {
+			c.sendCommandUsage(var1);
+		}
 	}
 
 }

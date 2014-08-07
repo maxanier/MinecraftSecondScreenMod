@@ -1,5 +1,10 @@
 package de.maxgb.minecraft.second_screen.shared;
 
+/**
+ * Protokoll constant class for the communication
+ * @author Max
+ *
+ */
 public class PROTOKOLL {
 
 	// Listener managment commands
@@ -27,6 +32,11 @@ public class PROTOKOLL {
 	 * "label"(String),"state"(Boolean)
 	 */
 	public static final String A_RED_CONTROL = "rc";
+	
+	/**
+	 * Asks for the latest chat messages. No params
+	 */
+	public static final String A_GET_CHAT = "gc";
 
 	// Connection
 

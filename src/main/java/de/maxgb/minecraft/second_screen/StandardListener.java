@@ -4,6 +4,11 @@ import net.minecraft.server.MinecraftServer;
 import cpw.mods.fml.common.FMLCommonHandler;
 import de.maxgb.minecraft.second_screen.util.User;
 
+/**
+ * Abstract class which all Listeners have to extend
+ * @author Max
+ *
+ */
 public abstract class StandardListener {
 
 	protected User user;
@@ -51,5 +56,13 @@ public abstract class StandardListener {
 	 *         the client listener
 	 */
 	public abstract String update();
+	
+	/**
+	 * Is called when the listener is removed.
+	 * There might be a few situations where this fails.
+	 */
+	public void onUnregister(){
+		
+	}
 
 }

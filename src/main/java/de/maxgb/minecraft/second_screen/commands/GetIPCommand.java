@@ -6,10 +6,17 @@ import java.util.List;
 import net.minecraft.command.ICommandSender;
 import de.maxgb.minecraft.second_screen.SecondScreenMod;
 
+/**
+ * Returns the IP the mod is running on or if not running the error message
+ * @author Max
+ *
+ */
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class GetIPCommand extends BaseCommand {
 
 	private List aliases;
 
+	
 	public GetIPCommand() {
 		this.aliases = new ArrayList();
 		this.aliases.add("getIP");
@@ -47,7 +54,7 @@ public class GetIPCommand extends BaseCommand {
 
 	@Override
 	public String getCommandUsage(ICommandSender var1) {
-		return "getIP";
+		return "/getIP";
 	}
 
 	@Override
@@ -57,15 +64,12 @@ public class GetIPCommand extends BaseCommand {
 
 	@Override
 	public void processCommand(ICommandSender var1, String[] var2) {
-		if (SecondScreenMod.connected) {
-			sendMessage(var1, "IP: " + SecondScreenMod.hostname);
+		if (SecondScreenMod.instance.webSocketListener.isRunning()) {
+			sendMessage(var1, "IP: " + SecondScreenMod.instance.hostname);
 		} else {
-			if (SecondScreenMod.error == null) {
-				SecondScreenMod.error = "Unknown";
-			}
-			sendMessage(var1, "IP: " + SecondScreenMod.hostname
-					+ ". But the mod isnt running. Error: "
-					+ SecondScreenMod.error);
+			
+			sendMessage(var1, "IP: " + SecondScreenMod.instance.hostname + ". But the mod isnt running. Error: "
+					+ SecondScreenMod.instance.webSocketListener.getError());
 		}
 
 	}

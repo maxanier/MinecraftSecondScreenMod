@@ -10,6 +10,11 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import de.maxgb.minecraft.second_screen.shared.ClientVersion;
 
+/**
+ * Second screen user class
+ * @author Max
+ *
+ */
 public class User {
 
 	public final String username;
@@ -17,12 +22,14 @@ public class User {
 	private final String TAG = "UserObject";
 	private static final String perm_category = "permissions";
 
+	/**
+	 * Creates a user object from a config file
+	 * @param config
+	 * @return
+	 */
 	public static User readFromConfig(Configuration config) {
-		String name = config
-				.get(Configuration.CATEGORY_GENERAL, "username", "")
-				.getString();
-		int pass = config.get(Configuration.CATEGORY_GENERAL, "password", 0)
-				.getInt();
+		String name = config.get(Configuration.CATEGORY_GENERAL, "username", "").getString();
+		int pass = config.get(Configuration.CATEGORY_GENERAL, "password", 0).getInt();
 		if (pass == 0) {
 			return null;
 		}
@@ -34,6 +41,9 @@ public class User {
 		return new User(name, pass, perm);
 	}
 
+	/**
+	 * Map which saves the status for each permission
+	 */
 	private HashMap<String, Boolean> perm;
 
 	private boolean all_allowed;
@@ -43,7 +53,7 @@ public class User {
 		this(username, password, null);
 	}
 
-	public User(String username, int password, HashMap<String, Boolean> perm) {
+	private User(String username, int password, HashMap<String, Boolean> perm) {
 		this.username = username;
 		this.password = password;
 		if (perm == null) {
@@ -60,12 +70,22 @@ public class User {
 		return password;
 	}
 
+	/**
+	 * Returns the player entity corrosponding to this user
+	 * @param s
+	 * @return entity, null if not online
+	 */
 	public EntityPlayerMP getPlayer(MinecraftServer s) {
 		if (s == null) {
 			Logger.w(TAG, "Server null, cant find user");
 			return null;
 		}
-		return s.getConfigurationManager().getPlayerForUsername(username);
+		for (Object p : s.getConfigurationManager().playerEntityList) {
+			if (((EntityPlayerMP) p).getDisplayName().equals(username)) {
+				return (EntityPlayerMP) p;
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -89,14 +109,16 @@ public class User {
 		}
 	}
 
+	/**
+	 * Saves the user to config file
+	 * @param config
+	 * @return
+	 */
 	public boolean saveToConfig(Configuration config) {
-		config.get(Configuration.CATEGORY_GENERAL, "username", username).set(
-				username);
-		config.get(Configuration.CATEGORY_GENERAL, "password", password).set(
-				password);
+		config.get(Configuration.CATEGORY_GENERAL, "username", username).set(username);
+		config.get(Configuration.CATEGORY_GENERAL, "password", password).set(password);
 		for (Entry<String, Boolean> e : perm.entrySet()) {
-			config.get(perm_category, e.getKey(), e.getValue()).set(
-					e.getValue());
+			config.get(perm_category, e.getKey(), e.getValue()).set(e.getValue());
 		}
 		if (config.hasChanged()) {
 			config.save();
