@@ -77,7 +77,7 @@ public class FluidTankObserver implements ObservedBlock.ObservingType {
 
 	private void addTankInfo(JSONObject parent, FluidTankInfo tank) {
 		try {
-			parent.put(tank.fluid.getFluid().getLocalizedName(tank.fluid),
+			parent.put(tank.fluid.getFluid().getLocalizedName(),
 					new JSONArray().put(tank.fluid.amount).put(tank.capacity));
 		} catch (NullPointerException e) {
 		}

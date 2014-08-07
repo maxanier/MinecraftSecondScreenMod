@@ -24,15 +24,6 @@ import cpw.mods.fml.common.FMLCommonHandler;
  */
 public class Helper {
 
-	/**
-	 * Returns the GameProfile for the given username
-	 * 
-	 * @param username
-	 * @return GameProfile, null if it does not exist
-	 */
-	public static GameProfile getGameProfile(String username) {
-		return MinecraftServer.getServer().func_152358_ax().func_152655_a(username);
-	}
 
 	/**
 	 * Gets players looking spot.
@@ -75,13 +66,8 @@ public class Helper {
 	 * @param username
 	 * @return
 	 */
-	public static boolean isPlayerOpped(String username) {
-		GameProfile p = getGameProfile(username);
-		if (p == null) {
-			Logger.w("Helper.isPlayerOpped", "User: " + username + " is not online");
-			return false;
-		}
-		return MinecraftServer.getServer().getConfigurationManager().func_152596_g(p);
+	public static boolean isPlayerOpped(String username){
+		return FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().isPlayerOpped(username);
 	}
 	
 	/**
