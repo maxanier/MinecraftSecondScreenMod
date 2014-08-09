@@ -27,7 +27,7 @@ import de.maxgb.minecraft.second_screen.data.UserManager;
 import de.maxgb.minecraft.second_screen.util.Constants;
 import de.maxgb.minecraft.second_screen.util.Logger;
 
-@Mod(modid = Constants.MOD_ID, name = Constants.NAME, version = Constants.VERSION, dependencies = "required-after:FML", guiFactory = Constants.GUI_FACTORY_CLASS)
+@Mod(modid = Constants.MOD_ID, name = Constants.NAME, version = Constants.VERSION, dependencies = "required-after:FML", guiFactory = Constants.GUI_FACTORY_CLASS, acceptableRemoteVersions="*")
 public class SecondScreenMod {
 
 	public WebSocketListener webSocketListener;
