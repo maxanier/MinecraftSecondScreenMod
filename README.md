@@ -1,5 +1,7 @@
 Minecraft Second Screen
 
+[![Build Status](https://drone.io/github.com/maxanier/MinecraftSecondScreenMod/status.png)](https://drone.io/github.com/maxanier/MinecraftSecondScreenMod/latest)
+
 A Minecraft mod which allows you to use your mobile device as a second screen.
 This mod provides an "api" for the clientapps.
 There is client for Android 4.0+ (https://play.google.com/store/apps/details?id=de.maxgb.android.minecraft_second_screen) and a Webapp which can be used on almost any device (http://maxgb.de/minecraftsecondscreen/app)
