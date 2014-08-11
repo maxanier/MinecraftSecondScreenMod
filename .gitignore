@@ -3,6 +3,5 @@ build/
 .project
 .gradle/
 bin/
-uploadbuilds.bat
 build.bat
 /bin
