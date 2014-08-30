@@ -7,7 +7,7 @@ This mod provides an "api" for the clientapps.
 There is client for Android 4.0+ (https://play.google.com/store/apps/details?id=de.maxgb.android.minecraft_second_screen) and a Webapp which can be used on almost any device (http://maxgb.de/minecraftsecondscreen/app)
 
 Downloads (including a dev version) can be found here: http://maxgb.de/minecraftsecondscreen/files
-More informations can be found here: http://maxgb.de/minecraftsecondscreen
+*More informations can be found here: http://maxgb.de/minecraftsecondscreen*
 
 Author: maxanier
 
