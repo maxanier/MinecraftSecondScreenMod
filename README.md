@@ -11,6 +11,7 @@ More informations can be found here: http://maxgb.de/minecraftsecondscreen
 
 Author: maxanier
 
+
 Uses the Java-Websocket implementation by TooTallNate/Nathan Rajlich https://github.com/TooTallNate/Java-WebSocket, the JSON-java by douglascrockford/Douglas Crockford https://github.com/douglascrockford/JSON-java
 and multiple apis from other mods. They can be found in the api folder together with the corrosponding licences.
 
