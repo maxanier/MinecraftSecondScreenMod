@@ -40,7 +40,7 @@ else
 	#Generate Changelog
 	origin=https://github.com/${1}/${2}
 	echo "Origin url: " $origin
-	changelog=$(git log ${lasttag}..  --pretty=format:'<li> <a href="'${origin}'/commit/%H">view commit </a> &bull; %s</li> ' --reverse | grep "#changelog")
+	changelog=$(git log ${lasttag}..  --pretty=format:'<li> <a href="'${origin}'/commit/%H">view commit &bull; </a>  %s</li> ' --reverse | grep "#changelog")
 	changelogfile=changelog.html
 	echo $changelog > $changelogfile
 
