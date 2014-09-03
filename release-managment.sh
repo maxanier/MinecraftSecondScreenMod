@@ -1,0 +1,45 @@
+#!/bin/bash
+#Arguments: 1:Githubowner 2:Github repository name. Same as in url 3:Changelog register url ("no" if no upload)
+#Environment variable token:Github api token, pass:changelog add password
+echo ""
+echo ""
+echo "VersionManagment: "
+
+#Get commit message
+commsg=$(git show -s --format=%s $(printenv GIT_COMMIT))
+echo "Commit message: " $commsg
+
+#Get lasttag
+lasttag=$(git describe --abbrev=0 --tags)
+echo "Last tag: " $lasttag
+
+#Get mainversion:
+IFS=. read major minor build <<<"${lasttag##*v}"
+echo "MainVersion: "$major"."$minor
+echo "Shell: "$SHELL
+export MODVERSION=$major"."$minor
+
+#Check if release
+r="#release"
+if [[ $commsg != *"$r"* ]]; then
+	echo "Commit does not include #release"
+else
+
+	export RECOMMEND=1
+
+	#Extract new version
+	v="VERSION:"
+	if [[ $commsg == *"$v"* ]]; then
+		echo "Found new Mainversion"
+		echo "${commsg##*VERSION:}"
+		IFS=. read major minor <<<"${commsg##*VERSION:}"
+		echo "New Mainversion:"$major"."$minor
+		export MODVERSION=$major"."$minor
+	fi
+
+fi
+
+./gradlew setupCIWorkspace
+./gradlew build
+
+java -jar Autoupload.jar "build/libs" "MinecraftSecondScreen" "http://maxgb.de/minecraftsecondscreen/files/add.php"
