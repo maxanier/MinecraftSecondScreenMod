@@ -9,12 +9,13 @@ package de.maxgb.minecraft.second_screen.shared;
  */
 public class ModVersion {
 	public static ModVersion getVersion(int feature_id) {
-		// Set to newest known version if higher than known
-		if (feature_id > 5) {
-			feature_id = 5;
-		}
+
 		ModVersion v = new ModVersion();
+		
 		// Set Features
+		if(feature_id>=6){
+			v.extendedplayer=true;
+		}
 		if(feature_id>=5){
 			v.getchat=true;
 		}
@@ -51,6 +52,7 @@ public class ModVersion {
 	private boolean sendchat = false;
 	private boolean controlRed = false;
 	private boolean getchat=false;
+	private boolean extendedplayer=false;
 
 	public int getVersionId() {
 		return versionid;
@@ -90,5 +92,8 @@ public class ModVersion {
 	
 	public boolean isGetChat(){
 		return this.getchat;
+	}
+	public boolean isExtendendPlayer(){
+		return this.extendedplayer;
 	}
 }

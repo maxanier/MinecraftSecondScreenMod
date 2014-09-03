@@ -12,7 +12,7 @@ public class Constants {
 	 * Feature version for the client to know what feautures the modversion
 	 * supports
 	 */
-	public static final int FEATURE_VERSION = 5;
+	public static final int FEATURE_VERSION = 6;
 
 	public static final String USER_SAVE_DIR = "mss-users";
 
