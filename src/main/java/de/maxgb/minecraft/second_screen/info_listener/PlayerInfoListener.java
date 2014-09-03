@@ -6,6 +6,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.Direction;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.chunk.Chunk;
 
@@ -77,7 +78,7 @@ public class PlayerInfoListener extends StandardListener {
 			Collection<PotionEffect> pot = player.getActivePotionEffects();
 			for (PotionEffect i : pot) {
 				JSONArray p = new JSONArray();
-				p.put(i.getEffectName());
+				p.put(StatCollector.translateToLocal(i.getEffectName()));
 				p.put(i.getDuration() / 20);
 				potions.put(p);
 			}
