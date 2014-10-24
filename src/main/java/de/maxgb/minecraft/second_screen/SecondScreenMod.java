@@ -1,6 +1,12 @@
 package de.maxgb.minecraft.second_screen;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -25,6 +31,7 @@ import de.maxgb.minecraft.second_screen.commands.mss_sub.RegisterUserCommand;
 import de.maxgb.minecraft.second_screen.data.ObservingManager;
 import de.maxgb.minecraft.second_screen.data.UserManager;
 import de.maxgb.minecraft.second_screen.util.Constants;
+import de.maxgb.minecraft.second_screen.util.Helper;
 import de.maxgb.minecraft.second_screen.util.Logger;
 
 @Mod(modid = Constants.MOD_ID, name = Constants.NAME, version = Constants.VERSION, dependencies = "required-after:FML", guiFactory = Constants.GUI_FACTORY_CLASS, acceptableRemoteVersions="*")
@@ -42,9 +49,10 @@ public class SecondScreenMod {
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
+		MSSEventHandler handler = new MSSEventHandler();
 		FMLCommonHandler.instance().bus().register(new Configs());
-		FMLCommonHandler.instance().bus().register(this);
-		MinecraftForge.EVENT_BUS.register(this);
+		FMLCommonHandler.instance().bus().register(handler);
+		MinecraftForge.EVENT_BUS.register(handler);
 	}
 
 	@EventHandler
@@ -130,22 +138,11 @@ public class SecondScreenMod {
 	/**
 	 * Saves all informations to files
 	 */
-	private void saveData(){
+	public void saveData(){
 		ObservingManager.saveObservingFile();
 		UserManager.saveUsers();
 	}
 	
-	@SubscribeEvent
-	public void onWorldSave(WorldEvent.Save e){
-		if(e.world.provider.dimensionId==0){
-			Logger.i(TAG, "Saving data");
-			saveData();
-		}
-	}
 	
-	@SubscribeEvent
-	public void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent e){
-		latestOnlinePlayer=e.player.getDisplayName();
-	}
 
 }

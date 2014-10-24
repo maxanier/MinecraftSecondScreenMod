@@ -2,8 +2,15 @@ package de.maxgb.minecraft.second_screen.util;
 
 import java.util.Date;
 
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
@@ -12,6 +19,7 @@ import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
@@ -132,5 +140,45 @@ public class Helper {
 		}
 		return h + ":" + min;
 	}
+	
+	public static ItemStack createTutorialBook(){
+		ItemStack bookStack = new ItemStack(Items.written_book);
+		NBTTagList bookPages = new NBTTagList();
+		bookPages.appendTag(new NBTTagString("Welcome to the MinecraftSecondScreen mod manual!"
+				+ "\nThis mod allows you to use your mobile device/second screen as a 'Second Screen' or 'Companion app' for Minecraft. \nIt also allows you to control certain things in game. "));
+		bookPages.appendTag(new NBTTagString("Currently there is a native Android (4.0+) app and a universal webapp which can be used on any device with a modern internet browser,\nbut the universal app is currently lacking a few features."));
+		bookPages.appendTag(new NBTTagString("Download of the apps:\nhttp://maxgb.de/minecraftsecondscreen/files\n\nUsage:\nhttp://maxgb.de/minecraftsecondscreen/usage.html"));
+		
+		bookStack.setTagInfo("pages", bookPages);
+		bookStack.setTagInfo("author", new NBTTagString("maxanier"));
+		bookStack.setTagInfo("title", new NBTTagString("Second Screen Mod Manual"));
+		
+		return bookStack;
+		
+	}
+	
+	/**
+	 * Drops Itemstack in world.
+	 * Copied from OpenModsLib and edited
+	 * @param worldObj
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param stack
+	 * @return
+	 */
+	public static EntityItem dropItemStackInWorld(World worldObj, double x, double y, double z, ItemStack stack) {
+		float f = 0.7F;
+		float d0 = worldObj.rand.nextFloat() * f + (1.0F - f) * 0.5F;
+		float d1 = worldObj.rand.nextFloat() * f + (1.0F - f) * 0.5F;
+		float d2 = worldObj.rand.nextFloat() * f + (1.0F - f) * 0.5F;
+		EntityItem entityitem = new EntityItem(worldObj, x + d0, y + d1, z + d2, stack);
+		entityitem.delayBeforeCanPickup = 10;
+		if (stack.hasTagCompound()) {
+			entityitem.getEntityItem().setTagCompound((NBTTagCompound)stack.getTagCompound().copy());
+		}
+		worldObj.spawnEntityInWorld(entityitem);
+		return entityitem;
+}
 
 }

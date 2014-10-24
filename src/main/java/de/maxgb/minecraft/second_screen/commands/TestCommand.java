@@ -8,10 +8,13 @@ import org.apache.commons.lang3.ClassUtils;
 import net.minecraft.block.Block;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
 import cpw.mods.fml.common.FMLCommonHandler;
 import de.maxgb.minecraft.second_screen.util.Helper;
+import de.maxgb.minecraft.second_screen.util.Logger;
 
 /**
  * Test command for developent purpose
@@ -66,8 +69,6 @@ public class TestCommand extends BaseCommand {
 
 	@Override
 	public void processCommand(ICommandSender var1, String[] var2) {
-		
-
 	}
 
 }
