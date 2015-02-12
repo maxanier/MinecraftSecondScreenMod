@@ -6,6 +6,8 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -102,7 +104,7 @@ public class ObservedBlock {
 				ObservingManager.removeObservedBlock(username, block.label);
 
 			} else {
-				if (world.getBlock(block.x, block.y, block.z).getMaterial() == net.minecraft.block.material.Material.air) {
+				if (world.getBlockState(block.pos).getBlock().getMaterial() == net.minecraft.block.material.Material.air) {
 					Logger.w(TAG, "Blocks material is air -> remove");
 					ObservingManager.removeObservedBlock(username, block.label);
 				} else {
@@ -137,17 +139,15 @@ public class ObservedBlock {
 			b.label = json.getString("label");
 
 			JSONArray coord = json.getJSONArray("coord");
-			b.x = coord.getInt(0);
-			b.y = coord.getInt(1);
-			b.z = coord.getInt(2);
+			b.pos=new BlockPos(coord.getInt(0),coord.getInt(1),coord.getInt(2));
 			b.dimensionId = coord.getInt(3);
 
 			b.type = json.getInt("type");
 
-			if (json.has("side")) {
-				b.side = json.getInt("side");
+			if (json.has("side_str")) {
+				b.side = EnumFacing.byName(json.getString("side_str"));
 			} else {
-				b.side = -1;
+				b.side = EnumFacing.UP;
 			}
 
 			return b;
@@ -167,8 +167,8 @@ public class ObservedBlock {
 			observingTypes.add(new RedstoneObserver());
 			observingTypes.add(new InventoryObserver());
 			observingTypes.add(new FluidTankObserver());
-			observingTypes.add(new NodeObserver());
-			observingTypes.add(new RFEnergyStorageObserver());
+			//observingTypes.add(new NodeObserver());
+			//observingTypes.add(new RFEnergyStorageObserver());
 		}
 
 		return observingTypes;
@@ -176,7 +176,11 @@ public class ObservedBlock {
 
 	protected String label;
 
-	protected int x, y, z, dimensionId, side;
+	protected int dimensionId;
+	
+	protected BlockPos pos;
+	
+	protected EnumFacing side;
 
 	protected int type;
 
@@ -192,16 +196,14 @@ public class ObservedBlock {
 	 * @param z Z-Coord
 	 * @param dimensionId Worlddimension id
 	 * @param type ObservingType given by the corrosponding observer class
-	 * @param side Side it was registered from
+	 * @param sideHit Side it was registered from
 	 */
-	public ObservedBlock(String label, int x, int y, int z, int dimensionId, int type, int side) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
+	public ObservedBlock(String label, BlockPos pos, int dimensionId, int type, EnumFacing sideHit) {
+		this.pos=pos;
 		this.label = label;
 		this.dimensionId = dimensionId;
 		this.type = type;
-		this.side = side;
+		this.side = sideHit;
 	}
 
 	/**
@@ -212,7 +214,7 @@ public class ObservedBlock {
 	 * @return block
 	 */
 	public Block getBlock(IBlockAccess world) {
-		return world.getBlock(x, y, z);
+		return world.getBlockState(pos).getBlock();
 	}
 
 	public String getLabel() {
@@ -229,13 +231,13 @@ public class ObservedBlock {
 		json.put("label", label);
 
 		JSONArray coord = new JSONArray();
-		coord.put(x);
-		coord.put(y);
-		coord.put(z);
+		coord.put(pos.getX());
+		coord.put(pos.getY());
+		coord.put(pos.getZ());
 		coord.put(dimensionId);
 
 		json.put("coord", coord);
-		json.put("side", side);
+		json.put("side_str", side.getName());
 
 		json.put("type", type);
 

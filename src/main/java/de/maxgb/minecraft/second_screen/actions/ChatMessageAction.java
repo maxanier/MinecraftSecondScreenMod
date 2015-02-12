@@ -5,7 +5,6 @@ import net.minecraftforge.common.MinecraftForge;
 
 import org.json.JSONObject;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import de.maxgb.minecraft.second_screen.actions.ActionManager.ActionResultListener;
 import de.maxgb.minecraft.second_screen.actions.ActionManager.IAction;
 import de.maxgb.minecraft.second_screen.info_listener.ChatListener.RemoteChatMessageEvent;

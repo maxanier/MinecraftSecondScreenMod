@@ -1,5 +1,6 @@
 package de.maxgb.minecraft.second_screen.world_observer;
 
+/*
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -7,8 +8,7 @@ import net.minecraft.world.World;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import thaumcraft.api.aspects.Aspect;
-import thaumcraft.api.nodes.INode;
+import scala.collection.concurrent.INode;
 import de.maxgb.minecraft.second_screen.util.Logger;
 
 //@formatter:off
@@ -20,14 +20,15 @@ import de.maxgb.minecraft.second_screen.util.Logger;
  * 	<"aspects":JSONObject>
  * 		which contains multiple
  * 		<aspectname:aspectamount(int)
- */
+ *
 //@formatter:on
 
 /**
  * Observer class which is designed to observe Thaumcraft Nodes which implement INode
  * @author Max
  *
- */
+ *
+
 public class NodeObserver implements ObservedBlock.ObservingType {
 
 	private final int ID = 2;
@@ -91,3 +92,4 @@ public class NodeObserver implements ObservedBlock.ObservingType {
 	}
 
 }
+*/

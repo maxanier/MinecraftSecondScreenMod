@@ -3,9 +3,10 @@ package de.maxgb.minecraft.second_screen.util;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
+import net.minecraftforge.fml.common.FMLLog;
+
 import org.apache.logging.log4j.Level;
 
-import cpw.mods.fml.common.FMLLog;
 
 /**
  * Logging class, which provides different methods for different log levels and always adds a tag which states to what the log is related
@@ -24,6 +25,7 @@ public class Logger {
 
 	public static void e(String tag, String msg, Throwable t) {
 		String stacktrace = "";
+		
 		PrintStream p;
 		try {
 			p = new PrintStream(stacktrace);
@@ -31,8 +33,9 @@ public class Logger {
 		} catch (FileNotFoundException e1) {
 			stacktrace = t.getMessage();
 		}
-		log(Level.ERROR, "[" + tag + "]" + msg + "\nStacktrace: " + stacktrace);
+		log(Level.ERROR, "[" + tag + "]" + msg + "\nThrowable: "+t.getClass().getCanonicalName()+"\nStacktrace: " + stacktrace+"\nMessage: "+t.getMessage());
 	}
+
 
 	public static void i(String tag, String msg) {
 		log(Level.INFO, "[" + tag + "]" + msg);

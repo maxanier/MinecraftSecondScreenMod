@@ -1,7 +1,7 @@
 package de.maxgb.minecraft.second_screen;
 
 import net.minecraft.server.MinecraftServer;
-import cpw.mods.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import de.maxgb.minecraft.second_screen.util.User;
 
 /**

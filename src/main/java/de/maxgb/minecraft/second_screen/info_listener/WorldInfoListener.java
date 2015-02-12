@@ -66,7 +66,7 @@ public class WorldInfoListener extends StandardListener {
 		worlds = new HashMap<Integer, WorldServer>();
 
 		for (WorldServer s : server.worldServers) {
-			worlds.put(s.provider.dimensionId, s);
+			worlds.put(s.provider.getDimensionId(), s);
 		}
 		Logger.i(TAG, "Worlds: " + worlds.toString());
 	}
@@ -79,7 +79,7 @@ public class WorldInfoListener extends StandardListener {
 		JSONObject ow = new JSONObject();
 
 		for (WorldServer w : server.worldServers) {
-			if (w.provider.dimensionId == 0) {
+			if (w.provider.getDimensionId() == 0) {
 				WorldInfo i = w.getWorldInfo();
 				ow.put("name", i.getWorldName());
 				ow.put("time", parseTime((int) i.getWorldTime() + 6000));

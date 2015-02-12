@@ -2,9 +2,10 @@ package de.maxgb.minecraft.second_screen.info_listener;
 
 import java.util.Collection;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.Direction;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.EnumSkyBlock;
@@ -12,6 +13,8 @@ import net.minecraft.world.chunk.Chunk;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+
 
 import de.maxgb.minecraft.second_screen.Configs;
 import de.maxgb.minecraft.second_screen.StandardListener;
@@ -59,17 +62,16 @@ public class PlayerInfoListener extends StandardListener {
 			response.put("ping", player.ping);
 			
 			//Get direction, @see GUIIngame
-			int i4 = MathHelper.floor_double((double)(player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-			response.put("direction", i4 + " (" + Direction.directions[i4] + ")");
 			
-			if (player.worldObj != null && player.worldObj.blockExists(x,y,z))
+            EnumFacing enumfacing = player.getHorizontalFacing();
+			response.put("direction", enumfacing.getName());
+			
+			if (player.worldObj != null && player.worldObj.isBlockLoaded(player.getPosition()))
             {
-                Chunk chunk = player.worldObj.getChunkFromBlockCoords(x, z);
+                Chunk chunk = player.worldObj.getChunkFromBlockCoords(player.getPosition());
                 response.put("lc", (chunk.getTopFilledSegment()+15));
-                response.put("biome", chunk.getBiomeGenForWorldCoords(x & 15, z & 15, player.worldObj.getWorldChunkManager()).biomeName);
-                response.put("blight", chunk.getSavedLightValue(EnumSkyBlock.Block, x & 15, y, z & 15));
-                response.put("slight", chunk.getSavedLightValue(EnumSkyBlock.Sky, x & 15, y, z & 15));
-                response.put("rlight", chunk.getBlockLightValue(x & 15, y, z & 15, 0));
+                response.put("biome", chunk.getBiome(player.getPosition(), player.worldObj.getWorldChunkManager()).biomeName);
+                response.put("light", chunk.setLight(player.getPosition(), 0) + " (" + chunk.getLightFor(EnumSkyBlock.SKY, player.getPosition()) + " sky, " + chunk.getLightFor(EnumSkyBlock.BLOCK, player.getPosition()) + " block)");
                 
                 
             }

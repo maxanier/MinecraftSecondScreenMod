@@ -6,7 +6,6 @@ import de.maxgb.minecraft.second_screen.Configs;
 import de.maxgb.minecraft.second_screen.SecondScreenMod;
 import de.maxgb.minecraft.second_screen.StandardListener;
 import de.maxgb.minecraft.second_screen.shared.PROTOKOLL;
-import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.util.User;
 
 /**

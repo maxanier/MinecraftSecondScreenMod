@@ -7,8 +7,8 @@ import java.net.UnknownHostException;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
-import cpw.mods.fml.client.event.ConfigChangedEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import de.maxgb.minecraft.second_screen.util.Constants;
 import de.maxgb.minecraft.second_screen.util.Logger;
 

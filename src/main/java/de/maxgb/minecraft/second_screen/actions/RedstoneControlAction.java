@@ -1,8 +1,9 @@
 package de.maxgb.minecraft.second_screen.actions;
 
+import net.minecraftforge.fml.common.FMLCommonHandler;
+
 import org.json.JSONObject;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import de.maxgb.minecraft.second_screen.actions.ActionManager.ActionResultListener;
 import de.maxgb.minecraft.second_screen.actions.ActionManager.IAction;
 import de.maxgb.minecraft.second_screen.data.ObservingManager;

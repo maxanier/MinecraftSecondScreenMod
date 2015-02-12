@@ -13,8 +13,8 @@ import de.maxgb.minecraft.second_screen.data.ObservingManager;
 import de.maxgb.minecraft.second_screen.util.Helper;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.world_observer.ObservedBlock;
-import de.maxgb.minecraft.second_screen.world_observer.RedstoneObserver;
 import de.maxgb.minecraft.second_screen.world_observer.ObservedBlock.ObservingType;
+import de.maxgb.minecraft.second_screen.world_observer.RedstoneObserver;
 
 /**
  * Command which is used to register Observer for blocks
@@ -67,8 +67,8 @@ public class RegisterObserverCommand implements MssCommand.MssSubCommand {
 				sendMessage(var1, "You have to look at a block");
 				return;
 			}
-			Block block = player.worldObj.getBlock(p.blockX, p.blockY, p.blockZ);
-			TileEntity tile = player.worldObj.getTileEntity(p.blockX, p.blockY, p.blockZ);
+			Block block = player.worldObj.getBlockState(p.getBlockPos()).getBlock();
+			TileEntity tile = player.worldObj.getTileEntity(p.getBlockPos());
 
 			boolean publ = false;
 			ObservingType type = null;
@@ -129,8 +129,8 @@ public class RegisterObserverCommand implements MssCommand.MssSubCommand {
 			//If there is just one possiblity, add this block together with its type to obserer list
 			//Otherwise inform user
 			if (types.size() == 1) {
-				if (ObservingManager.observeBlock(var1.getCommandSenderName(), publ, new ObservedBlock(var2[1],
-						p.blockX, p.blockY, p.blockZ, player.worldObj.provider.dimensionId, types.get(0).getId(),
+				if (ObservingManager.observeBlock(var1.getName(), publ, new ObservedBlock(var2[1],
+						p.getBlockPos(), player.worldObj.provider.getDimensionId(), types.get(0).getId(),
 						p.sideHit))) {
 					sendMessage(var1, "Successfully added block to observer list (" + types.get(0).getIdentifier()
 							+ ")");
@@ -156,7 +156,7 @@ public class RegisterObserverCommand implements MssCommand.MssSubCommand {
 				return;
 			}
 			
-			if (ObservingManager.removeObservedBlock(var1.getCommandSenderName(), var2[1])) {
+			if (ObservingManager.removeObservedBlock(var1.getName(), var2[1])) {
 				sendMessage(var1, "Successfully removed block from observer list");
 			} else {
 				sendMessage(var1, "Failed to remove block from observer list. There is no block with this label");

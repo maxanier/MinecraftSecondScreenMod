@@ -3,7 +3,9 @@ package de.maxgb.minecraft.second_screen.commands.mss_sub;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.util.BlockPos;
 import de.maxgb.minecraft.second_screen.commands.BaseCommand;
 
 /**
@@ -39,16 +41,6 @@ public class MssCommand extends BaseCommand {
 		commands.add(c);
 	}
 
-	@Override
-	public List addTabCompletionOptions(ICommandSender var1, String[] var2) {
-
-		return null;
-	}
-
-	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender var1) {
-		return true;
-	}
 
 	@Override
 	public int compareTo(Object arg0) {
@@ -56,15 +48,6 @@ public class MssCommand extends BaseCommand {
 		return 0;
 	}
 
-	@Override
-	public List getCommandAliases() {
-		return aliases;
-	}
-
-	@Override
-	public String getCommandName() {
-		return "mss";
-	}
 
 	@Override
 	public String getCommandUsage(ICommandSender var1) {
@@ -79,35 +62,6 @@ public class MssCommand extends BaseCommand {
 		return false;
 	}
 
-	@Override
-	public void processCommand(ICommandSender var1, String[] var2) {
-		if (var2 == null || var2.length == 0) {
-			BaseCommand.sendMessage(var1, "Usage: " + getCommandUsage(var1));
-			return;
-		}
-		//Tests for the corrosponding subcommand and calls it with the reduced amount of params
-		for (MssSubCommand c : commands) {
-			if (var2[0].equals(c.getCommandName())) {
-				String[] var;
-				if (var2.length == 1) {
-					var = null;
-				} else {
-					var = new String[var2.length - 1];
-					for (int i = 1; i < var2.length; i++) {
-						var[i - 1] = var2[i];
-					}
-				}
-
-				c.processCommand(var1, var);
-				return;
-			}
-		}
-		if (!var2[0].equals("help")) {
-			BaseCommand.sendMessage(var1, "Action not found.");
-		}
-		sendActions(var1);
-
-	}
 
 	/**
 	 * Prints the available actions/subcommands to the command sender
@@ -119,6 +73,58 @@ public class MssCommand extends BaseCommand {
 		for (MssSubCommand c : commands) {
 			c.sendCommandUsage(var1);
 		}
+	}
+
+	@Override
+	public String getName() {
+		return "mss";
+	}
+
+	@Override
+	public List getAliases() {
+		return aliases;
+	}
+
+	@Override
+	public void execute(ICommandSender sender, String[] args)
+			throws CommandException {
+		if (args == null || args.length == 0) {
+			BaseCommand.sendMessage(sender, "Usage: " + getCommandUsage(sender));
+			return;
+		}
+		//Tests for the corrosponding subcommand and calls it with the reduced amount of params
+		for (MssSubCommand c : commands) {
+			if (args[0].equals(c.getCommandName())) {
+				String[] var;
+				if (args.length == 1) {
+					var = null;
+				} else {
+					var = new String[args.length - 1];
+					for (int i = 1; i < args.length; i++) {
+						var[i - 1] = args[i];
+					}
+				}
+
+				c.processCommand(sender, var);
+				return;
+			}
+		}
+		if (!args[0].equals("help")) {
+			BaseCommand.sendMessage(sender, "Action not found.");
+		}
+		sendActions(sender);
+		
+	}
+
+	@Override
+	public boolean canCommandSenderUse(ICommandSender sender) {
+		return true;
+	}
+
+	@Override
+	public List addTabCompletionOptions(ICommandSender sender, String[] args,
+			BlockPos pos) {
+		return null;
 	}
 
 }

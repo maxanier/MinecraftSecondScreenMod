@@ -4,11 +4,10 @@ import java.util.ArrayList;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ServerChatEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 import de.maxgb.minecraft.second_screen.actions.ActionManager.ActionResultListener;
 import de.maxgb.minecraft.second_screen.actions.ActionManager.IAction;

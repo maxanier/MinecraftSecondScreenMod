@@ -42,7 +42,7 @@ public class InventoryObserver implements ObservedBlock.ObservingType {
 		}
 		try {
 			JSONArray inv = new JSONArray();
-			IInventory chest = (IInventory) world.getTileEntity(block.x, block.y, block.z);
+			IInventory chest = (IInventory) world.getTileEntity(block.pos);
 			HashMap<String,Integer> items=new HashMap<String,Integer>();
 			for (int i = 0; i < chest.getSizeInventory(); i++) {
 				ItemStack s = chest.getStackInSlot(i);
