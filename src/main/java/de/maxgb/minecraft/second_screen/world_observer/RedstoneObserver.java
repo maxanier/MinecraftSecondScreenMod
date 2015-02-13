@@ -5,12 +5,15 @@ import net.minecraft.block.BlockLever;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import de.maxgb.minecraft.second_screen.util.Logger;
 
 public class RedstoneObserver implements ObservedBlock.ObservingType {
 
@@ -39,8 +42,15 @@ public class RedstoneObserver implements ObservedBlock.ObservingType {
 
 			if (w.getBlockState(b.pos).getBlock() instanceof BlockLever) {
 				IBlockState st = w.getBlockState(b.pos);
-				st.withProperty(BlockLever.POWERED, state);
-				w.setBlockState(b.pos, st, 3);
+				
+				if(!st.getValue(BlockLever.POWERED).equals(Boolean.valueOf(state))){
+					st=st.withProperty(BlockLever.POWERED, Boolean.valueOf(state));
+					w.setBlockState(b.pos, st, 3);
+		            w.notifyNeighborsOfStateChange(b.pos, w.getBlockState(b.pos).getBlock());
+		            EnumFacing enumfacing1 = ((BlockLever.EnumOrientation)st.getValue(BlockLever.FACING)).getFacing();
+		            w.notifyNeighborsOfStateChange(b.pos.offset(enumfacing1.getOpposite()), w.getBlockState(b.pos).getBlock());
+				}
+				
 				
 				w.spawnParticle(EnumParticleTypes.REDSTONE, b.pos.getX(), b.pos.getY() + 1, b.pos.getZ(), 0.0D, 255.0D, 0.0D);
 
@@ -58,7 +68,7 @@ public class RedstoneObserver implements ObservedBlock.ObservingType {
 			info = new JSONArray();
 		}
 		JSONArray in = new JSONArray();
-		in.put(block.label).put(world.isBlockIndirectlyGettingPowered(block.pos))
+		in.put(block.label).put((world.isBlockIndirectlyGettingPowered(block.pos)>0))
 				.put(block.getBlock(world) instanceof BlockLever);
 
 		info.put(in);
