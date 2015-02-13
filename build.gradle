@@ -29,7 +29,6 @@ configFile.withReader {
 
 version = System.getenv("MODVERSION")
 group = "de.maxgb.minecraft.minecraft.second_screen"
-archiveBaseName= "MinecraftSecondScreen"
 
 sourceSets
 {
