@@ -8,6 +8,8 @@ import net.minecraft.world.World;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.Map;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 
 public class RedstoneObserver implements ObservedBlock.ObservingType {

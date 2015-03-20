@@ -62,5 +62,3 @@ fi
 
 ./gradlew setupCIWorkspace
 ./gradlew build
-
-java -jar Autoupload.jar "build/libs" "MinecraftSecondScreen" "http://maxgb.de/minecraftsecondscreen/files/add.php"
