@@ -65,5 +65,5 @@ fi
 
 for f in build/libs/*.jar; do
 	curl -F "pass=$PASS" -F "fileupload=@$f" http://maxanier.de/projects/mcss/files/upload.php
-fi
+end for
 
