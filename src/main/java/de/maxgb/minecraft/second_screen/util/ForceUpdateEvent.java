@@ -1,6 +1,7 @@
 package de.maxgb.minecraft.second_screen.util;
 
-import cpw.mods.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.common.eventhandler.Event;
+
 
 /**
  * Event which forces an update of the listener corrosponding to the referred class

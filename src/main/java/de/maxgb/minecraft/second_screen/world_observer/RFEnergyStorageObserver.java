@@ -1,15 +1,13 @@
 package de.maxgb.minecraft.second_screen.world_observer;
 
+/*
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import cofh.api.energy.IEnergyHandler;
-import cofh.api.energy.IEnergyStorage;
 import de.maxgb.minecraft.second_screen.util.Logger;
 
 //@formatter:off
@@ -21,14 +19,14 @@ import de.maxgb.minecraft.second_screen.util.Logger;
  * 		<0=label:String>
  * 		<1=energystored:int>
  * 		<2=maxenergystored:int>
- */
+ *
 //@formatter:on
 
 /**
  * Observer class which is designed to observe redstone flux energy storage container which implement IEnergyStorage or IEngeryHandler
  * @author Max
  *
- */
+ *
 public class RFEnergyStorageObserver implements ObservedBlock.ObservingType {
 
 	private final int ID = 4;
@@ -97,3 +95,4 @@ public class RFEnergyStorageObserver implements ObservedBlock.ObservingType {
 	}
 
 }
+*/

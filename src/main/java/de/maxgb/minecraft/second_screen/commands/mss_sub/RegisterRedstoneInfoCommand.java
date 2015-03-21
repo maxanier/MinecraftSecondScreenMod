@@ -3,6 +3,7 @@ package de.maxgb.minecraft.second_screen.commands.mss_sub;
 import net.minecraft.block.Block;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import de.maxgb.minecraft.second_screen.commands.BaseCommand;
 import de.maxgb.minecraft.second_screen.data.ObservingManager;
@@ -66,17 +67,16 @@ public class RegisterRedstoneInfoCommand implements MssCommand.MssSubCommand {
 				sendMessage(var1, "You have to look at a block");
 				return;
 			}
-			Block b = player.worldObj.getBlock(p.blockX, p.blockY, p.blockZ);
+			Block b = player.worldObj.getBlockState(p.getBlockPos()).getBlock();
 
 			sendMessage(var1,
-					"You are looking at: " + p.blockX + "," + p.blockY + "," + p.blockZ + " " + b.getLocalizedName());
+					"You are looking at: " + p.getBlockPos().toString() + " " + b.getLocalizedName());
 
 			if (!RedstoneObserver.canObserve(b)) {
 				sendMessage(var1, "You can only observe solid blocks and levers");
 			}
 
-			if (ObservingManager.observeBlock(var1.getCommandSenderName(), publ, new ObservedBlock(var2[1], p.blockX,
-					p.blockY, p.blockZ, player.worldObj.provider.dimensionId, RedstoneObserver.ID, -1))) {
+			if (ObservingManager.observeBlock(var1.getName(), publ, new ObservedBlock(var2[1], p.getBlockPos(), player.worldObj.provider.getDimensionId(), RedstoneObserver.ID, EnumFacing.UP))) {
 				sendMessage(var1, "Successfully added block to observer list.");
 			} else {
 				sendMessage(var1,
@@ -86,7 +86,7 @@ public class RegisterRedstoneInfoCommand implements MssCommand.MssSubCommand {
 			// ChatComponentText(""+player.worldObj.isBlockIndirectlyGettingPowered(p.blockX,
 			// p.blockY, p.blockZ)));
 		} else if (var2[0].equals("remove")) {
-			if (ObservingManager.removeObservedBlock(var1.getCommandSenderName(), var2[1])) {
+			if (ObservingManager.removeObservedBlock(var1.getName(), var2[1])) {
 				sendMessage(var1, "Successfully removed block from observer list");
 			} else {
 				sendMessage(var1, "Failed to remove block from observer list. There is no block with this label");

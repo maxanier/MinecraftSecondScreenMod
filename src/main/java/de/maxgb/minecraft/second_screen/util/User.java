@@ -81,7 +81,7 @@ public class User {
 			return null;
 		}
 		for (Object p : s.getConfigurationManager().playerEntityList) {
-			if (((EntityPlayerMP) p).getDisplayName().equals(username)) {
+			if (((EntityPlayerMP) p).getName().equals(username)) {
 				return (EntityPlayerMP) p;
 			}
 		}

@@ -19,11 +19,11 @@ import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
+import net.minecraft.util.Vec3i;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 
 /**
  * Helper class
@@ -39,7 +39,12 @@ public class Helper {
 	 * @return GameProfile, null if it does not exist
 	 */
 	public static GameProfile getGameProfile(String username) {
-		return MinecraftServer.getServer().func_152358_ax().func_152655_a(username);
+		for(GameProfile p:MinecraftServer.getServer().getGameProfiles()){
+			if(username.equals(p.getName())){
+				return p;
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -58,9 +63,9 @@ public class Helper {
 		float pitch = player.prevRotationPitch + (player.rotationPitch - player.prevRotationPitch) * scale;
 		float yaw = player.prevRotationYaw + (player.rotationYaw - player.prevRotationYaw) * scale;
 		double x = player.prevPosX + (player.posX - player.prevPosX) * scale;
-		double y = player.prevPosY + (player.posY - player.prevPosY) * scale + 1.62D - player.yOffset;
+		double y = player.prevPosY + (player.posY - player.prevPosY) * scale + 1.62D - player.getYOffset();
 		double z = player.prevPosZ + (player.posZ - player.prevPosZ) * scale;
-		Vec3 vector1 = Vec3.createVectorHelper(x, y, z);
+		Vec3 vector1 = new Vec3(x, y, z);
 		float cosYaw = MathHelper.cos(-yaw * 0.017453292F - (float) Math.PI);
 		float sinYaw = MathHelper.sin(-yaw * 0.017453292F - (float) Math.PI);
 		float cosPitch = -MathHelper.cos(-pitch * 0.017453292F);
@@ -77,19 +82,18 @@ public class Helper {
 	}
 
 	/**
-	 * Returns if the user with the given username is opped on this server. Only
-	 * usable when online
+	 * Returns if the user with the given username is opped on this server.
 	 * 
 	 * @param username
 	 * @return
 	 */
 	public static boolean isPlayerOpped(String username) {
-		GameProfile p = getGameProfile(username);
-		if (p == null) {
-			Logger.w("Helper.isPlayerOpped", "User: " + username + " is not online");
-			return false;
+		for(String s : MinecraftServer.getServer().getConfigurationManager().getOppedPlayerNames()){
+			if(s.equals(username)){
+				return true;
+			}
 		}
-		return MinecraftServer.getServer().getConfigurationManager().func_152596_g(p);
+		return false;
 	}
 	
 	/**
@@ -173,7 +177,7 @@ public class Helper {
 		float d1 = worldObj.rand.nextFloat() * f + (1.0F - f) * 0.5F;
 		float d2 = worldObj.rand.nextFloat() * f + (1.0F - f) * 0.5F;
 		EntityItem entityitem = new EntityItem(worldObj, x + d0, y + d1, z + d2, stack);
-		entityitem.delayBeforeCanPickup = 10;
+		entityitem.setDefaultPickupDelay();
 		if (stack.hasTagCompound()) {
 			entityitem.getEntityItem().setTagCompound((NBTTagCompound)stack.getTagCompound().copy());
 		}

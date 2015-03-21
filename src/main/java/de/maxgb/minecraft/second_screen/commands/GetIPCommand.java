@@ -3,7 +3,9 @@ package de.maxgb.minecraft.second_screen.commands;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.util.BlockPos;
 import de.maxgb.minecraft.second_screen.SecondScreenMod;
 
 /**
@@ -25,16 +27,7 @@ public class GetIPCommand extends BaseCommand {
 		this.aliases.add("gethostname");
 	}
 
-	@Override
-	public List addTabCompletionOptions(ICommandSender var1, String[] var2) {
 
-		return null;
-	}
-
-	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender var1) {
-		return true;
-	}
 
 	@Override
 	public int compareTo(Object arg0) {
@@ -42,15 +35,6 @@ public class GetIPCommand extends BaseCommand {
 		return 0;
 	}
 
-	@Override
-	public List getCommandAliases() {
-		return aliases;
-	}
-
-	@Override
-	public String getCommandName() {
-		return "getIP";
-	}
 
 	@Override
 	public String getCommandUsage(ICommandSender var1) {
@@ -63,15 +47,37 @@ public class GetIPCommand extends BaseCommand {
 	}
 
 	@Override
-	public void processCommand(ICommandSender var1, String[] var2) {
+	public String getName() {
+		return "getIP";
+	}
+
+	@Override
+	public List getAliases() {
+		return aliases;
+	}
+
+	@Override
+	public void execute(ICommandSender sender, String[] args)
+			throws CommandException {
 		if (SecondScreenMod.instance.webSocketListener.isRunning()) {
-			sendMessage(var1, "IP: " + SecondScreenMod.instance.hostname);
+			sendMessage(sender, "IP: " + SecondScreenMod.instance.hostname);
 		} else {
 			
-			sendMessage(var1, "IP: " + SecondScreenMod.instance.hostname + ". But the mod isnt running. Error: "
+			sendMessage(sender, "IP: " + SecondScreenMod.instance.hostname + ". But the mod isnt running. Error: "
 					+ SecondScreenMod.instance.webSocketListener.getError());
 		}
+		
+	}
 
+	@Override
+	public boolean canCommandSenderUse(ICommandSender sender) {
+		return true;
+	}
+
+	@Override
+	public List addTabCompletionOptions(ICommandSender sender, String[] args,
+			BlockPos pos) {
+		return null;
 	}
 
 }

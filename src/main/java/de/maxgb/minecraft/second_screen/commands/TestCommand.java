@@ -3,18 +3,9 @@ package de.maxgb.minecraft.second_screen.commands;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.ClassUtils;
-
-import net.minecraft.block.Block;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MovingObjectPosition;
-import cpw.mods.fml.common.FMLCommonHandler;
-import de.maxgb.minecraft.second_screen.util.Helper;
-import de.maxgb.minecraft.second_screen.util.Logger;
+import net.minecraft.util.BlockPos;
 
 /**
  * Test command for developent purpose
@@ -30,16 +21,6 @@ public class TestCommand extends BaseCommand {
 		this.aliases = new ArrayList();
 	}
 
-	@Override
-	public List addTabCompletionOptions(ICommandSender var1, String[] var2) {
-
-		return null;
-	}
-
-	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender var1) {
-		return true;
-	}
 
 	@Override
 	public int compareTo(Object arg0) {
@@ -47,15 +28,6 @@ public class TestCommand extends BaseCommand {
 		return 0;
 	}
 
-	@Override
-	public List getCommandAliases() {
-		return aliases;
-	}
-
-	@Override
-	public String getCommandName() {
-		return "msstest";
-	}
 
 	@Override
 	public String getCommandUsage(ICommandSender var1) {
@@ -67,8 +39,32 @@ public class TestCommand extends BaseCommand {
 		return false;
 	}
 
+
 	@Override
-	public void processCommand(ICommandSender var1, String[] var2) {
+	public String getName() {
+		return "msstest";
+	}
+
+	@Override
+	public List getAliases() {
+		return aliases;
+	}
+
+	@Override
+	public void execute(ICommandSender sender, String[] args)
+			throws CommandException {
+		
+	}
+
+	@Override
+	public boolean canCommandSenderUse(ICommandSender sender) {
+		return true;
+	}
+
+	@Override
+	public List addTabCompletionOptions(ICommandSender sender, String[] args,
+			BlockPos pos) {
+		return null;
 	}
 
 }

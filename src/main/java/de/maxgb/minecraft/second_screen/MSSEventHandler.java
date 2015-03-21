@@ -6,9 +6,9 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.WorldEvent;
-import cpw.mods.fml.common.eventhandler.EventPriority;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import de.maxgb.minecraft.second_screen.util.Helper;
 import de.maxgb.minecraft.second_screen.util.Logger;
 
@@ -18,7 +18,7 @@ public class MSSEventHandler {
 	
 	@SubscribeEvent
 	public void onWorldSave(WorldEvent.Save e){
-		if(e.world.provider.dimensionId==0 && !e.world.isRemote){
+		if(e.world.provider.getDimensionId()==0 && !e.world.isRemote){
 			Logger.i(TAG, "Saving data");
 			SecondScreenMod.instance.saveData();
 		}
@@ -26,7 +26,7 @@ public class MSSEventHandler {
 	
 	@SubscribeEvent
 	public void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent e){
-		SecondScreenMod.instance.latestOnlinePlayer=e.player.getDisplayName();
+		SecondScreenMod.instance.latestOnlinePlayer=e.player.getDisplayName().getFormattedText();
 	}
 	
 	@SubscribeEvent(priority=EventPriority.LOWEST)

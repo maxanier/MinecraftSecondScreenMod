@@ -31,7 +31,7 @@ public class RegisterUserCommand implements MssCommand.MssSubCommand {
 
 	@Override
 	public void sendCommandUsage(ICommandSender var1) {
-		if (var1.getCommandSenderName().equals("Rcon") || var1.getCommandSenderName().equals("Server")) {
+		if (var1.getName().equals("Rcon") || var1.getName().equals("Server")) {
 			sendMessage(var1, "register <username> <password>");
 		}
 		else{
@@ -54,13 +54,13 @@ public class RegisterUserCommand implements MssCommand.MssSubCommand {
 			}
 
 			int hash = var2[0].hashCode();
-			UserManager.addUser(var1.getCommandSenderName(), hash);
-			BaseCommand.sendMessage(var1, "Added user " + var1.getCommandSenderName());
-			Logger.i(TAG, "Added user " + var1.getCommandSenderName() + " with pass: " + hash);
+			UserManager.addUser(var1.getName(), hash);
+			BaseCommand.sendMessage(var1, "Added user " + var1.getName());
+			Logger.i(TAG, "Added user " + var1.getName() + " with pass: " + hash);
 
 			return;
 
-		} else if (var1.getCommandSenderName().equals("Rcon") || var1.getCommandSenderName().equals("Server")) {
+		} else if (var1.getName().equals("Rcon") || var1.getName().equals("Server")) {
 			if (var2.length != 2) {
 				sendMessage(var1, "Wrong arguments. Usage:");
 				sendCommandUsage(var1);
@@ -73,7 +73,7 @@ public class RegisterUserCommand implements MssCommand.MssSubCommand {
 
 			return;
 		} else {
-			Logger.w(TAG, var1.getCommandSenderName() + " tried to add a user, but what is he?");
+			Logger.w(TAG, var1.getName() + " tried to add a user, but what is he?");
 		}
 
 	}

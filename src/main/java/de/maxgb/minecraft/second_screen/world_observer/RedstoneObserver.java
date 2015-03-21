@@ -2,13 +2,18 @@ package de.maxgb.minecraft.second_screen.world_observer;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLever;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import cpw.mods.fml.common.FMLCommonHandler;
+import de.maxgb.minecraft.second_screen.util.Logger;
 
 public class RedstoneObserver implements ObservedBlock.ObservingType {
 
@@ -35,16 +40,19 @@ public class RedstoneObserver implements ObservedBlock.ObservingType {
 		if (b.type == ID) {
 			World w = FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(b.dimensionId);
 
-			if (w.getBlock(b.x, b.y, b.z) instanceof BlockLever) {
-				int meta = w.getBlockMetadata(b.x, b.y, b.z);
-				if (state) {
-					meta = meta | 0x8;
-
-				} else {
-					meta = meta ^ 0x8;
+			if (w.getBlockState(b.pos).getBlock() instanceof BlockLever) {
+				IBlockState st = w.getBlockState(b.pos);
+				
+				if(!st.getValue(BlockLever.POWERED).equals(Boolean.valueOf(state))){
+					st=st.withProperty(BlockLever.POWERED, Boolean.valueOf(state));
+					w.setBlockState(b.pos, st, 3);
+		            w.notifyNeighborsOfStateChange(b.pos, w.getBlockState(b.pos).getBlock());
+		            EnumFacing enumfacing1 = ((BlockLever.EnumOrientation)st.getValue(BlockLever.FACING)).getFacing();
+		            w.notifyNeighborsOfStateChange(b.pos.offset(enumfacing1.getOpposite()), w.getBlockState(b.pos).getBlock());
 				}
-				w.setBlockMetadataWithNotify(b.x, b.y, b.z, meta, 3);
-				w.spawnParticle("reddust", b.x, b.y + 1, b.z, 0.0D, 255.0D, 0.0D);
+				
+				
+				w.spawnParticle(EnumParticleTypes.REDSTONE, b.pos.getX(), b.pos.getY() + 1, b.pos.getZ(), 0.0D, 255.0D, 0.0D);
 
 				return true;
 			}
@@ -60,7 +68,7 @@ public class RedstoneObserver implements ObservedBlock.ObservingType {
 			info = new JSONArray();
 		}
 		JSONArray in = new JSONArray();
-		in.put(block.label).put(world.isBlockIndirectlyGettingPowered(block.x, block.y, block.z))
+		in.put(block.label).put((world.isBlockIndirectlyGettingPowered(block.pos)>0))
 				.put(block.getBlock(world) instanceof BlockLever);
 
 		info.put(in);

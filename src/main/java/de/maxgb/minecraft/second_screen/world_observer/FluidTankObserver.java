@@ -3,13 +3,11 @@ package de.maxgb.minecraft.second_screen.world_observer;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fluids.IFluidTank;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import de.maxgb.minecraft.second_screen.util.Logger;
@@ -49,12 +47,12 @@ public class FluidTankObserver implements ObservedBlock.ObservingType {
 
 		JSONObject ti = new JSONObject();
 
-		TileEntity t = world.getTileEntity(block.x, block.y, block.z);
+		TileEntity t = world.getTileEntity(block.pos);
 
 		if (t != null && (t instanceof IFluidHandler)) {
 			IFluidHandler tank = (IFluidHandler) t;
 			try {
-				for (FluidTankInfo tinfo : tank.getTankInfo(ForgeDirection.getOrientation(block.side))) {
+				for (FluidTankInfo tinfo : tank.getTankInfo(block.side)) {
 					addTankInfo(ti, tinfo);
 				}
 			} catch (NullPointerException e) {
