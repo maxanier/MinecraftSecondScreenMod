@@ -63,4 +63,7 @@ fi
 ./gradlew setupCIWorkspace
 ./gradlew build
 
-java -jar Autoupload.jar "build/libs" "MinecraftSecondScreen" "http://maxgb.de/minecraftsecondscreen/files/add.php"
+for f in build/libs/*.jar; do
+	curl -F "pass=$PASS" -F "fileupload=@$f" http://maxanier.de/projects/mcss/files/upload.php
+fi
+
