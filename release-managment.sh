@@ -64,5 +64,11 @@ fi
 ./gradlew build
 
 for f in build/libs/*.jar; do
-	curl -F "pass=$PASS" -F "fileupload=@$f" http://maxanier.de/projects/mcss/files/upload.php
+	if [[ $f == *"dev"* ]]
+	then
+		dev=f;
+	else
+		file=f;
+	fi
 done
+curl -F "pass=$PASS" -F "fileupload=@$file" -F "dev=@$dev" http://maxanier.de/projects/mcss/files/upload.php
