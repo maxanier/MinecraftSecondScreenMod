@@ -38,18 +38,18 @@ else
 	fi
 
 	#Generate Changelog
-	origin=https://github.com/${1}/${2}
-	echo "Origin url: " $origin
-	changelog=$(git log ${lasttag}..  --pretty=format:'<li> <a href="'${origin}'/commit/%H">view commit:</a>  %s</li> ' --reverse | grep "#changelog")
-	changelogfile=changelog.html
-	echo $changelog > $changelogfile
+	#origin=https://github.com/${1}/${2}
+	#echo "Origin url: " $origin
+	#changelog=$(git log ${lasttag}..  --pretty=format:'<li> <a href="'${origin}'/commit/%H">view commit:</a>  %s</li> ' --reverse | grep "#changelog")
+	#changelogfile=changelog.html
+	#echo $changelog > $changelogfile
 
-	chpass=$(printenv PASS)
-	if [ $3 ]
-	then
-		echo "Uploading changelog"
-		curl --data "major=${major}&minor=${minor}&change=${changelog}&pass=${chpass}&build=$(printenv DRONE_BUILD_NUMBER)" ${3}
-	fi
+	#chpass=$(printenv PASS)
+	#if [ $3 ]
+	#then
+	#	echo "Uploading changelog"
+	#	curl --data "major=${major}&minor=${minor}&change=${changelog}&pass=${chpass}&build=$(printenv DRONE_BUILD_NUMBER)" ${3}
+	#fi
 
 	#Create release
 	fversion=$(printenv MODVERSION)"."$(printenv DRONE_BUILD_NUMBER)
@@ -66,9 +66,9 @@ fi
 for f in build/libs/*.jar; do
 	if [[ $f == *"dev"* ]]
 	then
-		dev=f;
+		dev=$f;
 	else
-		file=f;
+		file=$f;
 	fi
 done
-curl -F "pass=$PASS" -F "fileupload=@$file" -F "dev=@$dev" http://maxanier.de/projects/mcss/files/upload.php
+curl -F "pass=$PASS" -F "file=@$file" -F "dev=@$dev" http://maxanier.de/projects/mcss/files/upload.php
