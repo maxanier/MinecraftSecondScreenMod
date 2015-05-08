@@ -25,6 +25,7 @@ public class Configs {
 	public static int chat_update_time;
 	public static boolean auth_required;
 	public static boolean obs_publ_admin;
+	public static boolean debug_mode;
 	public static Configuration config;
 	private static String TAG = "Configs";
 
@@ -90,6 +91,10 @@ public class Configs {
 		prop = config.get(CATEGORY_GENERAL, "public_observer_admin_only", false);
 		prop.comment = "If true, only admins can create public block observations";
 		obs_publ_admin = prop.getBoolean(false);
+		
+		prop = config.get(CATEGORY_GENERAL, "debug_mode", false);
+		prop.comment = "Enable logging debug messages to file";
+		debug_mode=prop.getBoolean(false);
 
 		if (config.hasChanged()) {
 			config.save();

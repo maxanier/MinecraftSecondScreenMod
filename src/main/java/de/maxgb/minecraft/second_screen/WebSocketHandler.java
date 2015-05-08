@@ -48,6 +48,8 @@ public class WebSocketHandler implements ActionResultListener {
 		socket.close();
 
 		remove = true;
+		
+		Logger.d(TAG, "Closing this listener "+address);
 
 	}
 
@@ -100,6 +102,7 @@ public class WebSocketHandler implements ActionResultListener {
 	 * Handles the disconnect message
 	 */
 	private void onDisconnectMessage() {
+		Logger.d(TAG, "Received disconnect message");
 		close();
 	}
 
@@ -310,7 +313,7 @@ public class WebSocketHandler implements ActionResultListener {
 		if (msg == null || remove) {
 			return;
 		}
-
+		Logger.d(TAG, "Sending "+msg);
 		socket.send(msg);
 		// TODO make async test etc
 	}

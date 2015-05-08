@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 
 import org.java_websocket.WebSocket;
+import org.java_websocket.WebSocketImpl;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 
@@ -34,7 +35,6 @@ public class WebSocketListener {
 
 		@Override
 		public void onClose(WebSocket conn, int code, String reason, boolean remote) {
-
 			WebSocketHandler h = handlers.get(conn.getRemoteSocketAddress());
 			if (h != null) {
 				synchronized (handlers) {
@@ -135,7 +135,9 @@ public class WebSocketListener {
 	}
 
 	public void start() {
-
+		if(Configs.debug_mode){
+			WebSocketImpl.DEBUG=true;
+		}
 		socketServer = create();
 		Logger.i(TAG, "Starting WebSocketListener on " + socketServer.getAddress().toString());
 

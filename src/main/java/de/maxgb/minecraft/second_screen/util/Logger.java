@@ -7,6 +7,8 @@ import net.minecraftforge.fml.common.FMLLog;
 
 import org.apache.logging.log4j.Level;
 
+import de.maxgb.minecraft.second_screen.Configs;
+
 
 /**
  * Logging class, which provides different methods for different log levels and always adds a tag which states to what the log is related
@@ -16,7 +18,10 @@ import org.apache.logging.log4j.Level;
 public class Logger {
 
 	public static void d(String tag, String msg) {
-		log(Level.DEBUG, "[" + tag + "]" + msg);
+		if(Configs.debug_mode){
+			log(Level.INFO, "[" + tag + "]" + msg);
+		}
+
 	}
 
 	public static void e(String tag, String msg) {
