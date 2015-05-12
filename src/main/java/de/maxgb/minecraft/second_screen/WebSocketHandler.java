@@ -32,9 +32,17 @@ public class WebSocketHandler implements ActionResultListener {
 	private static String TAG = "WebSocketHandler-";
 	private ArrayList<StandardListener> listeners;
 	private User user;
-	public boolean remove = false;
+	/**
+	 * Indicates if the Handler will be removed. Should only be modified by {@link #markForRemoval()}
+	 */
+	private boolean gettingRemoved;
+
+	public boolean isGettingRemoved() {
+		return gettingRemoved;
+	}
 
 	public WebSocketHandler(WebSocket socket) {
+		gettingRemoved=false;
 		address = socket.getRemoteSocketAddress();
 		this.socket = socket;
 		TAG += WebSocketListener.getNewHandlerID();
@@ -47,7 +55,7 @@ public class WebSocketHandler implements ActionResultListener {
 		}
 		socket.close();
 
-		remove = true;
+		this.markForRemoval();
 		
 		Logger.d(TAG, "Closing this listener "+address);
 
@@ -62,7 +70,7 @@ public class WebSocketHandler implements ActionResultListener {
 	}
 
 	private void onActionMessage(String action, String params) {
-
+		Logger.d(TAG, "Received action result message");
 		// Check is user object is available and so if the user is authentified
 		if (user == null) {
 
@@ -89,6 +97,7 @@ public class WebSocketHandler implements ActionResultListener {
 	 * Handles the connect message
 	 */
 	private void onConnectMessage() {
+		Logger.d(TAG, "Received connect message");
 		JSONObject result = new JSONObject();
 		result.put("versionid", Constants.FEATURE_VERSION);
 		result.put("minecraftversion", Constants.MINECRAFT_VERSION);
@@ -113,6 +122,7 @@ public class WebSocketHandler implements ActionResultListener {
 	 *            The parameter Json string
 	 */
 	private void onLoginMessage(String params) {
+		Logger.d(TAG, "Received login message");
 		JSONObject data = new JSONObject(params);
 
 		if (!data.has("username")) {
@@ -164,7 +174,7 @@ public class WebSocketHandler implements ActionResultListener {
 	public void onMessage(String msg) {
 		try {
 			Logger.i(TAG, "Received Message: " + msg);// TODO Remove
-			if (msg.startsWith(PROTOKOLL.REGISTER_COMMAND_BEGIN)) {
+			if (msg.trim().startsWith(PROTOKOLL.REGISTER_COMMAND_BEGIN)) {
 				try {
 					String listener = msg.replace(PROTOKOLL.REGISTER_COMMAND_BEGIN, "").trim();
 					onRegisterMessage(listener);
@@ -173,7 +183,7 @@ public class WebSocketHandler implements ActionResultListener {
 					send(PROTOKOLL.ERROR + "-" + "Failed to register listener. [" + msg + "]");
 				}
 
-			} else if (msg.startsWith(PROTOKOLL.UNREGISTER_COMMAND_BEGIN)) {
+			} else if (msg.trim().startsWith(PROTOKOLL.UNREGISTER_COMMAND_BEGIN)) {
 				try {
 					String listener = msg.replace(PROTOKOLL.UNREGISTER_COMMAND_BEGIN, "").trim();
 					onUnregisterMessage(listener);
@@ -181,7 +191,7 @@ public class WebSocketHandler implements ActionResultListener {
 					Logger.e(TAG, "Failed to parse listener from unregister command", e);
 					send(PROTOKOLL.ERROR + "-" + "Failed to unregister listener. [" + msg + "]");
 				}
-			} else if (msg.startsWith(PROTOKOLL.ACTION_COMMAND_BEGIN)) {
+			} else if (msg.trim().startsWith(PROTOKOLL.ACTION_COMMAND_BEGIN)) {
 				try {
 					String s = msg.replace(PROTOKOLL.ACTION_COMMAND_BEGIN, "");
 					String action = s.substring(0, s.indexOf('-'));
@@ -191,23 +201,31 @@ public class WebSocketHandler implements ActionResultListener {
 					Logger.e(TAG, "Failed processing action command", e);
 					send(PROTOKOLL.ERROR + "-" + "Failed processing action command. [" + msg + "]");
 				}
-			} else if (msg.startsWith(PROTOKOLL.CONNECT)) {
+			} else if (msg.trim().startsWith(PROTOKOLL.CONNECT)) {
 
 				onConnectMessage();
-			} else if (msg.startsWith(PROTOKOLL.LOGIN)) {
+			} else if (msg.trim().startsWith(PROTOKOLL.LOGIN)) {
 				String params = msg.substring(PROTOKOLL.LOGIN.length() + 1);
 				onLoginMessage(params);
 
 			}
 
-			else if (msg.startsWith(PROTOKOLL.DISCONNECT)) {
+			else if (msg.trim().startsWith(PROTOKOLL.DISCONNECT)) {
 				onDisconnectMessage();
 			} else {
+				String m="";
+				for(int i=0;i<msg.length();i++){
+					m+="'"+msg.charAt(i)+"',";
+				}
+				Logger.d(TAG, "Did not find any matching command in the protokoll for "+m);
 				send(PROTOKOLL.UNKNOWN + " [" + msg + "]");
 			}
 		} catch (Exception e) {
 			Logger.e(TAG, "Failed to process message", e);
 			send(PROTOKOLL.ERROR + "-" + "Failed to process message. [" + msg + "]");
+		}
+		finally{
+			Logger.d(TAG, "Processed message");
 		}
 
 	}
@@ -220,7 +238,7 @@ public class WebSocketHandler implements ActionResultListener {
 	 *            registered
 	 */
 	private void onRegisterMessage(final String l) {
-
+		Logger.d(TAG, "Received register message");
 		// Check is user object is available and so if the user is authentified
 		if (user == null) {
 
@@ -255,6 +273,7 @@ public class WebSocketHandler implements ActionResultListener {
 	 *            unregistered
 	 */
 	private void onUnregisterMessage(String l) {
+		Logger.d(TAG, "Received unregister message");
 		int listenercount = listeners.size();
 		if (l.startsWith(PROTOKOLL.S_PLAYERINFO_LISTENER)) {
 
@@ -310,7 +329,7 @@ public class WebSocketHandler implements ActionResultListener {
 	}
 
 	private void send(String msg) {
-		if (msg == null || remove) {
+		if (msg == null || isGettingRemoved()) {
 			return;
 		}
 		Logger.d(TAG, "Sending "+msg);
@@ -322,5 +341,13 @@ public class WebSocketHandler implements ActionResultListener {
 		for (StandardListener l : listeners) {
 			send(l.tick(false));
 		}
+	}
+	
+	/**
+	 * Marks the method ready for removal
+	 */
+	public void markForRemoval(){
+		Logger.d(TAG, "Marking ready for removal");
+		this.gettingRemoved=true;
 	}
 }

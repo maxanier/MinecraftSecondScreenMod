@@ -3,6 +3,7 @@ package de.maxgb.minecraft.second_screen;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -77,6 +78,15 @@ public class WebSocketListener {
 			Logger.i(TAG, "New connection: " + conn.getRemoteSocketAddress().toString());
 			handlers.put(conn.getRemoteSocketAddress(), new WebSocketHandler(conn));
 
+		}
+		
+		/**
+		 * Does super{@link #stop(int)}, but adds a debug log call
+		 */
+		@Override
+		public void stop(int timeout) throws InterruptedException{
+			Logger.d(TAG, "WebsocketServer received stop call with timeout "+timeout);
+			super.stop(timeout);
 		}
 
 	}
@@ -182,8 +192,11 @@ public class WebSocketListener {
 	@SubscribeEvent
 	public void tick(ServerTickEvent e) {
 		synchronized (handlers) {
-			for (WebSocketHandler h : handlers.values()) {
-				if (h.remove) {
+			Iterator<WebSocketHandler> iterator=handlers.values().iterator();
+			while (iterator.hasNext()) {
+				WebSocketHandler h=iterator.next();
+				if (h.isGettingRemoved()) {
+					Logger.d(TAG, "Handler "+h+" indicates it wants to be removed");
 					handlers.remove(h.address);
 
 				} else {

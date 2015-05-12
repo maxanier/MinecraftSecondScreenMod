@@ -115,7 +115,8 @@ public class FramedataImpl1 implements FrameBuilder {
 				+ unmaskedpayload.remaining()
 				+ "], payload:"
 				+ Arrays.toString(Charsetfunctions.utf8Bytes(new String(
-						unmaskedpayload.array()))) + "}";
+						unmaskedpayload.array()))) + "/"+new String(
+								unmaskedpayload.array())+"}";
 	}
 
 }
