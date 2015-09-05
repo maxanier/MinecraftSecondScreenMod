@@ -1,74 +1,34 @@
 #!/bin/bash
-#Arguments: 1:Githubowner 2:Github repository name. Same as in url 3:Changelog register url ("no" if no upload)
-#Environment variable token:Github api token, pass:changelog add password
 echo ""
 echo ""
-echo "VersionManagment: "
-
+echo "VersionManagment:"
+git fetch -t
 #Get commit message
 commsg=$(git show -s --format=%s $(printenv GIT_COMMIT))
 echo "Commit message: " $commsg
 
-#Get lasttag
-lasttag=$(git describe --abbrev=0 --tags)
-echo "Last tag: " $lasttag
-
-#Get mainversion:
-IFS=. read major minor build <<<"${lasttag##*v}"
-echo "MainVersion: "$major"."$minor
-echo "Shell: "$SHELL
-export MODVERSION=$major"."$minor
-
+#Check if release
+rt="#release"
+vt="#build"
+if [[ $commsg != *"$rt"* ]] && [[ $commsg != *"$vt"* ]] ; then
+	echo "Commit does not include #release or #build"
+	exit 0
+fi
 #Check if release
 r="#release"
 if [[ $commsg != *"$r"* ]]; then
-	echo "Commit does not include #release"
+	echo "Creating snapshot build"
 else
-
-	export RECOMMEND=1
-
-	#Extract new version
-	v="VERSION:"
-	if [[ $commsg == *"$v"* ]]; then
-		echo "Found new Mainversion"
-		echo "${commsg##*VERSION:}"
-		IFS=. read major minor <<<"${commsg##*VERSION:}"
-		echo "New Mainversion:"$major"."$minor
-		export MODVERSION=$major"."$minor
-	fi
-
-	#Generate Changelog
-	#origin=https://github.com/${1}/${2}
-	#echo "Origin url: " $origin
-	#changelog=$(git log ${lasttag}..  --pretty=format:'<li> <a href="'${origin}'/commit/%H">view commit:</a>  %s</li> ' --reverse | grep "#changelog")
-	#changelogfile=changelog.html
-	#echo $changelog > $changelogfile
-
-	#chpass=$(printenv PASS)
-	#if [ $3 ]
-	#then
-	#	echo "Uploading changelog"
-	#	curl --data "major=${major}&minor=${minor}&change=${changelog}&pass=${chpass}&build=$(printenv DRONE_BUILD_NUMBER)" ${3}
-	#fi
-
-	#Create release
-	fversion=$(printenv MODVERSION)"."$(printenv DRONE_BUILD_NUMBER)
-	echo "Creating release for v"$fversion
-
-	API_JSON=$(printf '{"tag_name": "v%s","target_commitish": "master","name": "v%s","body": "Release of version %s","draft": false,"prerelease": false}' $fversion $fversion $fversion)
-	token=$(printenv TOKEN)
-	curl --data "$API_JSON" https://api.github.com/repos/${1}/${2}/releases?access_token=${token}
+	export RELEASE="true"
 fi
-
 ./gradlew setupCIWorkspace
-./gradlew build
-
-for f in build/libs/*.jar; do
-	if [[ $f == *"dev"* ]]
-	then
-		dev=$f;
-	else
-		file=$f;
-	fi
-done
-curl -F "pass=$PASS" -F "file=@$file" -F "dev=@$dev" http://maxanier.de/projects/mcss/files/upload.php
+./gradlew build curse
+version=$(<version.txt)
+echo "Finished building version: " $version
+token=$(printenv TOKEN)
+if [[ $commsg = *"$r"* ]]; then
+API_JSON=$(printf '{"tag_name": "v%s","target_commitish": "%s","name": "v%s","body": "Release of version %s","draft": false,"prerelease": false}' $version $(printenv GIT_COMMIT) $version $version)
+curl -u maxanier:${token} --data "$API_JSON" https://api.github.com/repos/${1}/${2}/releases
+fi
+API_JSON=$(printf '{ "body":"[DRONE]%s"}' $(printenv DRONE_BUILD_URL))
+curl -u maxanier:${token} --data "$API_JSON" https://api.github.com/repos/${1}/${2}/commits/$(printenv GIT_COMMIT)/comments

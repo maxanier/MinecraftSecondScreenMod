@@ -1,6 +1,5 @@
 buildscript {
-    repositories
-    {
+    repositories {
         mavenCentral()
         maven {
             name = "forge"
@@ -11,24 +10,34 @@ buildscript {
             url = "https://oss.sonatype.org/content/repositories/snapshots/"
         }
     }
-    dependencies
-    {
-        classpath "net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT"
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
     }
 }
 
-apply plugin: "forge"
+apply plugin: 'forge'
 
-ext.configFile = file "build.properties"
+loadProperties()
 
-configFile.withReader {
-    def prop = new Properties()
-    prop.load(it)
-    project.ext.config = new ConfigSlurper().parse prop
-}
-
-version = System.getenv("MODVERSION")
 group = "de.maxgb.minecraft.minecraft.second_screen"
+archivesBaseName= "MinecraftSecondScreen"
+
+def loadProperties(){
+    ext.configFile = file "build.properties"
+
+    configFile.withReader {
+        def prop = new Properties()
+        prop.load(it)
+        project.ext.config = new ConfigSlurper().parse prop
+    }
+
+    ext.mod_version="Test"
+}
+apply from: 'gradle/versioning.gradle'
+apply from: 'gradle/forge.gradle'
+apply from: 'gradle/dev.gradle'
+apply from: 'gradle/deploy.gradle'
+
 
 sourceSets
 {
@@ -37,57 +46,3 @@ sourceSets
         java { srcDirs = ["$projectDir/src/main/java","$projectDir/src/shared/java","$projectDir/src/api/java"] }		resources { srcDirs = ["$projectDir/src/main/resources"] }
     }
 }
-
-//Replace the mod version and minecraft version in the reference/constants java file
-
-minecraft {
-    version = config.minecraft_version + "-" + config.forge_version
-	mappings = "snapshot_nodoc_20141130"
-	
-    replaceIn "util/Constants.java"
-    replace "@VERSION@", "${System.getenv("MODVERSION")}.${System.getenv("DRONE_BUILD_NUMBER") ?: 0}"
-    replace "@MVERSION@", "${config.minecraft_version}"
-}
-
-version = "${config.minecraft_version}-${System.getenv("MODVERSION")}.${System.getenv("DRONE_BUILD_NUMBER") ?: 0}"
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '1.2'
-}
-
-processResources {
-    // exclude xcf files, as they are for development only
-    //exclude '**/*.xcf'
-
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include '*.info'
-
-        // replace version and mcversion
-        expand 'mod_version': project.version, 'minecraft_version': project.config.minecraft_version
-    }
-
-    // copy everything else, thats not the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude '**/*.info'
-    }
-}
-
-task devJar(type: Jar, dependsOn: 'classes') {
-    from(sourceSets.main.output) {
-        include '**'
-    }
-
-    extension = 'jar'
-    classifier = 'dev'
-}
-
-artifacts {
-    archives devJar
-}
-
-
-
-
-
-
