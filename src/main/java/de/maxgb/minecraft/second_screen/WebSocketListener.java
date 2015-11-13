@@ -1,20 +1,19 @@
 package de.maxgb.minecraft.second_screen;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.util.HashMap;
-
-import net.minecraft.server.MinecraftServer;
-
-import org.java_websocket.WebSocket;
-import org.java_websocket.handshake.ClientHandshake;
-import org.java_websocket.server.WebSocketServer;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
 import de.maxgb.minecraft.second_screen.util.ForceUpdateEvent;
 import de.maxgb.minecraft.second_screen.util.Logger;
+import net.minecraft.server.MinecraftServer;
+import org.java_websocket.WebSocket;
+import org.java_websocket.handshake.ClientHandshake;
+import org.java_websocket.server.WebSocketServer;
+
+import java.net.InetSocketAddress;
+import java.util.ConcurrentModificationException;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * Manages the websocket and all handlers.
@@ -165,12 +164,8 @@ public class WebSocketListener {
 		try {
 			socketServer.stop();
 
-		} catch (InterruptedException e) {
-
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			Logger.e(TAG, "Failed to stop the socket server", e);
 		}
 		socketServer = null;
 
@@ -179,16 +174,28 @@ public class WebSocketListener {
 
 	@SubscribeEvent
 	public void tick(ServerTickEvent e) {
-		synchronized (handlers) {
-			for (WebSocketHandler h : handlers.values()) {
-				if (h.remove) {
-					handlers.remove(h.address);
+		try {
+			synchronized (handlers) {
+				Iterator<WebSocketHandler> iterator = handlers.values().iterator();
+				while (iterator.hasNext()) {
+					WebSocketHandler h = iterator.next();
+					if (h.remove) {
+						iterator.remove();
+					} else {
+						try {
+							h.tick();
+						} catch (Exception ex) {
+							Logger.e(TAG, "Failed to tick Websockethandler " + h.toString(), ex);
+						}
 
-				} else {
-					h.tick();
+					}
 				}
 			}
+		} catch (ConcurrentModificationException ex2) {
+			//Theoretically should not get to here
+			Logger.e(TAG, "Failed to loop through the handlers. There was a concurrent modification.", ex2);
 		}
+
 	}
 
 }

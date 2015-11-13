@@ -1,16 +1,16 @@
 package de.maxgb.minecraft.second_screen;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.world.WorldEvent;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
+import de.maxgb.minecraft.second_screen.util.Constants;
 import de.maxgb.minecraft.second_screen.util.Helper;
 import de.maxgb.minecraft.second_screen.util.Logger;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.world.WorldEvent;
 
 public class MSSEventHandler {
 	
@@ -32,18 +32,36 @@ public class MSSEventHandler {
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public void onPlayerJoinWorld(EntityJoinWorldEvent e){
 		if(e.entity instanceof EntityPlayer && !e.world.isRemote){
+
 			EntityPlayer p = (EntityPlayer) e.entity;
-			if(!p.getEntityData().getBoolean("mss_book")){
+			NBTTagCompound tag = getModTag(p, Constants.MOD_ID);
+			if (!tag.getBoolean("has_initial_mss_book")) {
 				ItemStack book=Helper.createTutorialBook();
-				Helper.dropItemStackInWorld(e.world, p.posX, p.posY, p.posZ, new ItemStack(Items.apple));
-				if(!p.inventory.addItemStackToInventory(book)){
-					Logger.i("EntityJoinWorld-Main","Playerinventory full, dropping manual to the ground");
-					Helper.dropItemStackInWorld(e.world, p.posX, p.posY, p.posZ, book);
-				}
-				
-				p.getEntityData().setBoolean("mss_book", true);
+				p.inventory.addItemStackToInventory(book);
+				p.inventoryContainer.detectAndSendChanges();
+
+				tag.setBoolean("has_initial_mss_book", true);
 			}
 		}
+	}
+
+	public NBTTagCompound getModTag(EntityPlayer player, String modName) {
+		NBTTagCompound tag = player.getEntityData();
+		NBTTagCompound persistTag;
+		if (tag.hasKey(EntityPlayer.PERSISTED_NBT_TAG))
+			persistTag = tag.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
+		else {
+			persistTag = new NBTTagCompound();
+			tag.setTag(EntityPlayer.PERSISTED_NBT_TAG, persistTag);
+		}
+		NBTTagCompound modTag;
+		if (persistTag.hasKey(modName)) {
+			modTag = persistTag.getCompoundTag(modName);
+		} else {
+			modTag = new NBTTagCompound();
+			persistTag.setTag(modName, modTag);
+		}
+		return modTag;
 	}
 	
 }
