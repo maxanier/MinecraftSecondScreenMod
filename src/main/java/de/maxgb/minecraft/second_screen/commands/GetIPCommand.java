@@ -1,12 +1,13 @@
 package de.maxgb.minecraft.second_screen.commands;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import de.maxgb.minecraft.second_screen.SecondScreenMod;
 import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
-import de.maxgb.minecraft.second_screen.SecondScreenMod;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Returns the IP the mod is running on or if not running the error message
@@ -30,7 +31,7 @@ public class GetIPCommand extends BaseCommand {
 
 
 	@Override
-	public int compareTo(Object arg0) {
+	public int compareTo(ICommand arg0) {
 
 		return 0;
 	}
@@ -47,17 +48,17 @@ public class GetIPCommand extends BaseCommand {
 	}
 
 	@Override
-	public String getName() {
+	public String getCommandName() {
 		return "getIP";
 	}
 
 	@Override
-	public List getAliases() {
+	public List getCommandAliases() {
 		return aliases;
 	}
 
 	@Override
-	public void execute(ICommandSender sender, String[] args)
+	public void processCommand(ICommandSender sender, String[] args)
 			throws CommandException {
 		if (SecondScreenMod.instance.webSocketListener.isRunning()) {
 			sendMessage(sender, "IP: " + SecondScreenMod.instance.hostname);
@@ -70,7 +71,7 @@ public class GetIPCommand extends BaseCommand {
 	}
 
 	@Override
-	public boolean canCommandSenderUse(ICommandSender sender) {
+	public boolean canCommandSenderUseCommand(ICommandSender sender) {
 		return true;
 	}
 

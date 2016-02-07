@@ -1,12 +1,13 @@
 package de.maxgb.minecraft.second_screen.commands;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import de.maxgb.minecraft.second_screen.SecondScreenMod;
 import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
-import de.maxgb.minecraft.second_screen.SecondScreenMod;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Returns the port the mod listens to
@@ -26,7 +27,7 @@ public class GetMSSPortCommand extends BaseCommand {
 	}
 
 	@Override
-	public int compareTo(Object o) {
+	public int compareTo(ICommand o) {
 
 		return 0;
 	}
@@ -44,17 +45,17 @@ public class GetMSSPortCommand extends BaseCommand {
 	}
 
 	@Override
-	public String getName() {
+	public String getCommandName() {
 		return "getMssPort";
 	}
 
 	@Override
-	public List getAliases() {
+	public List getCommandAliases() {
 		return aliase;
 	}
 
 	@Override
-	public void execute(ICommandSender sender, String[] args)
+	public void processCommand(ICommandSender sender, String[] args)
 			throws CommandException {
 		if (SecondScreenMod.instance.webSocketListener.isRunning()) {
 			sendMessage(sender, "Minecraft Second Screen Port: " + SecondScreenMod.instance.port);
@@ -67,7 +68,7 @@ public class GetMSSPortCommand extends BaseCommand {
 	}
 
 	@Override
-	public boolean canCommandSenderUse(ICommandSender sender) {
+	public boolean canCommandSenderUseCommand(ICommandSender sender) {
 		return true;
 	}
 

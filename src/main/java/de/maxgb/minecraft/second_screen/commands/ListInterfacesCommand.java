@@ -1,19 +1,18 @@
 package de.maxgb.minecraft.second_screen.commands;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import de.maxgb.minecraft.second_screen.util.Helper;
 import net.minecraft.block.Block;
 import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
-
 import org.apache.commons.lang3.ClassUtils;
 
-import de.maxgb.minecraft.second_screen.util.Helper;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Command for development purpose
@@ -35,7 +34,7 @@ public class ListInterfacesCommand extends BaseCommand {
 
 
 	@Override
-	public int compareTo(Object arg0) {
+	public int compareTo(ICommand arg0) {
 
 		return 0;
 	}
@@ -52,17 +51,17 @@ public class ListInterfacesCommand extends BaseCommand {
 	}
 
 	@Override
-	public String getName() {
+	public String getCommandName() {
 		return "listinterfaces";
 	}
 
 	@Override
-	public List getAliases() {
+	public List getCommandAliases() {
 		return aliases;
 	}
 
 	@Override
-	public void execute(ICommandSender var1, String[] var2)
+	public void processCommand(ICommandSender var1, String[] var2)
 			throws CommandException {
 		EntityPlayer player;
 
@@ -100,7 +99,7 @@ public class ListInterfacesCommand extends BaseCommand {
 	}
 
 	@Override
-	public boolean canCommandSenderUse(ICommandSender sender) {
+	public boolean canCommandSenderUseCommand(ICommandSender sender) {
 		return true;
 	}
 

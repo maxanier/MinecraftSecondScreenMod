@@ -1,12 +1,13 @@
 package de.maxgb.minecraft.second_screen.commands.mss_sub;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import de.maxgb.minecraft.second_screen.commands.BaseCommand;
 import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
-import de.maxgb.minecraft.second_screen.commands.BaseCommand;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Manages all commands which start with mss
@@ -15,18 +16,7 @@ import de.maxgb.minecraft.second_screen.commands.BaseCommand;
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class MssCommand extends BaseCommand {
-	protected interface MssSubCommand {
-		public boolean canCommandSenderUseCommand(ICommandSender var1);
-
-		public String getCommandName();
-
-		public void processCommand(ICommandSender var1, String[] var2);
-
-		public void sendCommandUsage(ICommandSender var1);
-	}
-
 	private List aliases;
-
 	private ArrayList<MssSubCommand> commands;
 
 	public MssCommand() {
@@ -37,17 +27,19 @@ public class MssCommand extends BaseCommand {
 		commands = new ArrayList<MssSubCommand>();
 	}
 
+	@Override
+	public int compareTo(ICommand o) {
+		return 0;
+	}
+
 	public void addSubCommand(MssSubCommand c) {
 		commands.add(c);
 	}
 
-
 	@Override
-	public int compareTo(Object arg0) {
-
-		return 0;
+	public String getCommandName() {
+		return "mss";
 	}
-
 
 	@Override
 	public String getCommandUsage(ICommandSender var1) {
@@ -57,37 +49,12 @@ public class MssCommand extends BaseCommand {
 	}
 
 	@Override
-	public boolean isUsernameIndex(String[] var1, int var2) {
-
-		return false;
-	}
-
-
-	/**
-	 * Prints the available actions/subcommands to the command sender
-	 * @param var1
-	 */
-	private void sendActions(ICommandSender var1) {
-		sendMessage(var1, getCommandUsage(var1));
-		sendMessage(var1, "Actions:");
-		for (MssSubCommand c : commands) {
-			c.sendCommandUsage(var1);
-		}
-	}
-
-	@Override
-	public String getName() {
-		return "mss";
-	}
-
-	@Override
-	public List getAliases() {
+	public List<String> getCommandAliases() {
 		return aliases;
 	}
 
 	@Override
-	public void execute(ICommandSender sender, String[] args)
-			throws CommandException {
+	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
 		if (args == null || args.length == 0) {
 			BaseCommand.sendMessage(sender, "Usage: " + getCommandUsage(sender));
 			return;
@@ -113,18 +80,46 @@ public class MssCommand extends BaseCommand {
 			BaseCommand.sendMessage(sender, "Action not found.");
 		}
 		sendActions(sender);
-		
 	}
 
 	@Override
-	public boolean canCommandSenderUse(ICommandSender sender) {
+	public boolean canCommandSenderUseCommand(ICommandSender sender) {
 		return true;
 	}
 
 	@Override
+	public boolean isUsernameIndex(String[] var1, int var2) {
+
+		return false;
+	}
+
+	/**
+	 * Prints the available actions/subcommands to the command sender
+	 * @param var1
+	 */
+	private void sendActions(ICommandSender var1) {
+		sendMessage(var1, getCommandUsage(var1));
+		sendMessage(var1, "Actions:");
+		for (MssSubCommand c : commands) {
+			c.sendCommandUsage(var1);
+		}
+	}
+
+	@Override
 	public List addTabCompletionOptions(ICommandSender sender, String[] args,
-			BlockPos pos) {
+										BlockPos pos) {
 		return null;
+	}
+
+
+	protected interface MssSubCommand {
+		boolean canCommandSenderUseCommand(ICommandSender var1);
+
+		String getCommandName();
+
+		void processCommand(ICommandSender var1, String[] var2);
+
+		void sendCommandUsage(ICommandSender var1);
 	}
 
 }

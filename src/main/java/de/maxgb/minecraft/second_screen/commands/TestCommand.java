@@ -1,11 +1,12 @@
 package de.maxgb.minecraft.second_screen.commands;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Test command for developent purpose
@@ -23,7 +24,7 @@ public class TestCommand extends BaseCommand {
 
 
 	@Override
-	public int compareTo(Object arg0) {
+	public int compareTo(ICommand arg0) {
 
 		return 0;
 	}
@@ -41,23 +42,23 @@ public class TestCommand extends BaseCommand {
 
 
 	@Override
-	public String getName() {
+	public String getCommandName() {
 		return "msstest";
 	}
 
 	@Override
-	public List getAliases() {
+	public List getCommandAliases() {
 		return aliases;
 	}
 
 	@Override
-	public void execute(ICommandSender sender, String[] args)
+	public void processCommand(ICommandSender sender, String[] args)
 			throws CommandException {
 		
 	}
 
 	@Override
-	public boolean canCommandSenderUse(ICommandSender sender) {
+	public boolean canCommandSenderUseCommand(ICommandSender sender) {
 		return true;
 	}
 
