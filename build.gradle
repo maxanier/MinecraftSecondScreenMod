@@ -9,18 +9,21 @@ buildscript {
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
 
 plugins {
-    id 'com.matthewprenger.cursegradle' version '1.0.5'
+    id 'com.matthewprenger.cursegradle' version '1.0.9'
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 loadProperties()
 
 group = "de.maxgb.minecraft.minecraft.second_screen"
 archivesBaseName= "MinecraftSecondScreen"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 def loadProperties(){
     ext.configFile = file "build.properties"
@@ -43,6 +46,27 @@ sourceSets
 {
     main
     {
-        java { srcDirs = ["$projectDir/src/main/java","$projectDir/src/shared/java","$projectDir/src/api/java"] }		resources { srcDirs = ["$projectDir/src/main/resources"] }
+        java { 
+            srcDirs = ["$projectDir/src/main/java","$projectDir/src/shared/java","$projectDir/src/api/java"] 
+        }
+        resources { 
+            srcDirs = ["$projectDir/src/main/resources"] 
+        }
+    }
+    api {
+                java {
+                    srcDir "$projectDir/src/api/java"
+                }
+                resources {
+                    srcDir "$projectDir/src/api/resources"
+                }
+    }
+    test {
+                java {
+                    srcDir "$projectDir/src/test/java"
+                }
+                resources {
+                    srcDir "$projectDir/src/test/resources"
+                }
     }
 }
