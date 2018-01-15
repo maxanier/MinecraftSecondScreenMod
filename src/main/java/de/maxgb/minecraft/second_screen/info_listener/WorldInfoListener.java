@@ -1,18 +1,16 @@
 package de.maxgb.minecraft.second_screen.info_listener;
 
-import java.util.HashMap;
-
-import net.minecraft.world.WorldServer;
-import net.minecraft.world.storage.WorldInfo;
-
-import org.json.JSONObject;
-
 import de.maxgb.minecraft.second_screen.Configs;
 import de.maxgb.minecraft.second_screen.StandardListener;
 import de.maxgb.minecraft.second_screen.shared.PROTOKOLL;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.util.User;
 import de.maxgb.minecraft.second_screen.world_observer.ObservedBlock;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.storage.WorldInfo;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 
 /**
  * Listens to world related informations like world time, also adds informations from all observed blocks
@@ -65,9 +63,9 @@ public class WorldInfoListener extends StandardListener {
 		everyTick = Configs.world_info_update_time;
 		worlds = new HashMap<Integer, WorldServer>();
 
-		for (WorldServer s : server.worldServers) {
-			worlds.put(s.provider.getDimensionId(), s);
-		}
+        for (WorldServer s : server.worlds) {
+            worlds.put(s.provider.getDimension(), s);
+        }
 		Logger.i(TAG, "Worlds: " + worlds.toString());
 	}
 
@@ -78,9 +76,9 @@ public class WorldInfoListener extends StandardListener {
 		// General Overworldinfo
 		JSONObject ow = new JSONObject();
 
-		for (WorldServer w : server.worldServers) {
-			if (w.provider.getDimensionId() == 0) {
-				WorldInfo i = w.getWorldInfo();
+        for (WorldServer w : server.worlds) {
+            if (w.provider.getDimension() == 0) {
+                WorldInfo i = w.getWorldInfo();
 				ow.put("name", i.getWorldName());
 				ow.put("time", parseTime((int) i.getWorldTime() + 6000));
 				ow.put("rain", i.isRaining());

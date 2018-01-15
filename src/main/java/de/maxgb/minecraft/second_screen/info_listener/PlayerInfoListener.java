@@ -7,8 +7,8 @@ import de.maxgb.minecraft.second_screen.util.User;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.chunk.Chunk;
 import org.json.JSONArray;
@@ -42,9 +42,9 @@ public class PlayerInfoListener extends StandardListener {
 		if (player == null) {
 			response.put("success", 0).put("error", "User " + user.username + " not online");
 		} else {
-			int x = MathHelper.floor_double(player.posX);
-            int y = MathHelper.floor_double(player.posY);
-            int z = MathHelper.floor_double(player.posZ);
+            int x = MathHelper.floor(player.posX);
+            int y = MathHelper.floor(player.posY);
+            int z = MathHelper.floor(player.posZ);
             
 			response.put("health", player.getHealth());
 			response.put("foodlevel", player.getFoodStats().getFoodLevel());
@@ -60,13 +60,13 @@ public class PlayerInfoListener extends StandardListener {
 			
             EnumFacing enumfacing = player.getHorizontalFacing();
 			response.put("direction", enumfacing.getName());
-			
-			if (player.worldObj != null && player.worldObj.isBlockLoaded(player.getPosition()))
+
+            if (player.getEntityWorld() != null && player.getEntityWorld().isBlockLoaded(player.getPosition()))
             {
-                Chunk chunk = player.worldObj.getChunkFromBlockCoords(player.getPosition());
+                Chunk chunk = player.getEntityWorld().getChunkFromBlockCoords(player.getPosition());
                 response.put("lc", (chunk.getTopFilledSegment()+15));
-                response.put("biome", chunk.getBiome(player.getPosition(), player.worldObj.getWorldChunkManager()).biomeName);
-				response.put("light", chunk.getLightSubtracted(player.getPosition(), 0) + " (" + chunk.getLightFor(EnumSkyBlock.SKY, player.getPosition()) + " sky, " + chunk.getLightFor(EnumSkyBlock.BLOCK, player.getPosition()) + " block)");
+                response.put("biome", chunk.getBiome(player.getPosition(), player.getEntityWorld().getBiomeProvider()).getBiomeName());
+                response.put("light", chunk.getLightSubtracted(player.getPosition(), 0) + " (" + chunk.getLightFor(EnumSkyBlock.SKY, player.getPosition()) + " sky, " + chunk.getLightFor(EnumSkyBlock.BLOCK, player.getPosition()) + " block)");
 
 
 			}
@@ -75,8 +75,8 @@ public class PlayerInfoListener extends StandardListener {
 			Collection<PotionEffect> pot = player.getActivePotionEffects();
 			for (PotionEffect i : pot) {
 				JSONArray p = new JSONArray();
-				p.put(StatCollector.translateToLocal(i.getEffectName()));
-				p.put(i.getDuration() / 20);
+                p.put(I18n.translateToLocal(i.getEffectName()));
+                p.put(i.getDuration() / 20);
 				potions.put(p);
 			}
 			response.put("potions", potions);

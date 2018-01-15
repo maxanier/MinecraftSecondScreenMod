@@ -1,15 +1,15 @@
 package de.maxgb.minecraft.second_screen.data;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-
-import net.minecraftforge.common.config.Configuration;
 import de.maxgb.minecraft.second_screen.Configs;
 import de.maxgb.minecraft.second_screen.util.Constants;
 import de.maxgb.minecraft.second_screen.util.Helper;
 import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.util.User;
+import net.minecraftforge.common.config.Configuration;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Manages the second screen users
@@ -39,8 +39,8 @@ public class UserManager {
 	 * 
 	 * @param username
 	 *            Username
-	 * @param password
-	 *            Passwordhash
+     * @param pass
+     *            Passwordhash
 	 * @return
 	 */
 	public static boolean auth(String username, int pass) {

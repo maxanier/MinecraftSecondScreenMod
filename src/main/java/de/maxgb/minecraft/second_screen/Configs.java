@@ -1,16 +1,16 @@
 package de.maxgb.minecraft.second_screen;
 
-import java.io.File;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
+import de.maxgb.minecraft.second_screen.util.Constants;
+import de.maxgb.minecraft.second_screen.util.Logger;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import de.maxgb.minecraft.second_screen.util.Constants;
-import de.maxgb.minecraft.second_screen.util.Logger;
+
+import java.io.File;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 public class Configs {
 
@@ -67,34 +67,34 @@ public class Configs {
 
 		// Update times
 		Property prop = config.get(update_times.getQualifiedName(), "server_info_update_time", 500);
-		prop.comment = "General server info";
-		server_info_update_time = prop.getInt();
+        prop.setComment("General server info");
+        server_info_update_time = prop.getInt();
 
 		prop = config.get(update_times.getQualifiedName(), "world_info_update_time", 200);
-		prop.comment = "World info";
-		world_info_update_time = prop.getInt();
+        prop.setComment("World info");
+        world_info_update_time = prop.getInt();
 
 		prop = config.get(update_times.getQualifiedName(), "player_info_update_time", 40);
-		prop.comment = "Player info";
-		player_info_update_time = prop.getInt();
+        prop.setComment("Player info");
+        player_info_update_time = prop.getInt();
 
 		prop = config.get(update_times.getQualifiedName(), "chat_update_time", 10);
-		prop.comment = "Chat";
-		chat_update_time = prop.getInt();
+        prop.setComment("Chat");
+        chat_update_time = prop.getInt();
 
 		// General configs
 
 		prop = config.get(CATEGORY_GENERAL, "auth_required", false);
-		prop.comment = "Whether the second screen user need to login with username and password, which can be set in game";
-		auth_required = prop.getBoolean(true);
+        prop.setComment("Whether the second screen user need to login with username and password, which can be set in game");
+        auth_required = prop.getBoolean(true);
 
 		prop = config.get(CATEGORY_GENERAL, "public_observer_admin_only", false);
-		prop.comment = "If true, only admins can create public block observations";
-		obs_publ_admin = prop.getBoolean(false);
+        prop.setComment("If true, only admins can create public block observations");
+        obs_publ_admin = prop.getBoolean(false);
 		
 		prop = config.get(CATEGORY_GENERAL, "debug_mode", false);
-		prop.comment = "Enable logging debug messages to file";
-		debug_mode=prop.getBoolean(false);
+        prop.setComment("Enable logging debug messages to file");
+        debug_mode=prop.getBoolean(false);
 
 		if (config.hasChanged()) {
 			config.save();
@@ -103,8 +103,8 @@ public class Configs {
 
 	@SubscribeEvent
 	public void onConfigurationChanged(ConfigChangedEvent.OnConfigChangedEvent e) {
-		if (e.modID.equalsIgnoreCase(Constants.MOD_ID)) {
-			// Resync configs
+        if (e.getModID().equalsIgnoreCase(Constants.MOD_ID)) {
+            // Resync configs
 			Logger.i(TAG, "Configuration has changed");
 			Configs.loadConfiguration();
 		}

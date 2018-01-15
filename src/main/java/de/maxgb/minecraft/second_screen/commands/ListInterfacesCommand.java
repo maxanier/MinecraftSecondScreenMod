@@ -6,12 +6,15 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import org.apache.commons.lang3.ClassUtils;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -41,7 +44,7 @@ public class ListInterfacesCommand extends BaseCommand {
 
 
 	@Override
-	public String getCommandUsage(ICommandSender var1) {
+	public String getUsage(ICommandSender var1) {
 		return "/listinterfaces";
 	}
 
@@ -51,17 +54,17 @@ public class ListInterfacesCommand extends BaseCommand {
 	}
 
 	@Override
-	public String getCommandName() {
+	public String getName() {
 		return "listinterfaces";
 	}
 
 	@Override
-	public List getCommandAliases() {
+	public List getAliases() {
 		return aliases;
 	}
 
 	@Override
-	public void processCommand(ICommandSender var1, String[] var2)
+	public void execute(MinecraftServer server, ICommandSender var1, String[] var2)
 			throws CommandException {
 		EntityPlayer player;
 
@@ -72,15 +75,15 @@ public class ListInterfacesCommand extends BaseCommand {
 			return;
 		}
 
-		MovingObjectPosition p = Helper.getPlayerLookingSpot(player, true);
+		RayTraceResult p = Helper.getPlayerLookingSpot(player, true);
 		if (p == null) {
 			sendMessage(var1, "You have to look at a block");
 			return;
 		}
 
 
-		Block block = player.worldObj.getBlockState(p.getBlockPos()).getBlock();
-		TileEntity tile = player.worldObj.getTileEntity(p.getBlockPos());
+		Block block = player.getEntityWorld().getBlockState(p.getBlockPos()).getBlock();
+		TileEntity tile = player.getEntityWorld().getTileEntity(p.getBlockPos());
 		
 		if(block!=null){
 			sendMessage(var1,block.getClass().getName());
@@ -99,14 +102,12 @@ public class ListInterfacesCommand extends BaseCommand {
 	}
 
 	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender sender) {
+	public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
 		return true;
 	}
 
 	@Override
-	public List addTabCompletionOptions(ICommandSender sender, String[] args,
-			BlockPos pos) {
-		return null;
+	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+		return Collections.emptyList();
 	}
-
 }

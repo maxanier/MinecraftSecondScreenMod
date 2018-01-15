@@ -1,12 +1,11 @@
 package de.maxgb.minecraft.second_screen.info_listener;
 
-import org.json.JSONObject;
-
 import de.maxgb.minecraft.second_screen.Configs;
 import de.maxgb.minecraft.second_screen.SecondScreenMod;
 import de.maxgb.minecraft.second_screen.StandardListener;
 import de.maxgb.minecraft.second_screen.shared.PROTOKOLL;
 import de.maxgb.minecraft.second_screen.util.User;
+import org.json.JSONObject;
 
 /**
  * Listener which listens to server informations like online players
@@ -25,9 +24,9 @@ public class ServerInfoListener extends StandardListener {
 		JSONObject info = new JSONObject();
 		info.put("motd", server.getMOTD());
 		info.put("maxplayer", server.getMaxPlayers());
-		info.put("usernames", server.getAllUsernames());
-		if(server.getAllUsernames().length==0){
-			info.put("lastonline", SecondScreenMod.instance.latestOnlinePlayer);
+        info.put("usernames", server.getOnlinePlayerNames());
+        if (server.getOnlinePlayerNames().length == 0) {
+            info.put("lastonline", SecondScreenMod.instance.latestOnlinePlayer);
 		}
 		info.put("playercount", server.getCurrentPlayerCount());
 		return PROTOKOLL.SERVER_INFO_LISTENER + "-" + info.toString();

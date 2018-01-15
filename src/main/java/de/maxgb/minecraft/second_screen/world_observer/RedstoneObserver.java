@@ -1,25 +1,21 @@
 package de.maxgb.minecraft.second_screen.world_observer;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockLever;
-import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import de.maxgb.minecraft.second_screen.util.Logger;
 
 public class RedstoneObserver implements ObservedBlock.ObservingType {
 
 	public final static int ID = 1;
-	public static boolean canObserve(Block block) {
-		if (block != null && block instanceof BlockLever) {
+
+	public static boolean canObserve(IBlockState block) {
+		if (block != null && block.getBlock() instanceof BlockLever) {
 			return true;
 		} else if (block != null && block.isNormalCube()) {
 			return true;
@@ -38,17 +34,17 @@ public class RedstoneObserver implements ObservedBlock.ObservingType {
 	 */
 	public static boolean setLeverState(ObservedBlock b, boolean state) {
 		if (b.type == ID) {
-			World w = FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(b.dimensionId);
+			World w = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(b.dimensionId);
 
 			if (w.getBlockState(b.pos).getBlock() instanceof BlockLever) {
 				IBlockState st = w.getBlockState(b.pos);
-				
-				if(!st.getValue(BlockLever.POWERED).equals(Boolean.valueOf(state))){
-					st=st.withProperty(BlockLever.POWERED, Boolean.valueOf(state));
+
+				if (!st.getValue(BlockLever.POWERED).equals(state)) {
+					st = st.withProperty(BlockLever.POWERED, state);
 					w.setBlockState(b.pos, st, 3);
-		            w.notifyNeighborsOfStateChange(b.pos, w.getBlockState(b.pos).getBlock());
-		            EnumFacing enumfacing1 = ((BlockLever.EnumOrientation)st.getValue(BlockLever.FACING)).getFacing();
-		            w.notifyNeighborsOfStateChange(b.pos.offset(enumfacing1.getOpposite()), w.getBlockState(b.pos).getBlock());
+					w.notifyNeighborsOfStateChange(b.pos, w.getBlockState(b.pos).getBlock(), true);
+					EnumFacing enumfacing1 = st.getValue(BlockLever.FACING).getFacing();
+					w.notifyNeighborsOfStateChange(b.pos.offset(enumfacing1.getOpposite()), w.getBlockState(b.pos).getBlock(), true);
 				}
 				
 				
@@ -76,7 +72,7 @@ public class RedstoneObserver implements ObservedBlock.ObservingType {
 	}
 
 	@Override
-	public boolean canObserve(Block block, TileEntity tile) {
+	public boolean canObserve(IBlockState block, TileEntity tile) {
 		return RedstoneObserver.canObserve(block);
 	}
 

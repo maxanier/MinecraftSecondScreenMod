@@ -1,15 +1,15 @@
 package de.maxgb.minecraft.second_screen.commands.mss_sub;
 
-import net.minecraft.block.Block;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MovingObjectPosition;
 import de.maxgb.minecraft.second_screen.commands.BaseCommand;
 import de.maxgb.minecraft.second_screen.data.ObservingManager;
 import de.maxgb.minecraft.second_screen.util.Helper;
 import de.maxgb.minecraft.second_screen.world_observer.ObservedBlock;
 import de.maxgb.minecraft.second_screen.world_observer.RedstoneObserver;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.RayTraceResult;
 
 public class RegisterRedstoneInfoCommand implements MssCommand.MssSubCommand {
 
@@ -21,10 +21,7 @@ public class RegisterRedstoneInfoCommand implements MssCommand.MssSubCommand {
 
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender var1) {
-		if (var1 instanceof EntityPlayer) {
-			return true;
-		}
-		return false;
+		return var1 instanceof EntityPlayer;
 	}
 
 	@Override
@@ -62,21 +59,21 @@ public class RegisterRedstoneInfoCommand implements MssCommand.MssSubCommand {
 			}
 
 			// Get Block
-			MovingObjectPosition p = Helper.getPlayerLookingSpot(player, true);
+			RayTraceResult p = Helper.getPlayerLookingSpot(player, true);
 			if (p == null) {
 				sendMessage(var1, "You have to look at a block");
 				return;
 			}
-			Block b = player.worldObj.getBlockState(p.getBlockPos()).getBlock();
+			IBlockState b = player.getEntityWorld().getBlockState(p.getBlockPos());
 
 			sendMessage(var1,
-					"You are looking at: " + p.getBlockPos().toString() + " " + b.getLocalizedName());
+					"You are looking at: " + p.getBlockPos().toString() + " " + b.getBlock().getUnlocalizedName());
 
 			if (!RedstoneObserver.canObserve(b)) {
 				sendMessage(var1, "You can only observe solid blocks and levers");
 			}
 
-			if (ObservingManager.observeBlock(var1.getName(), publ, new ObservedBlock(var2[1], p.getBlockPos(), player.worldObj.provider.getDimensionId(), RedstoneObserver.ID, EnumFacing.UP))) {
+			if (ObservingManager.observeBlock(var1.getName(), publ, new ObservedBlock(var2[1], p.getBlockPos(), player.getEntityWorld().provider.getDimension(), RedstoneObserver.ID, EnumFacing.UP))) {
 				sendMessage(var1, "Successfully added block to observer list.");
 			} else {
 				sendMessage(var1,

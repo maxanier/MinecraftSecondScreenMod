@@ -1,14 +1,14 @@
 package de.maxgb.minecraft.second_screen.util;
 
-import java.util.HashMap;
-import java.util.Map.Entry;
-
+import de.maxgb.minecraft.second_screen.shared.ClientVersion;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
-import de.maxgb.minecraft.second_screen.shared.ClientVersion;
+
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 /**
  * Second screen user class
@@ -80,10 +80,10 @@ public class User {
 			Logger.w(TAG, "Server null, cant find user");
 			return null;
 		}
-		for (Object p : s.getConfigurationManager().playerEntityList) {
-			if (((EntityPlayerMP) p).getName().equals(username)) {
-				return (EntityPlayerMP) p;
-			}
+        for (EntityPlayerMP p : s.getPlayerList().getPlayers()) {
+            if (p.getName().equals(username)) {
+                return p;
+            }
 		}
 		return null;
 	}

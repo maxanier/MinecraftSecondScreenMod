@@ -1,16 +1,15 @@
 package de.maxgb.minecraft.second_screen.world_observer;
 
-import net.minecraft.block.Block;
+import de.maxgb.minecraft.second_screen.util.Logger;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fluids.IFluidTank;
-
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import de.maxgb.minecraft.second_screen.util.Logger;
 
 //@formatter:off
 /*JSONStructure: 
@@ -52,7 +51,7 @@ public class FluidTankObserver implements ObservedBlock.ObservingType {
 		if (t != null && (t instanceof IFluidHandler)) {
 			IFluidHandler tank = (IFluidHandler) t;
 			try {
-				for (FluidTankInfo tinfo : tank.getTankInfo(block.side)) {
+				for (IFluidTankProperties tinfo : tank.getTankProperties()) {
 					addTankInfo(ti, tinfo);
 				}
 			} catch (NullPointerException e) {
@@ -81,12 +80,17 @@ public class FluidTankObserver implements ObservedBlock.ObservingType {
 		}
 	}
 
-	@Override
-	public boolean canObserve(Block block, TileEntity tile) {
-		if (tile != null && (tile instanceof IFluidHandler || tile instanceof IFluidTank)) {
-			return true;
+	private void addTankInfo(JSONObject parent, IFluidTankProperties tank) {
+		try {
+			parent.put(tank.getContents().getFluid().getLocalizedName(tank.getContents()),
+					new JSONArray().put(tank.getContents().amount).put(tank.getCapacity()));
+		} catch (NullPointerException e) {
 		}
-		return false;
+	}
+
+	@Override
+	public boolean canObserve(IBlockState block, TileEntity tile) {
+		return tile != null && (tile instanceof IFluidHandler || tile instanceof IFluidTank);
 	}
 
 	@Override

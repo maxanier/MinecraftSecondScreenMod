@@ -3,13 +3,16 @@ package de.maxgb.minecraft.second_screen.commands;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.BlockPos;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
- * Test command for developent purpose
+ * Test command for development purpose
  * @author Max
  *
  */
@@ -31,8 +34,8 @@ public class TestCommand extends BaseCommand {
 
 
 	@Override
-	public String getCommandUsage(ICommandSender var1) {
-		return "/msstest";
+    public String getUsage(ICommandSender var1) {
+        return "/msstest";
 	}
 
 	@Override
@@ -42,30 +45,28 @@ public class TestCommand extends BaseCommand {
 
 
 	@Override
-	public String getCommandName() {
-		return "msstest";
+    public String getName() {
+        return "msstest";
 	}
 
 	@Override
-	public List getCommandAliases() {
-		return aliases;
+    public List getAliases() {
+        return aliases;
 	}
 
 	@Override
-	public void processCommand(ICommandSender sender, String[] args)
-			throws CommandException {
+    public void execute(MinecraftServer server, ICommandSender sender, String[] args)
+            throws CommandException {
 		
 	}
 
 	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender sender) {
-		return true;
+    public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
+        return true;
 	}
 
 	@Override
-	public List addTabCompletionOptions(ICommandSender sender, String[] args,
-			BlockPos pos) {
-		return null;
-	}
-
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        return Collections.emptyList();
+    }
 }

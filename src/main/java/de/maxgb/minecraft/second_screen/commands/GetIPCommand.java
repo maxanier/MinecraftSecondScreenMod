@@ -4,9 +4,12 @@ import de.maxgb.minecraft.second_screen.SecondScreenMod;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.BlockPos;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -38,8 +41,8 @@ public class GetIPCommand extends BaseCommand {
 
 
 	@Override
-	public String getCommandUsage(ICommandSender var1) {
-		return "/getIP";
+    public String getUsage(ICommandSender var1) {
+        return "/getIP";
 	}
 
 	@Override
@@ -48,18 +51,19 @@ public class GetIPCommand extends BaseCommand {
 	}
 
 	@Override
-	public String getCommandName() {
-		return "getIP";
+    public String getName() {
+        return "getIP";
 	}
 
 	@Override
-	public List getCommandAliases() {
-		return aliases;
+    public List getAliases() {
+        return aliases;
 	}
 
+
 	@Override
-	public void processCommand(ICommandSender sender, String[] args)
-			throws CommandException {
+    public void execute(MinecraftServer server, ICommandSender sender, String[] args)
+            throws CommandException {
 		if (SecondScreenMod.instance.webSocketListener.isRunning()) {
 			sendMessage(sender, "IP: " + SecondScreenMod.instance.hostname);
 		} else {
@@ -71,14 +75,13 @@ public class GetIPCommand extends BaseCommand {
 	}
 
 	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender sender) {
-		return true;
+    public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
+        return true;
 	}
 
 	@Override
-	public List addTabCompletionOptions(ICommandSender sender, String[] args,
-			BlockPos pos) {
-		return null;
-	}
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        return Collections.emptyList();
+    }
 
 }

@@ -1,13 +1,5 @@
 package de.maxgb.minecraft.second_screen.commands.mss_sub;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MovingObjectPosition;
 import de.maxgb.minecraft.second_screen.commands.BaseCommand;
 import de.maxgb.minecraft.second_screen.data.ObservingManager;
 import de.maxgb.minecraft.second_screen.util.Helper;
@@ -15,6 +7,14 @@ import de.maxgb.minecraft.second_screen.util.Logger;
 import de.maxgb.minecraft.second_screen.world_observer.ObservedBlock;
 import de.maxgb.minecraft.second_screen.world_observer.ObservedBlock.ObservingType;
 import de.maxgb.minecraft.second_screen.world_observer.RedstoneObserver;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.RayTraceResult;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Command which is used to register Observer for blocks
@@ -27,10 +27,7 @@ public class RegisterObserverCommand implements MssCommand.MssSubCommand {
 
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender var1) {
-		if (var1 instanceof EntityPlayer) {
-			return true;
-		}
-		return false;
+		return var1 instanceof EntityPlayer;
 	}
 
 	@Override
@@ -62,13 +59,13 @@ public class RegisterObserverCommand implements MssCommand.MssSubCommand {
 				return;
 			}
 
-			MovingObjectPosition p = Helper.getPlayerLookingSpot(player, true);
-			if (p == null || p.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK) {
+			RayTraceResult p = Helper.getPlayerLookingSpot(player, true);
+			if (p == null || p.typeOfHit != RayTraceResult.Type.BLOCK) {
 				sendMessage(var1, "You have to look at a block");
 				return;
 			}
-			Block block = player.worldObj.getBlockState(p.getBlockPos()).getBlock();
-			TileEntity tile = player.worldObj.getTileEntity(p.getBlockPos());
+			IBlockState block = player.getEntityWorld().getBlockState(p.getBlockPos());
+			TileEntity tile = player.getEntityWorld().getTileEntity(p.getBlockPos());
 
 			boolean publ = false;
 			ObservingType type = null;
@@ -105,7 +102,7 @@ public class RegisterObserverCommand implements MssCommand.MssSubCommand {
 			}
 
 			//Gathers all possible ObservationTypes for this block, except there was one specified by the command
-			List<ObservingType> types = new ArrayList<ObservingType>();
+			List<ObservingType> types = new ArrayList<>();
 
 			if (type != null) {
 				types.add(type);
@@ -130,7 +127,7 @@ public class RegisterObserverCommand implements MssCommand.MssSubCommand {
 			//Otherwise inform user
 			if (types.size() == 1) {
 				if (ObservingManager.observeBlock(var1.getName(), publ, new ObservedBlock(var2[1],
-						p.getBlockPos(), player.worldObj.provider.getDimensionId(), types.get(0).getId(),
+						p.getBlockPos(), player.getEntityWorld().provider.getDimension(), types.get(0).getId(),
 						p.sideHit))) {
 					sendMessage(var1, "Successfully added block to observer list (" + types.get(0).getIdentifier()
 							+ ")");

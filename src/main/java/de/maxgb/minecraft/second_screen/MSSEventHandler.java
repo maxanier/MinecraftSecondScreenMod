@@ -1,6 +1,7 @@
 package de.maxgb.minecraft.second_screen;
 
-import net.minecraft.entity.Entity;
+import de.maxgb.minecraft.second_screen.util.Helper;
+import de.maxgb.minecraft.second_screen.util.Logger;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -9,8 +10,6 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import de.maxgb.minecraft.second_screen.util.Helper;
-import de.maxgb.minecraft.second_screen.util.Logger;
 
 public class MSSEventHandler {
 	
@@ -18,8 +17,8 @@ public class MSSEventHandler {
 	
 	@SubscribeEvent
 	public void onWorldSave(WorldEvent.Save e){
-		if(e.world.provider.getDimensionId()==0 && !e.world.isRemote){
-			Logger.i(TAG, "Saving data");
+        if (e.getWorld().provider.getDimension() == 0 && !e.getWorld().isRemote) {
+            Logger.i(TAG, "Saving data");
 			SecondScreenMod.instance.saveData();
 		}
 	}
@@ -31,15 +30,15 @@ public class MSSEventHandler {
 	
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public void onPlayerJoinWorld(EntityJoinWorldEvent e){
-		if(e.entity instanceof EntityPlayer && !e.world.isRemote){
-			EntityPlayer p = (EntityPlayer) e.entity;
-			if(!p.getEntityData().getBoolean("mss_book")){
+        if (e.getEntity() instanceof EntityPlayer && !e.getWorld().isRemote) {
+            EntityPlayer p = (EntityPlayer) e.getEntity();
+            if(!p.getEntityData().getBoolean("mss_book")){
 				ItemStack book=Helper.createTutorialBook();
-				Helper.dropItemStackInWorld(e.world, p.posX, p.posY, p.posZ, new ItemStack(Items.apple));
-				if(!p.inventory.addItemStackToInventory(book)){
+                Helper.dropItemStackInWorld(e.getWorld(), p.posX, p.posY, p.posZ, new ItemStack(Items.APPLE));
+                if(!p.inventory.addItemStackToInventory(book)){
 					Logger.i("EntityJoinWorld-Main","Playerinventory full, dropping manual to the ground");
-					Helper.dropItemStackInWorld(e.world, p.posX, p.posY, p.posZ, book);
-				}
+                    Helper.dropItemStackInWorld(e.getWorld(), p.posX, p.posY, p.posZ, book);
+                }
 				
 				p.getEntityData().setBoolean("mss_book", true);
 			}

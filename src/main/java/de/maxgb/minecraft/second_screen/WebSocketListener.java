@@ -1,22 +1,19 @@
 package de.maxgb.minecraft.second_screen;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.util.HashMap;
-import java.util.Iterator;
-
-import net.minecraft.server.MinecraftServer;
+import de.maxgb.minecraft.second_screen.util.ForceUpdateEvent;
+import de.maxgb.minecraft.second_screen.util.Logger;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
-
 import org.java_websocket.WebSocket;
 import org.java_websocket.WebSocketImpl;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 
-import de.maxgb.minecraft.second_screen.util.ForceUpdateEvent;
-import de.maxgb.minecraft.second_screen.util.Logger;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * Manages the websocket and all handlers.
@@ -128,8 +125,8 @@ public class WebSocketListener {
 
 		if (port == 0) {
 
-			port = MinecraftServer.getServer().getPort();
-		}
+            port = FMLCommonHandler.instance().getMinecraftServerInstance().getServerPort();
+        }
 
 		return new MSSWebSocketServer(new InetSocketAddress(hostname, port));
 	}

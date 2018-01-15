@@ -1,18 +1,16 @@
 package de.maxgb.minecraft.second_screen.world_observer;
 
-import java.util.HashMap;
-import java.util.Map.Entry;
-
-import net.minecraft.block.Block;
+import de.maxgb.minecraft.second_screen.util.Logger;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import de.maxgb.minecraft.second_screen.util.Logger;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 //@formatter:off
 /*JSONStructure:
@@ -49,10 +47,10 @@ public class InventoryObserver implements ObservedBlock.ObservingType {
 				if (s != null) {
 					String name=s.getDisplayName();
 					if(items.containsKey(name)){
-						items.put(name, items.get(name)+s.stackSize);
+						items.put(name, items.get(name) + s.getCount());
 					}
 					else{
-						items.put(name, s.stackSize);
+						items.put(name, s.getCount());
 					}
 					
 				}
@@ -69,13 +67,8 @@ public class InventoryObserver implements ObservedBlock.ObservingType {
 	}
 
 	@Override
-	public boolean canObserve(Block block, TileEntity tile) {
-		if (tile != null && tile instanceof IInventory) {
-
-			return true;
-
-		}
-		return false;
+	public boolean canObserve(IBlockState block, TileEntity tile) {
+		return tile != null && tile instanceof IInventory;
 	}
 
 	@Override

@@ -4,9 +4,12 @@ import de.maxgb.minecraft.second_screen.commands.BaseCommand;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.BlockPos;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -37,27 +40,27 @@ public class MssCommand extends BaseCommand {
 	}
 
 	@Override
-	public String getCommandName() {
-		return "mss";
+    public String getName() {
+        return "mss";
 	}
 
 	@Override
-	public String getCommandUsage(ICommandSender var1) {
+    public String getUsage(ICommandSender var1) {
 
 		return "/mss <action> <params>";
 
 	}
 
 	@Override
-	public List<String> getCommandAliases() {
-		return aliases;
+    public List<String> getAliases() {
+        return aliases;
 	}
 
 	@Override
-	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
-		if (args == null || args.length == 0) {
-			BaseCommand.sendMessage(sender, "Usage: " + getCommandUsage(sender));
-			return;
+    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+        if (args == null || args.length == 0) {
+            BaseCommand.sendMessage(sender, "Usage: " + getUsage(sender));
+            return;
 		}
 		//Tests for the corrosponding subcommand and calls it with the reduced amount of params
 		for (MssSubCommand c : commands) {
@@ -83,8 +86,8 @@ public class MssCommand extends BaseCommand {
 	}
 
 	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender sender) {
-		return true;
+    public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
+        return true;
 	}
 
 	@Override
@@ -98,19 +101,17 @@ public class MssCommand extends BaseCommand {
 	 * @param var1
 	 */
 	private void sendActions(ICommandSender var1) {
-		sendMessage(var1, getCommandUsage(var1));
-		sendMessage(var1, "Actions:");
+        sendMessage(var1, getUsage(var1));
+        sendMessage(var1, "Actions:");
 		for (MssSubCommand c : commands) {
 			c.sendCommandUsage(var1);
 		}
 	}
 
 	@Override
-	public List addTabCompletionOptions(ICommandSender sender, String[] args,
-										BlockPos pos) {
-		return null;
-	}
-
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        return Collections.emptyList();
+    }
 
 	protected interface MssSubCommand {
 		boolean canCommandSenderUseCommand(ICommandSender var1);

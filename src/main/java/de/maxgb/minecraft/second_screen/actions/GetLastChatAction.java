@@ -1,20 +1,18 @@
 package de.maxgb.minecraft.second_screen.actions;
 
-import java.util.ArrayList;
-
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.ServerChatEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import de.maxgb.minecraft.second_screen.actions.ActionManager.ActionResultListener;
 import de.maxgb.minecraft.second_screen.actions.ActionManager.IAction;
 import de.maxgb.minecraft.second_screen.info_listener.ChatListener.RemoteChatMessageEvent;
 import de.maxgb.minecraft.second_screen.shared.PROTOKOLL;
 import de.maxgb.minecraft.second_screen.util.Helper;
 import de.maxgb.minecraft.second_screen.util.User;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.ServerChatEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class GetLastChatAction implements IAction{
 	
@@ -52,8 +50,8 @@ public class GetLastChatAction implements IAction{
 	
 	@SubscribeEvent
 	public void onChatMessage(ServerChatEvent e){
-		addMessage(e.message,e.username);
-	}
+        addMessage(e.getMessage(), e.getUsername());
+    }
 	
 	@SubscribeEvent
 	public void onRemoteMessage(RemoteChatMessageEvent e){

@@ -1,17 +1,15 @@
 package de.maxgb.minecraft.second_screen.info_listener;
 
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import de.maxgb.minecraft.second_screen.Configs;
 import de.maxgb.minecraft.second_screen.StandardListener;
 import de.maxgb.minecraft.second_screen.shared.PROTOKOLL;
 import de.maxgb.minecraft.second_screen.util.User;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class PlayerInventoryListener extends StandardListener {
 	/*
@@ -73,16 +71,16 @@ public class PlayerInventoryListener extends StandardListener {
 		} else {
 			JSONArray items = new JSONArray();
 
-			for (int i = 0; i < player.inventory.mainInventory.length; i++) {
-				ItemStack s = player.inventory.mainInventory[i];
-				if (s != null) {
+			for (int i = 0; i < player.inventory.mainInventory.size(); i++) {
+				ItemStack s = player.inventory.mainInventory.get(i);
+				if (!s.isEmpty()) {
 					JSONObject stack = new JSONObject();
 
 					stack.put("displayname", s.getDisplayName());
-					stack.put("size", s.stackSize);
+					stack.put("size", s.getCount());
 					Item it = s.getItem();
-					if (it != null) {
-						CreativeTabs tab = null;
+
+					CreativeTabs tab = null;
 						try {
 							tab = it.getCreativeTab();
 						} catch (Exception e) {
@@ -95,7 +93,7 @@ public class PlayerInventoryListener extends StandardListener {
 						} else {
 							stack.put("tab", "otherMatters");
 						}
-					}
+
 
 					// stack.put("icon", getTextureString(s.getItem()));
 					items.put(stack);

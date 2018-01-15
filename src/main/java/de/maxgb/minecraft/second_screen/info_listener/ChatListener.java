@@ -1,6 +1,11 @@
 package de.maxgb.minecraft.second_screen.info_listener;
 
-import net.minecraft.util.EnumChatFormatting;
+import de.maxgb.minecraft.second_screen.Configs;
+import de.maxgb.minecraft.second_screen.StandardListener;
+import de.maxgb.minecraft.second_screen.shared.PROTOKOLL;
+import de.maxgb.minecraft.second_screen.util.Helper;
+import de.maxgb.minecraft.second_screen.util.User;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
@@ -8,15 +13,8 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import de.maxgb.minecraft.second_screen.Configs;
-import de.maxgb.minecraft.second_screen.StandardListener;
-import de.maxgb.minecraft.second_screen.shared.PROTOKOLL;
-import de.maxgb.minecraft.second_screen.util.Helper;
-import de.maxgb.minecraft.second_screen.util.User;
 
 /**
  * Listener which listens to chat messages and other chat related events
@@ -55,15 +53,15 @@ public class ChatListener extends StandardListener {
 		msg.put("msg", "Connected to chat");
 		buffer.put(msg);
 
-		Helper.sendChatMessage("[MSS] "+user.username+" connected to second screen chat", EnumChatFormatting.YELLOW);
-	}
+        Helper.sendChatMessage("[MSS] " + user.username + " connected to second screen chat", TextFormatting.YELLOW);
+    }
 
 	@SubscribeEvent
 	public void chatMessage(ServerChatEvent e) {
 
 		JSONObject msg = new JSONObject();
-		msg.put("sender", e.username);
-		msg.put("msg", e.message);
+        msg.put("sender", e.getUsername());
+        msg.put("msg", e.getMessage());
 
 		msg.put("time", Helper.getCurrentTimeString());
 		buffer.put(msg);
@@ -87,8 +85,8 @@ public class ChatListener extends StandardListener {
 		msg.put("info", true);
 		msg.put("color", "orange");
 		msg.put("time", Helper.getCurrentTimeString());
-		msg.put("msg", e.entityPlayer.getDisplayName() + " died");
-		buffer.put(msg);
+        msg.put("msg", e.getEntityPlayer().getDisplayName() + " died");
+        buffer.put(msg);
 	}
 
 	@SubscribeEvent
@@ -129,7 +127,7 @@ public class ChatListener extends StandardListener {
 	
 	@Override
 	public void onUnregister(){
-		Helper.sendChatMessage("[MSS] "+user.username+" disconnected from second screen chat", EnumChatFormatting.YELLOW);
-	}
+        Helper.sendChatMessage("[MSS] " + user.username + " disconnected from second screen chat", TextFormatting.YELLOW);
+    }
 
 }

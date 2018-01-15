@@ -1,91 +1,30 @@
 package de.maxgb.minecraft.second_screen.world_observer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
+import de.maxgb.minecraft.second_screen.data.ObservingManager;
+import de.maxgb.minecraft.second_screen.util.Logger;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import de.maxgb.minecraft.second_screen.data.ObservingManager;
-import de.maxgb.minecraft.second_screen.util.Logger;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class ObservedBlock {
 
 	/**
-	 * Interface for observingtypes e.g. InventoryObserver or FluidTankObserver
-	 * @author Max
-	 *
-	 */
-	public static interface ObservingType {
-		/**
-		 * Adds the informations about the given block to the next update
-		 * 
-		 * @param block
-		 * @param world
-		 *            World the block is in
-		 * @return false if the block should be removed from the list
-		 */
-		public boolean addInfoForBlock(World world, ObservedBlock block);
-
-		/**
-		 * Tests if this block/tile can be observed by this observer type
-		 * 
-		 * @param block
-		 * @param tile
-		 *            tile can be null
-		 * @return
-		 */
-		public boolean canObserve(Block block, TileEntity tile);
-
-		/**
-		 * Adds all information collected by
-		 * {@link #addInfoForBlock(ObservedBlock) addInfoForBlock} method. Does
-		 * not change anything if nothing to add
-		 * 
-		 * @param parent
-		 *            JSONObject the info shall be added to
-		 */
-		public void finishInfoCreation(JSONObject parent);
-
-		/**
-		 * 
-		 * @return ID for this type
-		 */
-		public int getId();
-
-		/**
-		 * 
-		 * @return A string which can be used to indentify this type in commands
-		 *         etc
-		 */
-		public String getIdentifier();
-
-		/**
-		 * 
-		 * @return A short string which can be used to indentify this type in
-		 *         commands etc
-		 */
-		public String getShortIndentifier();
-	}
-
-	private final static String TAG = "ObservedBlock";
-
-	private static List<ObservingType> observingTypes;
-
-	/**
 	 * Collects the data from all observed blocks, seperates them by types and
 	 * puts the results in the parent JSON
-	 * 
+	 *
 	 * @param parent
 	 *            JSONObject to store data
 	 * @param worlds
@@ -104,7 +43,7 @@ public class ObservedBlock {
 				ObservingManager.removeObservedBlock(username, block.label);
 
 			} else {
-				if (world.getBlockState(block.pos).getBlock().getMaterial() == net.minecraft.block.material.Material.air) {
+				if (world.getBlockState(block.pos).getMaterial() == Material.AIR) {
 					Logger.w(TAG, "Blocks material is air -> remove");
 					ObservingManager.removeObservedBlock(username, block.label);
 				} else {
@@ -125,6 +64,61 @@ public class ObservedBlock {
 			t.finishInfoCreation(parent);
 		}
 
+	}
+
+	private final static String TAG = "ObservedBlock";
+
+	private static List<ObservingType> observingTypes;
+
+	/**
+	 * Interface for observingtypes e.g. InventoryObserver or FluidTankObserver
+	 *
+	 * @author Max
+	 */
+	public interface ObservingType {
+		/**
+		 * Adds the informations about the given block to the next update
+		 *
+		 * @param block
+		 * @param world World the block is in
+		 * @return false if the block should be removed from the list
+		 */
+		boolean addInfoForBlock(World world, ObservedBlock block);
+
+		/**
+		 * Tests if this block/tile can be observed by this observer type
+		 *
+		 * @param block
+		 * @param tile  tile can be null
+		 * @return
+		 */
+		boolean canObserve(IBlockState block, TileEntity tile);
+
+		/**
+		 * Adds all information collected by
+		 * {@link #addInfoForBlock(ObservedBlock) addInfoForBlock} method. Does
+		 * not change anything if nothing to add
+		 *
+		 * @param parent JSONObject the info shall be added to
+		 */
+		void finishInfoCreation(JSONObject parent);
+
+		/**
+		 * @return ID for this type
+		 */
+		int getId();
+
+		/**
+		 * @return A string which can be used to indentify this type in commands
+		 * etc
+		 */
+		String getIdentifier();
+
+		/**
+		 * @return A short string which can be used to indentify this type in
+		 * commands etc
+		 */
+		String getShortIndentifier();
 	}
 
 	/**
